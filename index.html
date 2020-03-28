@@ -75,57 +75,37 @@
               <div class="card-body">
                 <h5 class="card-title">And the time is ...</h5>
                 <p class="card-text">There will be a clock here at some point.</p>
-                <!-- Radio buttons to choose yes or no to show seconds -->
-                <!-- <div class="form-group bg-light">
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="showSeconds" value="yes" id=
-                    "yesSeconds" checked>
-                    <label class="form-check-label" for="showSeconds">
-                      Please <em>show</em> seconds in time
-                    </label> 
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="showSeconds" value="no" id=
-                    "noSeconds">
-                    <label class="form-check-label" for="hideSeconds">
-                      Please <em>hide</em> seconds in time
-                    </label> 
-                  </div>
-                </div> -->
-                <!-- Switch to show/hid seconds -->
-                <div class="row form-check-inline bg-light border border-dark rounded p-2">
-                  <div class="mr-2 align-baseline font-weight-bold mySwitches">Hide Seconds</div>
-                  <div class="custom-control custom-switch form-control-lg">
-                      <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked onclick="showTime()">
-                    <label class="custom-control-label mySwitches" for="showSeconds">Show Seconds</label>
-                   
+                <div id="forTime"> <!-- placeholder div for clock -->
+
+                </div>
+
+
+
+                <!-- Switch to show/hide seconds -->
+                <div class="pl-3 pb-3">
+                  <div class="row form-check-inline bg-light border border-dark rounded p-2 m3">
+                    <div class="mr-2 align-baseline font-weight-bold mySwitches">Hide Seconds</div>
+                    <div class="custom-control custom-switch form-control-lg">
+                        <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked onclick="showTime()">
+                      <label class="custom-control-label mySwitches" for="showSeconds">Show Seconds</label>
+                    </div>
                   </div>
                 </div>
-                
+                <!-- end switch 12 vs 24 hr clock -->
 
-
-
-
-
-
-
-                <!-- Radio buttons to choose 12 or 24 hour time -->
-                <div class="form-group bg-light">
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="numHrs" value="12" id=
-                    "hrs12" checked>
-                    <label class="form-check-label" for="hrs12">
-                      12-hour Format
-                    </label> 
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="numHrs" value="24" id=
-                    "hrs24">
-                    <label class="form-check-label" for="hrs24">
-                      24-hour Format
-                    </label> 
+                <!-- Switch to  12 vs 24 hr clock -->
+                <!-- NEED TO ADD LOGIC TO showTime() -->
+                <div class="pl-3">
+                  <div class="row form-check-inline bg-light border border-dark rounded p-2 m3">
+                    <div class="mr-2 align-baseline font-weight-bold mySwitches">24-Hour Clock</div>
+                    <div class="custom-control custom-switch form-control-lg">
+                        <input type="checkbox" class="custom-control-input" id="numHrs" name="numHrs" onclick="showTime()">
+                      <label class="custom-control-label mySwitches" for="numHrs">12 Hour Clock</label>
+                    
+                    </div>
                   </div>
                 </div>
+                <!-- end switch 12 vs 24 hr clock -->
               </div>
             </div>
           </div>
@@ -157,14 +137,10 @@
 
     </script> -->
     <!-- plain moment() template -->
-    <!-- <script type="text/html" id="plainMoment">
-      <div class="card border-light">
-        <h2>Plain moment()</h2>
-        <div class="card-body text-danger bg-light">
-          <p class="card-text">{{message}}</p>
-        </div>
-      <div>
-    </script> -->
+    <script type="text/html" id="timeTpl">
+      <p>The time is {{time}}</p>
+    </script>
+    
 
   </body>
 </html>

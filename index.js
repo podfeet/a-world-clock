@@ -2,6 +2,17 @@
 // Define globally-scoped variables
 // 
 
+// 4 Time formats
+let TIME12WSEC = moment().format('h:mm:ss a');
+let TIME12WOSEC = moment().format('h:mm a');
+let TIME24WSEC = moment().format('HH:mm:ss');
+let TIME24WOSEC = moment().format('HH:mm:ss');
+let FORMATTEDTIME = ''; // time formatted as user requests
+
+let TIMEVIEW = ''; // the view for the time Mustache
+
+// let showTime = function; // a function to figure out which formatted time the user has requested
+
 
 // 
 // Document Ready Handler
@@ -25,10 +36,46 @@
 */
 
 // showTime();
-function showTime() {
-  var now = moment();
-  alert(`It is ${now} at Allison's house`);
+// function showTime() {
+//   var now = moment();
+//   alert(`The time is ${now}`);
+// }
+
+/**
+* Define Time format
+*
+* What comes in: 
+* @showSeconds {boolean}
+* @numHrs {string} 12 or 24
+* @return {string} Returns a string that defines the time format
+* Errors thrown e.g. @throws {RangeError} and why
+*/
+
+// <!-- NEEDS A CLICK HANDLER -->
+// <!-- THEN NESTED 12 VS 24 HR -->
+function showTime(){
+  if ($("input[id][name$='showSeconds']").prop( "checked" )) {
+    // console.log('showSeconds is yes');
+    console.log(`12 hour time with seconds is ${TIME12WSEC}`);
+    FORMATTEDTIME = TIME12WSEC;
+  }else{
+    console.log(`12 hour time without seconds is ${TIME12WOSEC}`);
+    FORMATTEDTIME = TIME12WOSEC;
+  } 
 }
+showTime();
+
+TIMEVIEW = {
+  time: FORMATTEDTIME
+}
+// moment().format('MMMM Do YYYY, h:mm:ss a');
+$(function(){
+  $('#forTime').html(Mustache.render($('#timeTpl').html(), TIMEVIEW));
+})
+
+// function timeFunction(ss,nh){
+
+// }
 
 // ************** //
 // Click Handlers //
