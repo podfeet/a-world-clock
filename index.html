@@ -74,7 +74,7 @@
             <div class="card" style="width: 100%">
               <div class="card-body">
                 <h5 class="card-title">And the time is ...</h5>
-                <p class="card-text">There will be a clock here at some point.</p>
+                <p class="card-text"></p>
                 <div id="forTime"> <!-- placeholder div for clock -->
 
                 </div>
@@ -86,7 +86,7 @@
                   <div class="row form-check-inline bg-light border border-dark rounded p-2 m3">
                     <div class="mr-2 align-baseline font-weight-bold mySwitches">Hide Seconds</div>
                     <div class="custom-control custom-switch form-control-lg">
-                        <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked onclick="showTime()">
+                        <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked>
                       <label class="custom-control-label mySwitches" for="showSeconds">Show Seconds</label>
                     </div>
                   </div>
@@ -94,12 +94,11 @@
                 <!-- end switch 12 vs 24 hr clock -->
 
                 <!-- Switch to  12 vs 24 hr clock -->
-                <!-- NEED TO ADD LOGIC TO showTime() -->
                 <div class="pl-3">
                   <div class="row form-check-inline bg-light border border-dark rounded p-2 m3">
                     <div class="mr-2 align-baseline font-weight-bold mySwitches">24-Hour Clock</div>
                     <div class="custom-control custom-switch form-control-lg">
-                        <input type="checkbox" class="custom-control-input" id="numHrs" name="numHrs" onclick="showTime()">
+                        <input type="checkbox" class="custom-control-input" id="numHrs" name="numHrs" >
                       <label class="custom-control-label mySwitches" for="numHrs">12 Hour Clock</label>
                     
                     </div>
@@ -138,7 +137,7 @@
     </script> -->
     <!-- plain moment() template -->
     <script type="text/html" id="timeTpl">
-      <p>The time is {{time}}</p>
+      <p class="h1">{{time}}</p>
     </script>
     
 
