@@ -3,20 +3,20 @@
 // 
 
 // 4 Time formats
-let TIME12WSEC = moment().format('h:mm:ss a');
-let TIME12WOSEC = moment().format('h:mm a');
+let TIME12WSEC = 'h:mm:ss a';
+let TIME12WOSEC = 'h:mm a';
 let TIME24WSEC = moment().format('HH:mm:ss');
 let TIME24WOSEC = moment().format('HH:mm:ss');
 let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 
 let TIMEVIEW = {}; // the view for the time Mustache
+
 // 
 // Document Ready Handler
 // 
 $(function(){
-  console.log('starting DOM');
   renderTime();
-  console.log('I am done with DOM');
+  setInterval(renderTime, 1000); // update clock every second
 });
 
 // Document functions
@@ -49,23 +49,16 @@ TIMEVIEW = {
   time: FORMATTEDTIME // default is 12 hour with seconds
 }
 function renderTime(){
-  $('#forTime').empty();
-  $('#forTime').html(Mustache.render($('#timeTpl').html(), TIMEVIEW));
+  $('#forTime').html(moment().format(FORMATTEDTIME));
 }
-// 
-
 
 // <!-- NEEDS NESTED 12 VS 24 HR -->
 $('#showSeconds').click(function(){
   if ($("input[id][name$='showSeconds']").prop( "checked" )) {
-    // console.log('showSeconds is yes');
-    console.log(`12 hour time with seconds is ${TIME12WSEC}`);
     FORMATTEDTIME = TIME12WSEC;
   }else{
-    console.log(`12 hour time without seconds is ${TIME12WOSEC}`);
     FORMATTEDTIME = TIME12WOSEC;
   } 
-  // had to repeate TIMEVIEW in here because it wasn't getting updated with new FORMATTEDTIME
   TIMEVIEW = {
     time: FORMATTEDTIME // should be showSeconds option
   }
@@ -73,6 +66,30 @@ $('#showSeconds').click(function(){
 })
 
 
+
+// function formatTime(){
+//   $('#showSeconds').click(function(){
+//     if ($("input[id][name$='showSeconds']").prop( "checked" )) {
+//       let SS = 'ss';
+//     }else{
+//       let SS = '';
+//     } 
+//   });
+//   $('#numHrs').click(function(){
+//     if ($("input[id][name$='numHrs']").prop( "checked" )) {
+//       let numHrs = 'HH';
+//       let A = ''
+//     }else{
+//       let numHrs = 'HhhH';
+//       let A = 'a'
+//     } 
+//   });
+//   FORMATTEDTIME = moment().format('MMMM Do YYYY, numHrs:mm:SS A');
+//   console.log(FORMATTEDTIME);
+// }
+
+// formatTime();
+  
 
 // moment().format('MMMM Do YYYY, h:mm:ss a');
 

@@ -13,6 +13,7 @@
         font-size: 1.25rem;
         font-weight: bold;
         color: #007bff;  /* same color as Bootstrap "primary" */
+        vertical-align: text-top;
       }
     </style>
   
@@ -75,19 +76,15 @@
               <div class="card-body">
                 <h5 class="card-title">And the time is ...</h5>
                 <p class="card-text"></p>
-                <div id="forTime"> <!-- placeholder div for clock -->
-
-                </div>
-
-
-
+                <div class="h1" id="forTime"></div> <!-- placeholder div for clock -->
+                  
                 <!-- Switch to show/hide seconds -->
                 <div class="pl-3 pb-3">
                   <div class="row form-check-inline bg-light border border-dark rounded p-2 m3">
                     <div class="mr-2 align-baseline font-weight-bold mySwitches">Hide Seconds</div>
                     <div class="custom-control custom-switch form-control-lg">
                         <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked>
-                      <label class="custom-control-label mySwitches" for="showSeconds">Show Seconds</label>
+                      <label class="custom-control-label mySwitches mySwitches" for="showSeconds">Show Seconds</label>
                     </div>
                   </div>
                 </div>
@@ -128,18 +125,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.28/moment-timezone-with-data-1970-2030.min.js" integrity="sha256-ob9GYTF6HJFUyVtlWivU47nga6eeRR3Lti9VfUeFhBI=" crossorigin="anonymous"></script>
 
     <!-- Load the local JS Code AFTER the other libraries -->
-    <script type="text/javascript" src="./index.js"></script>
+    <script type="text/javascript" src="./script.js"></script>
 
     <!-- Templates -->
     <!-- Sample Template -->
     <!-- <script type="text/html" id="">
 
     </script> -->
-    <!-- plain moment() template -->
-    <script type="text/html" id="timeTpl">
-      <p class="h1">{{time}}</p>
-    </script>
-    
 
   </body>
 </html>
