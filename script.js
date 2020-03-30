@@ -52,16 +52,17 @@ $('#showSeconds').click(function(){
   renderTime();
 })
 
+let hrs = 'h';
+let min = ':mm'; // no matter what, we need mm for minutes
+let sec = ':sec';
 
-let timeString = [];
-let hrs = '';
-let min = 'mm'; // no matter what, we need mm for minutes
-let sec = '';
+let timeString = [hrs + min + sec];
 
 
 function formatTime(){
+  console.log(`timeString before formatTime is ${timeString}`);
   timeString = [];
-  timeString.push(hrs + ':' + min + sec)
+  timeString.push(hrs + min + sec)
   console.log(timeString);
 }
   // This works but only on clicking
