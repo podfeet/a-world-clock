@@ -5,8 +5,8 @@
 // 4 Time formats
 let TIME12WSEC = 'h:mm:ss a';
 let TIME12WOSEC = 'h:mm a';
-let TIME24WSEC = moment().format('HH:mm:ss');
-let TIME24WOSEC = moment().format('HH:mm:ss');
+let TIME24WSEC = 'HH:mm:ss';
+let TIME24WOSEC = 'HH:mm:ss';
 let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 
 let TIMEVIEW = {}; // the view for the time Mustache
@@ -17,24 +17,10 @@ let TIMEVIEW = {}; // the view for the time Mustache
 $(function(){
   renderTime();
   setInterval(renderTime, 1000); // update clock every second
+  formatTime();
 });
 
 // Document functions
-/**
-* Description
-*
-* What comes in e.g. @param {string} boogers which is the string
-* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
-* Errors thrown e.g. @throws {RangeError} and why
-*/
-
-/**
-* First test of moment.js
-* 
-* What comes in e.g. @param {string} boogers which is the string
-* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
-* Errors thrown e.g. @throws {RangeError} and why
-*/
 
 /**
 * Define Time format
@@ -49,10 +35,11 @@ TIMEVIEW = {
   time: FORMATTEDTIME // default is 12 hour with seconds
 }
 function renderTime(){
+  
   $('#forTime').html(moment().format(FORMATTEDTIME));
 }
 
-// <!-- NEEDS NESTED 12 VS 24 HR -->
+
 $('#showSeconds').click(function(){
   if ($("input[id][name$='showSeconds']").prop( "checked" )) {
     FORMATTEDTIME = TIME12WSEC;
@@ -66,29 +53,34 @@ $('#showSeconds').click(function(){
 })
 
 
+let timeString = [];
+let hrs = '';
+let min = 'mm'; // no matter what, we need mm for minutes
+let sec = '';
 
-// function formatTime(){
-//   $('#showSeconds').click(function(){
-//     if ($("input[id][name$='showSeconds']").prop( "checked" )) {
-//       let SS = 'ss';
-//     }else{
-//       let SS = '';
-//     } 
-//   });
-//   $('#numHrs').click(function(){
-//     if ($("input[id][name$='numHrs']").prop( "checked" )) {
-//       let numHrs = 'HH';
-//       let A = ''
-//     }else{
-//       let numHrs = 'HhhH';
-//       let A = 'a'
-//     } 
-//   });
-//   FORMATTEDTIME = moment().format('MMMM Do YYYY, numHrs:mm:SS A');
-//   console.log(FORMATTEDTIME);
-// }
 
-// formatTime();
+function formatTime(){
+  timeString = [];
+  timeString.push(hrs + ':' + min + sec)
+  console.log(timeString);
+}
+  // This works but only on clicking
+$('#numHrs').click(function(){
+  if ($("input[id][name$='numHrs']").prop( "checked" )) { // if numHrs is checked, they asked for 12 hour, else 24 hr clock
+    hrs = 'h' }else{ hrs='HH'};
+    console.log(`on click numHrs hrs is ${hrs}`);
+    formatTime();
+  });
+$('#showSeconds').click(function(){
+  if ($("input[id][name$='showSeconds']").prop( "checked" )) {
+    sec = ':ss' }else{ sec = ''};
+    console.log(`on click sec is ${sec}`);
+    formatTime();
+  });
+  
+  
+
+
   
 
 // moment().format('MMMM Do YYYY, h:mm:ss a');
@@ -129,6 +121,22 @@ $('#showSeconds').click(function(){
 * Click Handler for pulsing divider option (radio)
 * Can I animate the radio button to help illustrate?
 *
+* What comes in e.g. @param {string} boogers which is the string
+* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
+* Errors thrown e.g. @throws {RangeError} and why
+*/
+
+/**
+* Description
+*
+* What comes in e.g. @param {string} boogers which is the string
+* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
+* Errors thrown e.g. @throws {RangeError} and why
+*/
+
+/**
+* First test of moment.js
+* 
 * What comes in e.g. @param {string} boogers which is the string
 * What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
 * Errors thrown e.g. @throws {RangeError} and why
