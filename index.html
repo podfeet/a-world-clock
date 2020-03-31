@@ -71,7 +71,7 @@
       <!-- A card to hold the time -->
       <div class="container">
         <div class="row">
-          <div class="col-8">
+          <div class="col col-md-8">
             <div class="card" style="width: 100%">
               <div class="card-body">
                 <h5 class="card-title">And the time is ...</h5>
@@ -81,8 +81,9 @@
                 <!-- Switch to show/hide seconds -->
                 <div class="pl-3 pb-3">
                   <div class="row form-check-inline bg-light border border-dark rounded p-2 m3">
-                    <div class="mr-2 align-baseline font-weight-bold mySwitches">Hide Seconds</div>
-                    <div class="custom-control custom-switch form-control-lg">
+                    <div class="mr-2 font-weight-bold align-baseline mySwitches d-none d-md-inline">Hide Seconds</div>
+                    <div class="mr-2 font-weight-bold align-baseline mySwitches d-inline d-md-none">Hide</div>
+                    <div class="custom-control custom-switch form-control-md">
                         <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked>
                       <label class="custom-control-label mySwitches mySwitches" for="showSeconds">Show Seconds</label>
                     </div>
@@ -93,8 +94,9 @@
                 <!-- Switch to  12 vs 24 hr clock -->
                 <div class="pl-3">
                   <div class="row form-check-inline bg-light border border-dark rounded p-2 m3">
-                    <div class="mr-2 align-baseline font-weight-bold mySwitches">24-Hour Clock</div>
-                    <div class="custom-control custom-switch form-control-lg">
+                    <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clock</div>
+                    <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div>
+                    <div class="custom-control custom-switch form-control-md">
                         <input type="checkbox" class="custom-control-input" checked id="numHrs" name="numHrs" >
                       <label class="custom-control-label mySwitches" for="numHrs">12 Hour Clock</label>
                     
