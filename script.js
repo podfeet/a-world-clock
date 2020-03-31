@@ -6,10 +6,10 @@
 let TIME12WSEC = 'h:mm:ss a';
 let TIME12WOSEC = 'h:mm a';
 let TIME24WSEC = 'HH:mm:ss';
-let TIME24WOSEC = 'HH:mm:ss';
+let TIME24WOSEC = 'HH:mm';
 let FORMATTEDTIME = TIME12WSEC; // Default formatted time
-
-let TIMEVIEW = {}; // the view for the time Mustache
+let TRUESECONDS = ''; // boolean true if show seconds is true
+let TRUE12HR = ''; // boolean true if numHrs is 12
 
 // 
 // Document Ready Handler
@@ -17,7 +17,7 @@ let TIMEVIEW = {}; // the view for the time Mustache
 $(function(){
   renderTime();
   setInterval(renderTime, 1000); // update clock every second
-  formatTime();
+  // formatTime();
 });
 
 // Document functions
@@ -31,53 +31,82 @@ $(function(){
 * @return {string} Returns a string that defines the time format
 * Errors thrown e.g. @throws {RangeError} and why
 */
-TIMEVIEW = {
-  time: FORMATTEDTIME // default is 12 hour with seconds
-}
+
 function renderTime(){
-  
   $('#forTime').html(moment().format(FORMATTEDTIME));
 }
 
 
-$('#showSeconds').click(function(){
-  if ($("input[id][name$='showSeconds']").prop( "checked" )) {
-    FORMATTEDTIME = TIME12WSEC;
-  }else{
-    FORMATTEDTIME = TIME12WOSEC;
-  } 
-  TIMEVIEW = {
-    time: FORMATTEDTIME // should be showSeconds option
-  }
-  renderTime();
-})
-
-let hrs = 'h';
-let min = ':mm'; // no matter what, we need mm for minutes
-let sec = ':sec';
-
-let timeString = [hrs + min + sec];
-
-
-function formatTime(){
-  console.log(`timeString before formatTime is ${timeString}`);
-  timeString = [];
-  timeString.push(hrs + min + sec)
-  console.log(timeString);
+function ifTrue(){
+  TRUESECONDS = ($("input[id][name$='showSeconds']").prop( "checked" ));
+  TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
+  if (TRUESECONDS && TRUE12HR){
+    FORMATTEDTIME = TIME12WSEC
+    }
+    else{
+      if (TRUESECONDS && !TRUE12HR){
+        FORMATTEDTIME = TIME24WSEC
+        }
+        else{
+          if (!TRUESECONDS && TRUE12HR){
+            FORMATTEDTIME = TIME12WOSEC
+            }
+            else{
+                FORMATTEDTIME = TIME24WOSEC
+              }
+            }
+    }
 }
-  // This works but only on clicking
-$('#numHrs').click(function(){
-  if ($("input[id][name$='numHrs']").prop( "checked" )) { // if numHrs is checked, they asked for 12 hour, else 24 hr clock
-    hrs = 'h' }else{ hrs='HH'};
-    console.log(`on click numHrs hrs is ${hrs}`);
-    formatTime();
-  });
+
 $('#showSeconds').click(function(){
-  if ($("input[id][name$='showSeconds']").prop( "checked" )) {
-    sec = ':ss' }else{ sec = ''};
-    console.log(`on click sec is ${sec}`);
-    formatTime();
-  });
+  ifTrue();
+  renderTime();
+});
+$('#numHrs').click(function(){
+  ifTrue();
+  renderTime();
+});
+
+
+
+// $('#showSeconds').click(function(){
+//   if ($("input[id][name$='showSeconds']").prop( "checked" )) {
+//     FORMATTEDTIME = TIME12WSEC;
+//   }else{
+//     FORMATTEDTIME = TIME12WOSEC;
+//   } 
+//   TIMEVIEW = {
+//     time: FORMATTEDTIME // should be showSeconds option
+//   }
+//   renderTime();
+// })
+
+// let hrs = 'h';
+// let min = ':mm'; // no matter what, we need mm for minutes
+// let sec = ':sec';
+
+// let timeString = [hrs + min + sec];
+
+
+// function formatTime(){
+//   console.log(`timeString before formatTime is ${timeString}`);
+//   timeString = [];
+//   timeString.push(hrs + min + sec)
+//   console.log(timeString);
+// }
+//   // This works but only on clicking
+// $('#numHrs').click(function(){
+//   if ($("input[id][name$='numHrs']").prop( "checked" )) { // if numHrs is checked, they asked for 12 hour, else 24 hr clock
+//     hrs = 'h' }else{ hrs='HH'};
+//     console.log(`on click numHrs hrs is ${hrs}`);
+//     formatTime();
+//   });
+// $('#showSeconds').click(function(){
+//   if ($("input[id][name$='showSeconds']").prop( "checked" )) {
+//     sec = ':ss' }else{ sec = ''};
+//     console.log(`on click sec is ${sec}`);
+//     formatTime();
+//   });
   
   
 
