@@ -17,7 +17,6 @@ let TRUE12HR = ''; // boolean true if numHrs is 12
 $(function(){
   renderTime();
   setInterval(renderTime, 1000); // update clock every second
-  // formatTime();
 });
 
 // Document functions
@@ -35,7 +34,6 @@ $(function(){
 function renderTime(){
   $('#forTime').html(moment().format(FORMATTEDTIME));
 }
-
 
 function ifTrue(){
   TRUESECONDS = ($("input[id][name$='showSeconds']").prop( "checked" ));
@@ -68,56 +66,6 @@ $('#numHrs').click(function(){
 });
 
 
-
-// $('#showSeconds').click(function(){
-//   if ($("input[id][name$='showSeconds']").prop( "checked" )) {
-//     FORMATTEDTIME = TIME12WSEC;
-//   }else{
-//     FORMATTEDTIME = TIME12WOSEC;
-//   } 
-//   TIMEVIEW = {
-//     time: FORMATTEDTIME // should be showSeconds option
-//   }
-//   renderTime();
-// })
-
-// let hrs = 'h';
-// let min = ':mm'; // no matter what, we need mm for minutes
-// let sec = ':sec';
-
-// let timeString = [hrs + min + sec];
-
-
-// function formatTime(){
-//   console.log(`timeString before formatTime is ${timeString}`);
-//   timeString = [];
-//   timeString.push(hrs + min + sec)
-//   console.log(timeString);
-// }
-//   // This works but only on clicking
-// $('#numHrs').click(function(){
-//   if ($("input[id][name$='numHrs']").prop( "checked" )) { // if numHrs is checked, they asked for 12 hour, else 24 hr clock
-//     hrs = 'h' }else{ hrs='HH'};
-//     console.log(`on click numHrs hrs is ${hrs}`);
-//     formatTime();
-//   });
-// $('#showSeconds').click(function(){
-//   if ($("input[id][name$='showSeconds']").prop( "checked" )) {
-//     sec = ':ss' }else{ sec = ''};
-//     console.log(`on click sec is ${sec}`);
-//     formatTime();
-//   });
-  
-  
-
-
-  
-
-// moment().format('MMMM Do YYYY, h:mm:ss a');
-
-// function timeFunction(ss,nh){
-
-// }
 
 // ************** //
 // Click Handlers //
