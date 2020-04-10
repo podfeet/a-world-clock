@@ -74,7 +74,7 @@
           <div class="col col-md-8">
             <div class="card" style="width: 100%">
               <div class="card-body">
-                <h5 class="card-title">And the time is ...</h5>
+                <h5 class="card-title">Your local time is ...</h5>
                 <p class="card-text"></p>
                 <div class="h1" id="forTime"></div> <!-- placeholder div for clock -->
                   
@@ -108,7 +108,49 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> <!-- end time card -->
+
+            <!-- A card to hold the 2nd time -->
+            <div class="container">
+              <div class="row">
+                <div class="col col-md-8">
+                  <div class="card" style="width: 100%">
+                    <div class="card-body">
+                      <h5 class="card-title">The time in Toronto is ...</h5>
+                      <p class="card-text"></p>
+                      <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->
+                        
+                      <!-- Switch to show/hide seconds -->
+                      <div class="pl-3 pb-3">
+                        <div class="row form-control form-check-inline bg-light border border-dark rounded p-2 m3"><!-- row for showSeconds switch -->
+                          <div class="mr-2 font-weight-bold align-baseline mySwitches d-none d-md-inline">Hide Seconds</div>
+                          <div class="mr-2 font-weight-bold align-baseline mySwitches d-inline d-md-none">Hide</div>
+                          <div class="custom-control custom-switch form-control-md">
+                              <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked>
+                            <label class="custom-control-label mySwitches mySwitches" for="showSeconds">Show Seconds</label>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end switch 12 vs 24 hr clock -->
+      
+                      <!-- Switch to  12 vs 24 hr clock -->
+                      <div class="pl-3">
+                        <div class="row form-control form-check-inline bg-light border border-dark rounded p-2 m3"> <!-- row for numHrs switch -->
+                          <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clock</div>
+                          <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div>
+                          <div class="custom-control custom-switch form-control-md">
+                              <input type="checkbox" class="custom-control-input" checked id="numHrs" name="numHrs" >
+                            <label class="custom-control-label mySwitches" for="numHrs">12 Hour Clock</label>
+                          
+                          </div>
+                        </div>
+                      </div>
+                      <!-- end switch 12 vs 24 hr clock -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> <!-- end 2nd time card -->
 
     </main>
 

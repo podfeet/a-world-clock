@@ -33,6 +33,10 @@ $(function(){
 
 function renderTime(){
   $('#forTime').html(moment().format(FORMATTEDTIME));
+
+  $('#forTime2').html(moment().tz('America/Toronto').format(FORMATTEDTIME)); // works
+  // moment().tz("America/Toronto").format(FORMATTEDTIME);
+
 }
 
 function ifTrue(){
@@ -80,7 +84,7 @@ $('#numHrs').click(function(){
 */
 
 /**
-* Click Handler for 12 vs 24 hr selection (radio)
+* Click Handler for 12 vs 24 hr selection (checkbox custom-switch)
 *
 * What comes in e.g. @param {string} boogers which is the string
 * What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
