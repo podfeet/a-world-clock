@@ -14,6 +14,7 @@ let TRUE12HR = ''; // boolean true if numHrs is 12
 // More globally-scoped variables
 let zones = [];
 let dropDown = '';
+let selectedZone = '';
 
 // 
 // Document Ready Handler
@@ -71,7 +72,7 @@ function makeDropDown(){
   });
 }
 makeDropDown();
-$('#timeZone').select(function(){
+$('#timeZone').change(function(){ // triggers the function EVERY time you change the select
   ifTrue();
   selectedZone = $('#timeZone option:selected').val();
   console.log(selectedZone);
