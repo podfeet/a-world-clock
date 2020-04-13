@@ -103,7 +103,6 @@
             <div class="card" style="width: 100%">
               <div class="card-body">
                 <h5 class="card-title">Your local time is ...</h5>
-                <p id="timeZone"></p>
                 <p class="card-text"></p>
                 <div class="h1" id="forTime"></div> <!-- placeholder div for clock -->
               </div>
@@ -112,6 +111,15 @@
         </div>
       </div> <!-- end local time card -->
 
+      <!-- Dropdown to choose Timezone -->
+      <div class="container">
+        <div class="row">
+          <div class="col col-md-8">
+            <select class="h3" id="timeZone" name ="locality"></select>
+          </div>
+        </div>
+      </div>
+      
       <!-- A card to hold the 2nd time -->
       <div class="container">
         <div class="row">
@@ -119,6 +127,7 @@
             <div class="card" style="width: 100%">
               <div class="card-body">
                 <h5 class="card-title">The time in Toronto is ...</h5>
+                
                 <p class="card-text"></p>
                 <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->
               </div>
@@ -148,22 +157,21 @@
 
     <!-- Templates -->
     <!-- Sample Template -->
-    <script type="text/html" id="ddTemplate">
+    <!-- <script type="text/html" id="ddTemplate">
       <div class="form-inline">
-        <!-- <label for="countrySelected" class="mr-2">In what currency?</label> -->
         <div class="form-group">
 
         <select class="custom-select form-control" id="tzSelected">
-          {{#dropDownValues}}
+          {{#dropDownZones}}
           <option value='{{timeZone}}'>
               {{cc}}: {{city}}
           </option>
-          {{/dropDownValues}}
+          {{/dropDownZones}}
         </select>
       </div>
         
     </div>
-    </script>
+    </script> -->
 
   </body>
 </html>

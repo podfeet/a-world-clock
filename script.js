@@ -13,6 +13,7 @@ let TRUE12HR = ''; // boolean true if numHrs is 12
 
 // More globally-scoped variables
 let zones = [];
+let dropDown = '';
 
 // 
 // Document Ready Handler
@@ -46,42 +47,44 @@ function renderTime(){
 * Create dropdown for timezone selection
 *
 * What comes in: 
-* @ddTemplate {template string}
-* @aDropDown {json view}
-* @return {string} Returns a string with formatted time and sends it to placeholder html
+* @zones.json {json object}
+* @#timeZone {ID of select for the dropdown}
+* @return {string} Returns a string with formatted time and sends it to placeholder htm IDl
 * Errors thrown e.g. @throws {RangeError} and why
 */
-// bring in the json of the time zone file with AJAX
-const zonesPromise = $.ajax({
-  url: './zones.json',
-  method: 'GET',
-  dataType: 'json',
-  cache: false,
-});
 
-// zonesPromise.then(
-//   function(zones){
-//     // console.log(zones);
-//     // zones = JSON.parse(zones);
-//     for (const z of zones){
-//       console.log(z.city);
-//     }
-//   },
-//   function(){ // the rejected callback
-//     console.log(`🙁 The promise rejected`);
-//     console.error(result);
-//   }
-// );
-// make a promise for the zones (and anything else that comes up later)
-const allTplAndDataPromise = Promise.all([zonesPromise]);
-allTplAndDataPromise.then(
-  function (xArray){ // xArray is the output from Promise.all
-    zones = xArray[0];
-    console.log(zones); // prints our array of objects from zones.json
-    for (const z of zones){ console.log(`${z.cc}: ${z.city}`);}
+// source: https://www.codebyamir.com/blog/populate-a-select-dropdown-list-with-json
+// shortcut for full AJAX call: https://api.jquery.com/jQuery.getJSON/
+function makeDropDown(){
+  dropDown = $('#timeZone'); // dropDown is the ID of the select element in the html
+  dropDown.empty(); // empty whatever is in the dropdown to start with
+  // create a disabled but selected default to tell people to use the dropdown
+  dropDown.append('<option selected="true" disabled>Choose Region</option>')
+  dropDown.prop('selectedIndex', 0);
+  // give the json file a name
+  const jsonUrl = './zones.json';
+  // feels like an AJAX call to get the data
+  $.getJSON(jsonUrl, function(zones){
+    for (const z of zones){
+      dropDown.append($('<option></option>').attr('value', z.city).text(`${z.cc}` + ": "+ `${z.city}`));
+    }
   });
+}
+makeDropDown();
+$('#timeZone').select(function(){
+  ifTrue();
+  selectedZone = $('#timeZone option:selected').val();
+  console.log(selectedZone);
+  // renderTime();
+});
+// console.log();
+
+// $('#timeZone').select(function() {
+//   console.log(selectedZone);
+// });
+
 // $('#countrySelect').append(Mustache.render(ddTemplate, aDropDown));
-// $('#timeZone').append(Mustache.render(ddTemplate, aDropDown))
+// $('#timeZone').append(Mustache.render(ddTemplate, dropDownZones))
 
 // ********************************************************* //
 // Click Handler checking for 12/24 hr and show/hide seconds //
@@ -126,11 +129,12 @@ $('#numHrs').click(function(){
   renderTime();
 });
 
+
 /**
 * Create dropdown for timezone
 *
 * What comes in: 
-* @TIMEZONE {string}
+* @TIMEZONE {object}
 * @return {string} Returns a string to pass to the mustache to renderTime function to forTime2
 * Errors thrown e.g. @throws {RangeError} and why
 */
