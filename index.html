@@ -69,7 +69,7 @@
       <!-- html goes here -->
       <div class="container"> <!-- container to hold switches -->
         <!-- Switch to show/hide seconds -->
-        <div class="pl-3 pb-3 row">
+        <div class="row pl-3 pb-3">
           <div class="col col-md-8 form-control form-check-inline bg-light border border-dark rounded p-2 m3"><!-- row for showSeconds switch -->
             <div class="mr-2 font-weight-bold align-baseline mySwitches d-none d-md-inline">Hide Seconds</div>
             <div class="mr-2 font-weight-bold align-baseline mySwitches d-inline d-md-none">Hide</div>
@@ -96,37 +96,36 @@
         <!-- end switch 12 vs 24 hr clock -->
       </div> <!-- close hold switches container -->
 
-      <!-- A card to hold the time -->
+      <!-- A card to hold local time -->
       <div class="container">
         <div class="row">
           <div class="col col-md-8">
             <div class="card" style="width: 100%">
               <div class="card-body">
                 <h5 class="card-title">Your local time is ...</h5>
+                <p id="timeZone"></p>
                 <p class="card-text"></p>
                 <div class="h1" id="forTime"></div> <!-- placeholder div for clock -->
-                  
-                
               </div>
             </div>
           </div>
         </div>
-      </div> <!-- end time card -->
+      </div> <!-- end local time card -->
 
-            <!-- A card to hold the 2nd time -->
-            <div class="container">
-              <div class="row">
-                <div class="col col-md-8">
-                  <div class="card" style="width: 100%">
-                    <div class="card-body">
-                      <h5 class="card-title">The time in Toronto is ...</h5>
-                      <p class="card-text"></p>
-                      <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->
-                    </div>
-                  </div>
-                </div>
+      <!-- A card to hold the 2nd time -->
+      <div class="container">
+        <div class="row">
+          <div class="col col-md-8">
+            <div class="card" style="width: 100%">
+              <div class="card-body">
+                <h5 class="card-title">The time in Toronto is ...</h5>
+                <p class="card-text"></p>
+                <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->
               </div>
-            </div> <!-- end 2nd time card -->
+            </div>
+          </div>
+        </div>
+      </div> <!-- end 2nd time card -->
 
     </main>
 
@@ -149,9 +148,22 @@
 
     <!-- Templates -->
     <!-- Sample Template -->
-    <!-- <script type="text/html" id="">
+    <script type="text/html" id="ddTemplate">
+      <div class="form-inline">
+        <!-- <label for="countrySelected" class="mr-2">In what currency?</label> -->
+        <div class="form-group">
 
-    </script> -->
+        <select class="custom-select form-control" id="tzSelected">
+          {{#dropDownValues}}
+          <option value='{{timeZone}}'>
+              {{cc}}: {{city}}
+          </option>
+          {{/dropDownValues}}
+        </select>
+      </div>
+        
+    </div>
+    </script>
 
   </body>
 </html>
