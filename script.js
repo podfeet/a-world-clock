@@ -11,7 +11,7 @@ let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 let TRUESECONDS = ''; // boolean true if show seconds is true
 let TRUE12HR = ''; // boolean true if numHrs is 12
 
-// More globally-scoped variables
+// Time Zone globally-scoped variables
 let zones = [];
 let dropDown = '';
 let selectedZone = '';
@@ -20,8 +20,10 @@ let selectedZone = '';
 // Document Ready Handler
 // 
 $(function(){
+  selectedZone = 'America/Toronto';
   renderTime();
   setInterval(renderTime, 1000); // update clock every second
+  makeDropDown();
 });
 
 // Document functions
@@ -38,8 +40,9 @@ $(function(){
 * Errors thrown e.g. @throws {RangeError} and why
 */
 function renderTime(){
+
   $('#forTime').html(moment().format(FORMATTEDTIME));
-  $('#forTime2').html(moment().tz('America/Toronto').format(FORMATTEDTIME));
+  $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME));
 }
 // *********************************************************** //
 // populate the timezone dropdown //
@@ -71,18 +74,14 @@ function makeDropDown(){
     }
   });
 }
-makeDropDown();
+
+// Event handler for when the dropdown is changed to choose a new zone
 $('#timeZone').change(function(){ // triggers the function EVERY time you change the select
   ifTrue();
   selectedZone = $('#timeZone option:selected').val();
   console.log(selectedZone);
   // renderTime();
 });
-// console.log();
-
-// $('#timeZone').select(function() {
-//   console.log(selectedZone);
-// });
 
 // $('#countrySelect').append(Mustache.render(ddTemplate, aDropDown));
 // $('#timeZone').append(Mustache.render(ddTemplate, dropDownZones))
