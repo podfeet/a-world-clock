@@ -63,7 +63,7 @@ function makeDropDown(){
   dropDown = $('#timeZone'); // dropDown is the ID of the select element in the html
   dropDown.empty(); // empty whatever is in the dropdown to start with
   // create a disabled but selected default to tell people to use the dropdown
-  dropDown.append('<option selected="true" disabled>Choose Region</option>')
+  dropDown.append('<option selected="true" disabled>Toronto</option>')
   dropDown.prop('selectedIndex', 0);
   // give the json file a name
   const jsonUrl = './zones.json';

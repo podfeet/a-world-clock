@@ -54,18 +54,20 @@
     </nav>
 
     <!-- The page heading -->
+    <!-- The page heading -->
     <header>
       <div class="container-fluid bg bg-light mb-2 rounded">
         <div class="col-8">
           <div class="row">
             <div class="col-10">
-              <h1>The NosillaCastaways World Clock</h1>
+              <!-- Hide heading on small screens -->
+              <h1 class="h3 d-md-inline d-none">The NosillaCastaways World Clock</h1>
             </div>
           </div>
-          <div class='row'>
+          <div class="row">
             <p class="lead">
               <div class="col-2"><img width="75" alt="Programming by Stealth Logo" src="https://pbs.bartificer.net/assets/logo.png"></div>
-              <div class="col-5">
+              <div class="col-md-5 d-xs-none">
                 <p>Programming By Stealth #92 Challenge</p>
                 <p><a href="https://pbs.bartificer.net/pbs92.html" target="_blank" rel="noopener">pbs.bartificer.net/...</a></p>
               </div>
@@ -82,7 +84,7 @@
       <div class="container"> 
         <!-- Switch to show/hide seconds -->
         <div class="row pl-3 pb-3">
-          <div class="col col-md-4 form-control form-check-inline bg-light border border-dark rounded p-2 m3"><!-- row for showSeconds switch -->
+          <div class="col col-md-6 form-control form-check-inline bg-light border border-dark rounded p-2 m3"><!-- row for showSeconds switch -->
             <div class="mr-2 font-weight-bold align-baseline mySwitches d-none d-md-inline">Hide Seconds</div>
             <div class="mr-2 font-weight-bold align-baseline mySwitches d-inline d-md-none">Hide</div>
             <div class="custom-control custom-switch form-control-md">
@@ -95,7 +97,7 @@
 
         <!-- Switch to  12 vs 24 hr clock -->
         <div class="row pl-3 pb-3">
-          <div class="col col-md-4 form-control form-check-inline bg-light border border-dark rounded p-2 m3"> <!-- row for numHrs switch -->
+          <div class="col col-md-6 form-control form-check-inline bg-light border border-dark rounded p-2 m3"> <!-- row for numHrs switch -->
             <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clock</div>
             <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div>
             <div class="custom-control custom-switch form-control-md">
