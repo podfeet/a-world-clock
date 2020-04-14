@@ -55,10 +55,20 @@
 
     <!-- The page heading -->
     <header>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="jumbotron">
-            <h1>The NosillaCastaways World Clock</h1>
+      <div class="container-fluid bg bg-light mb-2 rounded">
+        <div class="col-8">
+          <div class="row">
+            <div class="col-10">
+              <h1>The NosillaCastaways World Clock</h1>
+            </div>
+          </div>
+          <div class='row'>
+            <p class="lead">
+              <div class="col-2"><img width="75" alt="Programming by Stealth Logo" src="https://pbs.bartificer.net/assets/logo.png"></div>
+              <div class="col-5">
+                <p>Programming By Stealth #92 Challenge</p>
+                <p><a href="https://pbs.bartificer.net/pbs92.html" target="_blank" rel="noopener">pbs.bartificer.net/...</a></p>
+              </div>
           </div>
         </div>
       </div> <!-- close container for page header -->
@@ -67,10 +77,12 @@
     <!-- The main page body -->
     <main>
       <!-- html goes here -->
-      <div class="container"> <!-- container to hold switches -->
+
+      <!-- container to hold switches -->
+      <div class="container"> 
         <!-- Switch to show/hide seconds -->
         <div class="row pl-3 pb-3">
-          <div class="col col-md-8 form-control form-check-inline bg-light border border-dark rounded p-2 m3"><!-- row for showSeconds switch -->
+          <div class="col col-md-4 form-control form-check-inline bg-light border border-dark rounded p-2 m3"><!-- row for showSeconds switch -->
             <div class="mr-2 font-weight-bold align-baseline mySwitches d-none d-md-inline">Hide Seconds</div>
             <div class="mr-2 font-weight-bold align-baseline mySwitches d-inline d-md-none">Hide</div>
             <div class="custom-control custom-switch form-control-md">
@@ -79,11 +91,11 @@
             </div>
           </div>
         </div>
-        <!-- end switch 12 vs 24 hr clock -->
+        <!-- end switch to show/hide seconds -->
 
         <!-- Switch to  12 vs 24 hr clock -->
         <div class="row pl-3 pb-3">
-          <div class="col col-md-8  form-control form-check-inline bg-light border border-dark rounded p-2 m3"> <!-- row for numHrs switch -->
+          <div class="col col-md-4 form-control form-check-inline bg-light border border-dark rounded p-2 m3"> <!-- row for numHrs switch -->
             <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clock</div>
             <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div>
             <div class="custom-control custom-switch form-control-md">
@@ -99,10 +111,10 @@
       <!-- A card to hold local time -->
       <div class="container mb-3">
         <div class="row">
-          <div class="col col-md-8">
-            <div class="card" style="width: 100%">
+          <div class="col col-md-6">
+            <div class="card bg-primary text-white" style="width: 100%">
               <div class="card-body">
-                <h5 class="card-title">Your local time is ...</h5>
+                <h5 class="card-title bg-light rounded text-primary col p-2">Your local time is ...</h5>
                 <p class="card-text"></p>
                 <div class="h1" id="forTime"></div> <!-- placeholder div for clock -->
               </div>
@@ -114,10 +126,10 @@
       <!-- A card to hold the 2nd time -->
       <div class="container">
         <div class="row">
-          <div class="col col-md-8">
-            <div class="card" style="width: 100%">
+          <div class="col col-md-6">
+            <div class="card bg-primary text-white" style="width: 100%">
               <div class="card-body">
-                <h5 class="card-title">The time in <select class="mr-2 ml-2" id="timeZone" name ="locality"></select> is ...</h5>
+                <h5 class="card-title bg-light rounded text-primary col p-2">The time in <select class="mr-2 ml-2 col-4 col-md-8 text-primary" id="timeZone" name ="locality"></select> is ...</h5>
                 
                 <p class="card-text"></p>
                 <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->
