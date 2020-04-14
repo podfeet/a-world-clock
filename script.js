@@ -39,9 +39,10 @@ $(function(){
 * @return {string} Returns a string with formatted time and sends it placeholder html
 * Errors thrown e.g. @throws {RangeError} and why
 */
+
 function renderTime(){
-  $('#forTime').html(moment().format(FORMATTEDTIME));
-  $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME));
+  $('#forTime').html(moment().format(FORMATTEDTIME)); // local time
+  $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME)); // time in selected zone
 }
 // *********************************************************** //
 // populate the timezone dropdown //
@@ -52,7 +53,7 @@ function renderTime(){
 * What comes in: 
 * @zones.json {json object}
 * @#timeZone {ID of select for the dropdown}
-* @return {string} Returns a string with formatted time and sends it to placeholder htm IDl
+* @return {string} Returns a string with formatted time and sends it to placeholder html ID
 * Errors thrown e.g. @throws {RangeError} and why
 */
 
@@ -81,9 +82,6 @@ $('#timeZone').change(function(){ // triggers the function EVERY time you change
   console.log(selectedZone);
   // renderTime();
 });
-
-// $('#countrySelect').append(Mustache.render(ddTemplate, aDropDown));
-// $('#timeZone').append(Mustache.render(ddTemplate, dropDownZones))
 
 // ********************************************************* //
 // Click Handler checking for 12/24 hr and show/hide seconds //
