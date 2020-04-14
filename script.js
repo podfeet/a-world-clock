@@ -70,7 +70,8 @@ function makeDropDown(){
   // feels like an AJAX call to get the data
   $.getJSON(jsonUrl, function(zones){
     for (const z of zones){
-      dropDown.append($('<option></option>').attr('value', z.city).text(`${z.cc}` + ": "+ `${z.city}`));
+      console.log(z.name);
+      dropDown.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
     }
   });
 }
