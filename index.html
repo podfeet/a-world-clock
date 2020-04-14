@@ -97,7 +97,7 @@
       </div> <!-- close hold switches container -->
 
       <!-- A card to hold local time -->
-      <div class="container">
+      <div class="container mb-3">
         <div class="row">
           <div class="col col-md-8">
             <div class="card" style="width: 100%">
@@ -110,15 +110,6 @@
           </div>
         </div>
       </div> <!-- end local time card -->
-
-      <!-- Dropdown to choose Timezone -->
-      <div class="container">
-        <div class="row">
-          <div class="col col-md-8">
-            <select class="h3" id="timeZone" name ="locality"></select>
-          </div>
-        </div>
-      </div>
       
       <!-- A card to hold the 2nd time -->
       <div class="container">
@@ -126,7 +117,7 @@
           <div class="col col-md-8">
             <div class="card" style="width: 100%">
               <div class="card-body">
-                <h5 class="card-title">The time in Toronto is ...</h5>
+                <h5 class="card-title">The time in <select class="mr-2 ml-2" id="timeZone" name ="locality"></select> is ...</h5>
                 
                 <p class="card-text"></p>
                 <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->

@@ -40,7 +40,6 @@ $(function(){
 * Errors thrown e.g. @throws {RangeError} and why
 */
 function renderTime(){
-
   $('#forTime').html(moment().format(FORMATTEDTIME));
   $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME));
 }
