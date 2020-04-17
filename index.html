@@ -104,7 +104,7 @@
             <div id="hrsDesc" class="sr-only">Switch to toggle between 24 and 12 hour clock</div> 
             <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clock</div>
             <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div>
-            <div class="custom-control custom-switch form-control-md">
+            <div class="custom-control custom-switch form-control-md" aria-describedby="hrsDesc">
                 <input type="checkbox" class="custom-control-input" checked id="numHrs" name="numHrs" >
               <label class="custom-control-label mySwitches" for="numHrs">12 Hour Clock</label>
             
@@ -135,7 +135,9 @@
           <div class="col col-md-6">
             <div class="card bg-primary text-white" style="width: 100%">
               <div class="card-body">
-                <h5 class="card-title bg-light rounded text-primary col p-2 pb-1">The time in:<p><select class="mr-2 ml-2 col-5 col-md-11 text-primary" id="timeZone" name ="locality"></select></p></h5>
+                <!-- <h5 class="card-title bg-light rounded text-primary col p-2 pb-1">The time in: --> 
+                  <label class="h5 card-title bg-light rounded text-primary col p-2 pb-1" for="timeZone" sr-only="true">The time in:</label>
+                  <p><select class="mr-2 ml-2 col-5 col-md-11 text-primary" id="timeZone" name ="locality"></select></p></h5>
                 
                 <p class="card-text"></p>
                 <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->

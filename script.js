@@ -44,6 +44,23 @@ function renderTime(){
   $('#forTime').html(moment().format(FORMATTEDTIME)); // local time
   $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME)); // time in selected zone
 }
+
+var localTime = document.querySelector('#forTime');
+function getTime() {
+  return new Date().toLocaleString;
+}
+
+function setTime(){
+  var time = getTime();
+  if (localTime.innerText.split(':').length === 1){
+    localTime.innterTex = time;
+  } else {
+    localTime.innerText = time.split(':').join(' ');
+  }
+}
+setInterval(setTime, 1000);
+setTime();
+
 // *********************************************************** //
 // populate the timezone dropdown //
 // *********************************************************** //
