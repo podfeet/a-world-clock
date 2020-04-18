@@ -3,6 +3,13 @@
 // 
 
 // Time formats
+
+let $seperator = $('<span />').addClass('seperator').text(':'); 
+
+// let TIME12WSEC = `'h${$seperator}mm${$seperator}ss a'` ;
+let h = 'h';
+let m = 'mm';
+let s = 'ss a';
 let TIME12WSEC = 'h:mm:ss a';
 let TIME12WOSEC = 'h:mm a';
 let TIME24WSEC = 'HH:mm:ss';
@@ -80,8 +87,6 @@ function makeDropDown(){
 $('#timeZone').change(function(){ // triggers the function EVERY time you change the select
   ifTrue();
   selectedZone = $('#timeZone option:selected').val();
-  console.log(selectedZone);
-  // renderTime();
 });
 
 // ********************************************************* //
