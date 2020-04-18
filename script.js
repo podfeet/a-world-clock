@@ -4,8 +4,6 @@
 
 // Time formats
 
-let $seperator = $('<span />').addClass('seperator').text(':'); 
-
 // let TIME12WSEC = `'h${$seperator}mm${$seperator}ss a'` ;
 let h = 'h';
 let m = 'mm';
