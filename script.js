@@ -121,6 +121,7 @@ function ifTrue(){
     }
 }
 
+// Two click handlers to render the time after changing showSeconds and numHrs
 $('#showSeconds').click(function(){
   ifTrue();
   renderTime();
@@ -130,60 +131,25 @@ $('#numHrs').click(function(){
   renderTime();
 });
 
+// elaborate function to show range slider input value as sliding
+// from https://codepen.io/yannicvanveen/pen/HtvbI
+// maybe too cute - just want to show the number somewhere that sticks 
+$('input[type="range"]').on('input', function() {
 
-/**
-* Create dropdown for timezone
-*
-* What comes in: 
-* @TIMEZONE {object}
-* @return {string} Returns a string to pass to the mustache to renderTime function to forTime2
-* Errors thrown e.g. @throws {RangeError} and why
-*/
+  var control = $(this),
+    controlMin = control.attr('min'),
+    controlMax = control.attr('max'),
+    controlVal = control.val(),
+    controlThumbWidth = control.data('thumbwidth');
 
+  var range = controlMax - controlMin;
+  
+  var position = ((controlVal - controlMin) / range) * 100;
+  var positionOffset = Math.round(controlThumbWidth * position / 100) - (controlThumbWidth / 2);
+  var output = control.next('output');
+  
+  output
+    .css('left', 'calc(' + position + '% - ' + positionOffset + 'px)')
+    .text(controlVal);
 
-
-// ************** //
-// Click Handlers //
-// ************** //
-
-/**
-* Click Handler for Timezone selection (Select)
-*
-* What comes in e.g. @param {string} boogers which is the string
-* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
-* Errors thrown e.g. @throws {RangeError} and why
-*/
-
-/**
-* Click Handler for 12 vs 24 hr and show/hide seconds selection (checkbox custom-switch)
-*
-* What comes in e.g. @param {string} boogers which is the string
-* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
-* Errors thrown e.g. @throws {RangeError} and why
-*/
-
-
-/**
-* Click Handler for pulsing divider option (radio)
-* Can I animate the radio button to help illustrate?
-*
-* What comes in e.g. @param {string} boogers which is the string
-* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
-* Errors thrown e.g. @throws {RangeError} and why
-*/
-
-/**
-* Description
-*
-* What comes in e.g. @param {string} boogers which is the string
-* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
-* Errors thrown e.g. @throws {RangeError} and why
-*/
-
-/**
-* First test of moment.js
-* 
-* What comes in e.g. @param {string} boogers which is the string
-* What goes out e.g. @return {jQuery} Returns a jQuery ojbect that contains...
-* Errors thrown e.g. @throws {RangeError} and why
-*/
+});
