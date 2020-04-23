@@ -21,6 +21,10 @@ let zones = [];
 let dropDown = '';
 let selectedZone = '';
 
+// TimeShifter variables
+let hrsShifted = '';
+let minShifted = '';
+
 // 
 // Document Ready Handler
 // 
@@ -131,25 +135,42 @@ $('#numHrs').click(function(){
   renderTime();
 });
 
+// Event Handler to change time via range sliders
+// $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
+function shiftTime(){
+  let addHours = $('changeHrs').value;
+  alert(addHours);
+}
+
 // elaborate function to show range slider input value as sliding
 // from https://codepen.io/yannicvanveen/pen/HtvbI
 // maybe too cute - just want to show the number somewhere that sticks 
-$('input[type="range"]').on('input', function() {
+// $('input[type="range"]').on('input', function() {
+//   var control = $(this),
+//     controlMin = control.attr('min'),
+//     controlMax = control.attr('max'),
+//     controlVal = control.val(),
+//     controlThumbWidth = control.data('thumbwidth');
 
-  var control = $(this),
-    controlMin = control.attr('min'),
-    controlMax = control.attr('max'),
-    controlVal = control.val(),
-    controlThumbWidth = control.data('thumbwidth');
-
-  var range = controlMax - controlMin;
+//   var range = controlMax - controlMin;
   
-  var position = ((controlVal - controlMin) / range) * 100;
-  var positionOffset = Math.round(controlThumbWidth * position / 100) - (controlThumbWidth / 2);
-  var output = control.next('output');
+//   var position = ((controlVal - controlMin) / range) * 100;
+//   var positionOffset = Math.round(controlThumbWidth * position / 100) - (controlThumbWidth / 2);
+//   var output = control.next('output');
   
-  output
-    .css('left', 'calc(' + position + '% - ' + positionOffset + 'px)')
-    .text(controlVal);
+//   output
+//     .css('left', 'calc(' + position + '% - ' + positionOffset + 'px)')
+//     .text(controlVal);
+// });
 
-});
+// https://codepen.io/prasanthmj/pen/OxoamJ
+$(function(){
+  $('.slider').on('input change', function(){
+    $(this).next($('.slider_label')).html(this.value);
+    });
+    $('.slider_label').each(function(){
+      var value = $(this).prev().attr('value');
+      $(this).html(value);
+    });
+  });
+

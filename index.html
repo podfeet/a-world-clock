@@ -55,28 +55,7 @@
         background: #007bff; /* Green background */
         cursor: pointer; /* Cursor on hover */
       }
-
-      /* css for output of slider from https://codepen.io/yannicvanveen/pen/HtvbI  */
-    
-      output {
-        position: absolute;
-        /* top: -32px; */
-        display: none;
-        width: 50px;
-        height: 24px;
-        border: 1px solid #e2e2e2;
-        background-color: #fff;
-        border-radius: 3px;
-        color: #777;
-        font-size: .8em;
-        line-height: 24px;
-        text-align: center;
-      }
-
-      input[type=range]:active + output {
-        display: block;
-        transform: translateX(-50%);
-      }
+      
     </style>
   
     <title>NosillaCast World Clock</title>
@@ -181,15 +160,18 @@
         <div class="row">
           <div class="col">
             <form>
-                <div class="form-group">
-                  <div class="mb-4">
-                  <label for="changeHrs">Scroll Hours</label>
+              <div class="form-group">
+                <div class="mb-4">
+                  <label for="changeHrs">Time Shift Hours</label>
                   <input type="range" class="slider form-control-input" min="0" max="11" step="1" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
-                  <output name="hrsVal">0</output>
+                  <p class="slider_label" id="hrsChosen"></p>
+                  <!-- <output name="hrsVal">0</output> -->
                 </div>
-                <div class="mt-3">
-                  <label for="changeMin">Scroll Min (by 15 min increments)</label>
-                  <input type="range" class="slider form-control-input" min="0" max="45" step="15" value="0" id="changeMin">
+                <div class="mt-3 mb-5">
+                  <label for="changeMin">Time Shift Min (by 15 min increments)</label>
+                  <input type="range" class="slider form-control-input" min="0" max="45" step="15" value="0" id="changeMin" data-thumbwidth="20">
+                  <!-- <output name="hrsVal">0</output> -->
+                  <p class="slider_label" id="hrsChosen"></p>
                 </div>
               </div>
             </form>
@@ -207,6 +189,7 @@
                 <h5 class="card-title bg-light rounded text-primary col p-2">Your local time:</h5>
                 <p class="card-text"></p>
                 <div class="h1" id="forTime"></div> <!-- placeholder div for clock -->
+                <div class="h2 danger" id="shiftedLocal"></div>
               </div>
             </div>
           </div>
