@@ -136,33 +136,15 @@ $('#numHrs').click(function(){
 });
 
 // Event Handler to change time via range sliders
+// put it in this when you get it captured
 // $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
+
 function shiftTime(){
   let addHours = $('changeHrs').value;
   alert(addHours);
 }
 
-// elaborate function to show range slider input value as sliding
-// from https://codepen.io/yannicvanveen/pen/HtvbI
-// maybe too cute - just want to show the number somewhere that sticks 
-// $('input[type="range"]').on('input', function() {
-//   var control = $(this),
-//     controlMin = control.attr('min'),
-//     controlMax = control.attr('max'),
-//     controlVal = control.val(),
-//     controlThumbWidth = control.data('thumbwidth');
-
-//   var range = controlMax - controlMin;
-  
-//   var position = ((controlVal - controlMin) / range) * 100;
-//   var positionOffset = Math.round(controlThumbWidth * position / 100) - (controlThumbWidth / 2);
-//   var output = control.next('output');
-  
-//   output
-//     .css('left', 'calc(' + position + '% - ' + positionOffset + 'px)')
-//     .text(controlVal);
-// });
-
+// function to show value chose on range sliders
 // https://codepen.io/prasanthmj/pen/OxoamJ
 $(function(){
   $('.slider').on('input change', function(){
