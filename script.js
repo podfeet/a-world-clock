@@ -13,8 +13,8 @@ let TIME12WOSEC = 'h:mm a';
 let TIME24WSEC = 'HH:mm:ss';
 let TIME24WOSEC = 'HH:mm';
 let FORMATTEDTIME = TIME12WSEC; // Default formatted time
-let TRUESECONDS = ''; // boolean true if show seconds is true
-let TRUE12HR = ''; // boolean true if numHrs is 12
+let TRUESECONDS = true; // boolean true if show seconds is true
+let TRUE12HR = true; // boolean true if numHrs is 12
 
 // Time Zone globally-scoped variables
 let zones = [];
@@ -138,12 +138,16 @@ $('#numHrs').click(function(){
 // Event Handler to change time via range sliders
 // put it in this when you get it captured
 // $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
-
+let addHours = '0';
 function shiftTime(){
-  let addHours = $('changeHrs').value;
-  alert(addHours);
+  $('#changeHrs').on('input change', function(){
+    console.log(`you changed the hours by ${this.value}`); // this worked 
+    $('#forTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this worked but it reverted on the next second
+  })
 }
 
+
+shiftTime();
 // function to show value chose on range sliders
 // https://codepen.io/prasanthmj/pen/OxoamJ
 $(function(){
