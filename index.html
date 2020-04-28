@@ -177,6 +177,15 @@
         </div>
       </div> <!-- close container for range sliders -->
 
+       <!-- NEW STUFF PROBABLY WRONG -->
+      <!-- One placeholder for all clocks using clockCards template -->
+      <div class="container-fluid">
+        <div class="col-12">
+          <div class="row" id="clocksPlaceholder"></div>
+        </div>
+      </div>
+      <!-- end clocks -->
+    <!-- END NEW PROBABLY WRONG STUFF -->
 
       <!-- A card to hold local time -->
       <div class="container mb-3">
@@ -213,6 +222,19 @@
       </div> <!-- end 2nd time card -->
 
     </main>
+    <!-- NEW STUFF PROBABLY WRONG -->
+    <!-- The clock card template -->
+    <script type="text/html" id="clockCards">
+      <div class="card bg-primary text-white" style="width: 100%">
+        <div class="card-body">
+          <h5 class="card-title bg-light rounded text-primary col p-2">{{timeDescription}}</h5>
+          <p class="card-text"></p>
+          <div class="h1" id="{{timeID}}"></div> <!-- placeholder div for clock -->
+          <div class="h2 danger" id="shiftedLocal"></div>
+        </div>
+      </div>
+    </script>
+    <!-- END NEW PROBABLY WRONG STUFF -->
 
 
     <!-- Include jQuery, Popper, then Bootstrap - IN THIS ORDER -->

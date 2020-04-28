@@ -53,6 +53,16 @@ function renderTime(){
   $('#forTime').html(moment().format(FORMATTEDTIME)); // local time
   $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME)); // time in selected zone
 }
+// NEW STUFF PROBABLY WRONG
+let localClock = {
+  timeDescription: 'Local Time',
+  timeID: 'localTime',
+  timeZone: 'html(moment().format(FORMATTEDTIME))'
+
+}
+let clockCardTemplate = $('#clockCards').html();
+$('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock))
+// END NEW PROBABLY WRONG STUFF
 
 // *********************************************************** //
 // populate the timezone dropdown //
@@ -145,9 +155,8 @@ function shiftTime(){
     $('#forTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this worked but it reverted on the next second
   })
 }
-
-
 shiftTime();
+
 // function to show value chose on range sliders
 // https://codepen.io/prasanthmj/pen/OxoamJ
 $(function(){
