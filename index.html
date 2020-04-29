@@ -179,10 +179,8 @@
 
        <!-- NEW STUFF PROBABLY WRONG -->
       <!-- One placeholder for all clocks using clockCards template -->
-      <div class="container-fluid">
-        <div class="col-12">
+      <div class="container">
           <div class="row" id="clocksPlaceholder"></div>
-        </div>
       </div>
       <!-- end clocks -->
     <!-- END NEW PROBABLY WRONG STUFF -->
@@ -194,9 +192,9 @@
             <div class="card bg-primary text-white" style="width: 100%">
               <div class="card-body">
                 <h5 class="card-title bg-light rounded text-primary col p-2">Your local time:</h5>
-                <p class="card-text"></p>
+                <!-- <p class="card-text"></p> -->
                 <div class="h1" id="forTime"></div> <!-- placeholder div for clock -->
-                <div class="h2 danger" id="shiftedLocal"></div>
+                <!-- <div class="h2 danger" id="shiftedLocal"></div> -->
               </div>
             </div>
           </div>
@@ -213,7 +211,7 @@
                   <label class="h5 card-title bg-light rounded text-primary col p-2 pb-1" for="timeZone" sr-only="true">The time in:</label>
                   <p><select class="mr-2 ml-2 col-5 col-md-11 text-primary" id="timeZone" name ="locality"></select></p></h5>
                 
-                <p class="card-text"></p>
+                <!-- <p class="card-text"></p> -->
                 <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->
               </div>
             </div>
@@ -225,12 +223,13 @@
     <!-- NEW STUFF PROBABLY WRONG -->
     <!-- The clock card template -->
     <script type="text/html" id="clockCards">
-      <div class="card bg-primary text-white" style="width: 100%">
-        <div class="card-body">
-          <h5 class="card-title bg-light rounded text-primary col p-2">{{timeDescription}}</h5>
+      <div class= "col col-md-6">
+        <div class="card bg-primary text-white" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title bg-light rounded text-primary col p-2">{{timeDescription}}</h5>
           <p class="card-text"></p>
           <div class="h1" id="{{timeID}}"></div> <!-- placeholder div for clock -->
-          <div class="h2 danger" id="shiftedLocal"></div>
+          </div>
         </div>
       </div>
     </script>

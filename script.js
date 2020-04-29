@@ -25,6 +25,11 @@ let selectedZone = '';
 let hrsShifted = '';
 let minShifted = '';
 
+// initialize the renderTime function as a global variable
+// let rendertTime();
+
+let localClock = {};
+
 // 
 // Document Ready Handler
 // 
@@ -33,6 +38,38 @@ $(function(){
   renderTime();
   setInterval(renderTime, 1000); // update clock every second
   makeDropDown();
+
+  // NEW STUFF PROBABLY WRONG
+  class AClock{
+    // define the constructor
+    constructor(details){
+      //  Initialize the data attributes
+      this.timeDescription = details.timeDescription;
+      this.timeID = details.timeID;
+      this.renderAs = details.renderAs;
+    }
+    //  Define the Instance functions
+    aRenderTime(){
+      this.renderAs;
+      return `I did aRenderTime`; // this typed to console with localClock.aRenderTime();
+    }
+}
+  // create an instance of the class AClock for the local time
+  localClock = new AClock ({
+    timeDescription: 'Your Local Time is…',
+    timeID: 'localTime',
+    // timeZone: html(moment().format(FORMATTEDTIME)),
+    renderAs: 
+      $('#this.timeID').html(moment().format(FORMATTEDTIME))
+  });
+  localClock.aRenderTime();
+
+  // END NEW PROBABLY WRONG STUFF
+
+  // Convert the template script to a string
+  let clockCardTemplate = $('#clockCards').html();
+  // Render the clock
+  $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock))
 });
 
 // Document functions
@@ -49,20 +86,11 @@ $(function(){
 * Errors thrown e.g. @throws {RangeError} and why
 */
 
+// Original method to render 2 clocks
 function renderTime(){
   $('#forTime').html(moment().format(FORMATTEDTIME)); // local time
   $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME)); // time in selected zone
 }
-// NEW STUFF PROBABLY WRONG
-let localClock = {
-  timeDescription: 'Local Time',
-  timeID: 'localTime',
-  timeZone: 'html(moment().format(FORMATTEDTIME))'
-
-}
-let clockCardTemplate = $('#clockCards').html();
-$('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock))
-// END NEW PROBABLY WRONG STUFF
 
 // *********************************************************** //
 // populate the timezone dropdown //
