@@ -46,21 +46,18 @@ $(function(){
       //  Initialize the data attributes
       this.timeDescription = details.timeDescription;
       this.timeID = details.timeID;
-      this.renderAs = details.renderAs;
+      // this.renderAs = details.renderAs;
     }
     //  Define the Instance functions
     aRenderTime(){
-      this.renderAs;
-      return `I did aRenderTime`; // this typed to console with localClock.aRenderTime();
+      $('#this.timeID').html(moment().format(FORMATTEDTIME))
+      // return `I did aRenderTime`; // this typed to console with localClock.aRenderTime();
     }
-}
+  }
   // create an instance of the class AClock for the local time
   localClock = new AClock ({
     timeDescription: 'Your Local Time is…',
-    timeID: 'localTime',
-    // timeZone: html(moment().format(FORMATTEDTIME)),
-    renderAs: 
-      $('#this.timeID').html(moment().format(FORMATTEDTIME))
+    timeID: 'localTime',  
   });
   localClock.aRenderTime();
 
