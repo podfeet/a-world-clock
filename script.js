@@ -39,158 +39,166 @@ $(function(){
   setInterval(renderTime, 1000); // update clock every second
   makeDropDown();
 
-  // NEW STUFF PROBABLY WRONG
+  // 
   class AClock{
     // define the constructor
     constructor(details){
       //  Initialize the data attributes
+      let self = this;
       this.timeDescription = details.timeDescription;
       this.timeID = details.timeID;
-      // this.renderAs = details.renderAs;
+      this.renderAs = details.renderAs; 
+      // string#$momentstuff
+      this.interval = details.interval;
+  
+      self.aRenderTime = this.aRenderTime.bind(this);
     }
     //  Define the Instance functions
     aRenderTime(){
-      $('#this.timeID').html(moment().format(FORMATTEDTIME))
-      // return `I did aRenderTime`; // this typed to console with localClock.aRenderTime();
+      $(`#${this.timeID}`).html(this.renderAs); // renders but interval does NOT work
+      // $(`#${this.timeID}`).html(moment().format(FORMATTEDTIME)); // renders & interval works
+    }
+    clockInterval(){
+      setInterval(this.aRenderTime(), this.interval)
     }
   }
+
   // create an instance of the class AClock for the local time
   localClock = new AClock ({
-    timeDescription: 'Your Local Time is…',
+    timeDescription: 'POOP Your Local Time is…',
     timeID: 'localTime',  
+    renderAs: `${moment().format(FORMATTEDTIME)}`,
+    interval: '1000'
   });
-  localClock.aRenderTime();
-
-  // END NEW PROBABLY WRONG STUFF
 
   // Convert the template script to a string
   let clockCardTemplate = $('#clockCards').html();
   // Render the clock
   $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock))
-});
 
-// Document functions
+  localClock.aRenderTime();
+  localClock.clockInterval();
+ 
+  // *********************************************************** //
+  // render the time in the chosen format and put it in the html //
+  // *********************************************************** //
+  /**
+  * Render Time Function
+  *
+  * What comes in: 
+  * @FORMATTEDTIME {string}
+  * @return {string} Returns a string with formatted time and sends it placeholder html
+  * Errors thrown e.g. @throws {RangeError} and why
+  */
 
-// *********************************************************** //
-// render the time in the chosen format and put it in the html //
-// *********************************************************** //
-/**
-* Render Time Function
-*
-* What comes in: 
-* @FORMATTEDTIME {string}
-* @return {string} Returns a string with formatted time and sends it placeholder html
-* Errors thrown e.g. @throws {RangeError} and why
-*/
+  // Original method to render 2 clocks
+  function renderTime(){
+    $('#forTime').html(moment().format(FORMATTEDTIME)); // local time
+    $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME)); // time in selected zone
+  }
 
-// Original method to render 2 clocks
-function renderTime(){
-  $('#forTime').html(moment().format(FORMATTEDTIME)); // local time
-  $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME)); // time in selected zone
-}
+  // *********************************************************** //
+  // populate the timezone dropdown //
+  // *********************************************************** //
+  /**
+  * Create dropdown for timezone selection
+  *
+  * What comes in: 
+  * @zones.json {json object}
+  * @#timeZone {ID of select for the dropdown}
+  * @return {string} Returns a string with formatted time and sends it to placeholder html ID
+  * Errors thrown e.g. @throws {RangeError} and why
+  */
 
-// *********************************************************** //
-// populate the timezone dropdown //
-// *********************************************************** //
-/**
-* Create dropdown for timezone selection
-*
-* What comes in: 
-* @zones.json {json object}
-* @#timeZone {ID of select for the dropdown}
-* @return {string} Returns a string with formatted time and sends it to placeholder html ID
-* Errors thrown e.g. @throws {RangeError} and why
-*/
+  // source: https://www.codebyamir.com/blog/populate-a-select-dropdown-list-with-json
+  // shortcut for full AJAX call: https://api.jquery.com/jQuery.getJSON/
+  function makeDropDown(){
+    dropDown = $('#timeZone'); // dropDown is the ID of the select element in the html
+    dropDown.empty(); // empty whatever is in the dropdown to start with
+    // create a disabled but selected default to tell people to use the dropdown
+    dropDown.append('<option selected="true" disabled>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>')
+    dropDown.prop('selectedIndex', 0);
+    // give the json file a name
+    const jsonUrl = './zones.json';
+    // feels like an AJAX call to get the data
+    $.getJSON(jsonUrl, function(zones){
+      for (const z of zones){
+        dropDown.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
+      }
+    });
+  }
 
-// source: https://www.codebyamir.com/blog/populate-a-select-dropdown-list-with-json
-// shortcut for full AJAX call: https://api.jquery.com/jQuery.getJSON/
-function makeDropDown(){
-  dropDown = $('#timeZone'); // dropDown is the ID of the select element in the html
-  dropDown.empty(); // empty whatever is in the dropdown to start with
-  // create a disabled but selected default to tell people to use the dropdown
-  dropDown.append('<option selected="true" disabled>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>')
-  dropDown.prop('selectedIndex', 0);
-  // give the json file a name
-  const jsonUrl = './zones.json';
-  // feels like an AJAX call to get the data
-  $.getJSON(jsonUrl, function(zones){
-    for (const z of zones){
-      dropDown.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
-    }
+  // Event handler for when the dropdown is changed to choose a new zone
+  $('#timeZone').change(function(){ // triggers the function EVERY time you change the select
+    ifTrue();
+    selectedZone = $('#timeZone option:selected').val();
   });
-}
 
-// Event handler for when the dropdown is changed to choose a new zone
-$('#timeZone').change(function(){ // triggers the function EVERY time you change the select
-  ifTrue();
-  selectedZone = $('#timeZone option:selected').val();
-});
+  // ********************************************************* //
+  // Click Handler checking for 12/24 hr and show/hide seconds //
+  // ********************************************************* //
+  /**
+  * Define Time format
+  *
+  * What comes in: 
+  * @showSeconds {boolean}
+  * @numHrs {string} 12 or 24
+  * @return {string} Returns a string that defines the time format
+  * Errors thrown e.g. @throws {RangeError} and why
+  */
 
-// ********************************************************* //
-// Click Handler checking for 12/24 hr and show/hide seconds //
-// ********************************************************* //
-/**
-* Define Time format
-*
-* What comes in: 
-* @showSeconds {boolean}
-* @numHrs {string} 12 or 24
-* @return {string} Returns a string that defines the time format
-* Errors thrown e.g. @throws {RangeError} and why
-*/
-
-function ifTrue(){
-  TRUESECONDS = ($("input[id][name$='showSeconds']").prop( "checked" ));
-  TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
-  if (TRUESECONDS && TRUE12HR){
-    FORMATTEDTIME = TIME12WSEC
-    }
-    else{
-      if (TRUESECONDS && !TRUE12HR){
-        FORMATTEDTIME = TIME24WSEC
-        }
-        else{
-          if (!TRUESECONDS && TRUE12HR){
-            FORMATTEDTIME = TIME12WOSEC
-            }
-            else{
-                FORMATTEDTIME = TIME24WOSEC
+  function ifTrue(){
+    TRUESECONDS = ($("input[id][name$='showSeconds']").prop( "checked" ));
+    TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
+    if (TRUESECONDS && TRUE12HR){
+      FORMATTEDTIME = TIME12WSEC
+      }
+      else{
+        if (TRUESECONDS && !TRUE12HR){
+          FORMATTEDTIME = TIME24WSEC
+          }
+          else{
+            if (!TRUESECONDS && TRUE12HR){
+              FORMATTEDTIME = TIME12WOSEC
               }
-            }
-    }
-}
+              else{
+                  FORMATTEDTIME = TIME24WOSEC
+                }
+              }
+      }
+  }
 
-// Two click handlers to render the time after changing showSeconds and numHrs
-$('#showSeconds').click(function(){
-  ifTrue();
-  renderTime();
-});
-$('#numHrs').click(function(){
-  ifTrue();
-  renderTime();
-});
-
-// Event Handler to change time via range sliders
-// put it in this when you get it captured
-// $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
-let addHours = '0';
-function shiftTime(){
-  $('#changeHrs').on('input change', function(){
-    console.log(`you changed the hours by ${this.value}`); // this worked 
-    $('#forTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this worked but it reverted on the next second
-  })
-}
-shiftTime();
-
-// function to show value chose on range sliders
-// https://codepen.io/prasanthmj/pen/OxoamJ
-$(function(){
-  $('.slider').on('input change', function(){
-    $(this).next($('.slider_label')).html(this.value);
-    });
-    $('.slider_label').each(function(){
-      var value = $(this).prev().attr('value');
-      $(this).html(value);
-    });
+  // Two click handlers to render the time after changing showSeconds and numHrs
+  $('#showSeconds').click(function(){
+    ifTrue();
+    renderTime();
+  });
+  $('#numHrs').click(function(){
+    ifTrue();
+    renderTime();
   });
 
+  // Event Handler to change time via range sliders
+  // put it in this when you get it captured
+  // $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
+  let addHours = '0';
+  function shiftTime(){
+    $('#changeHrs').on('input change', function(){
+      console.log(`you changed the hours by ${this.value}`); // this worked 
+      $('#forTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this worked but it reverted on the next second
+    })
+  }
+  shiftTime();
+
+  // function to show value chose on range sliders
+  // https://codepen.io/prasanthmj/pen/OxoamJ
+  $(function(){
+    $('.slider').on('input change', function(){
+      $(this).next($('.slider_label')).html(this.value);
+      });
+      $('.slider_label').each(function(){
+        var value = $(this).prev().attr('value');
+        $(this).html(value);
+      });
+    });
+}); // end document ready
