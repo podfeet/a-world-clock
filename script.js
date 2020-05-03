@@ -3,8 +3,6 @@
 // 
 
 // Time formats
-
-// let TIME12WSEC = `'h${$seperator}mm${$seperator}ss a'` ;
 let h = 'h';
 let m = 'mm';
 let s = 'ss a';
@@ -26,9 +24,10 @@ let hrsShifted = '';
 let minShifted = '';
 
 // initialize the renderTime function as a global variable
-// let rendertTime();
+let rendertTime;
 
-let localClock = {};
+// let localClock = {};
+// let nzClock = {};
 
 // 
 // Document Ready Handler
@@ -39,7 +38,7 @@ $(function(){
   setInterval(renderTime, 1000); // update clock every second
   makeDropDown();
 
-  // 
+  // A class to create clocks
   class AClock{
     // define the constructor
     constructor(details){
@@ -50,34 +49,52 @@ $(function(){
       this.renderAs = details.renderAs; 
       // string#$momentstuff
       this.interval = details.interval;
-  
-      self.aRenderTime = this.aRenderTime.bind(this);
-    }
+      self.aRenderTime = self.aRenderTime.bind(self);
+    };
     //  Define the Instance functions
     aRenderTime(){
       $(`#${this.timeID}`).html(this.renderAs); // renders but interval does NOT work
       // $(`#${this.timeID}`).html(moment().format(FORMATTEDTIME)); // renders & interval works
-    }
+    };
     clockInterval(){
-      setInterval(this.aRenderTime(), this.interval)
-    }
-  }
+      setInterval(this.aRenderTime(), this.interval);
+    };
+  };
 
-  // create an instance of the class AClock for the local time
-  localClock = new AClock ({
-    timeDescription: 'POOP Your Local Time is…',
-    timeID: 'localTime',  
-    renderAs: `${moment().format(FORMATTEDTIME)}`,
-    interval: '1000'
-  });
+  // Create a function to make the clocks
+  function makeClocks(){
+    // create instances of AClock as desired
+    localClock = new AClock ({
+      timeDescription: 'Classy: Your Local Time is…',
+      timeID: 'localTime',  
+      renderAs: `${moment().format(FORMATTEDTIME)}`,
+      interval: '1000'
+    });
 
-  // Convert the template script to a string
-  let clockCardTemplate = $('#clockCards').html();
-  // Render the clock
-  $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock))
+    nzClock = new AClock({
+      timeDescription: 'Classy: The Time in New Zealand is...', // description shows in div
+      timeID: 'nzTime', // div id properly created
+      renderAs: `${moment().tz('Pacific/Auckland').format(FORMATTEDTIME)}`, // correct time in console for nzClock.renderAs
+      interval: '2000' // nzClock.interval correct in console
+    });
+    // Convert the placeholder template script to a string
+    let clockCardTemplate = $('#clockCards').html();
 
-  localClock.aRenderTime();
-  localClock.clockInterval();
+    // render the html for the clocks
+    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock))
+    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, nzClock))
+
+    // start the clocks and set their intervals
+    // Local
+    localClock.aRenderTime();
+    localClock.clockInterval();
+    // New Zealand
+    nzClock.aRenderTime();
+    nzClock.clockInterval();
+
+  };
+  // make the clocks:
+  makeClocks();
  
   // *********************************************************** //
   // render the time in the chosen format and put it in the html //
@@ -185,7 +202,7 @@ $(function(){
   function shiftTime(){
     $('#changeHrs').on('input change', function(){
       console.log(`you changed the hours by ${this.value}`); // this worked 
-      $('#forTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this worked but it reverted on the next second
+      $('#forTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this works but it reverted on the next second
     })
   }
   shiftTime();
