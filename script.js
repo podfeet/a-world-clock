@@ -43,21 +43,24 @@ $(function(){
     // define the constructor
     constructor(details){
       //  Initialize the data attributes
-      let self = this;
+      // let self = this;
       this.timeDescription = details.timeDescription;
       this.timeID = details.timeID;
-      this.renderAs = details.renderAs; 
-      // string#$momentstuff
+      this.location = details.location;
+      // this.renderAs = details.renderAs; 
       this.interval = details.interval;
-      self.aRenderTime = self.aRenderTime.bind(self);
+      console.log(this.location);
+      // this.aRenderTime = this.aRenderTime.bind(this);
     };
     //  Define the Instance functions
     aRenderTime(){
-      $(`#${this.timeID}`).html(this.renderAs); // renders but interval does NOT work
-      // $(`#${this.timeID}`).html(moment().format(FORMATTEDTIME)); // renders & interval works
+      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
+      // $(`#${this.timeID}`).html(this.renderAs); // renders but interval does NOT work
+      // $(`#${this.timeID}`).html(moment().format(FORMATTEDTIME)); // renders
     };
     clockInterval(){
-      setInterval(this.aRenderTime(), this.interval);
+      // setInterval(this.aRenderTime(), this.interval);
+      setInterval(this.aRenderTime.bind(this), this.interval);
     };
   };
 
@@ -66,15 +69,16 @@ $(function(){
     // create instances of AClock as desired
     localClock = new AClock ({
       timeDescription: 'Classy: Your Local Time is…',
-      timeID: 'localTime',  
-      renderAs: `${moment().format(FORMATTEDTIME)}`,
-      interval: '1000'
+      timeID: 'localTime',
+      location: moment.tz.guess(true),
+      // renderAs: `${moment.tz.format(FORMATTEDTIME)}`,
+      interval: 1000
     });
-
     nzClock = new AClock({
       timeDescription: 'Classy: The Time in New Zealand is...', // description shows in div
       timeID: 'nzTime', // div id properly created
-      renderAs: `${moment().tz('Pacific/Auckland').format(FORMATTEDTIME)}`, // correct time in console for nzClock.renderAs
+      location: 'Pacific/Auckland',
+      // renderAs: `${moment().tz('Pacific/Auckland').format(FORMATTEDTIME)}`, // correct time in console for nzClock.renderAs
       interval: '2000' // nzClock.interval correct in console
     });
     // Convert the placeholder template script to a string
