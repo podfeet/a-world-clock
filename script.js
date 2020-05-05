@@ -68,8 +68,12 @@ $(function(){
       $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
     };
     clockInterval(){
-      setInterval(this.aRenderTime.bind(this), this.interval);
+      if(this.interval){
+        setInterval(this.aRenderTime.bind(this), this.interval);
+      }else{return};
     };
+
+   
   };
 
   // Create a function to make the clocks
@@ -79,13 +83,13 @@ $(function(){
       timeDescription: 'Classy: Your Local Time is…',
       timeID: 'localTime',
       location: moment.tz.guess(true),
-      interval: 1000
+      interval: true
     });
     nzClock = new AClock({
       timeDescription: 'Classy: The Time in New Zealand is...', 
       timeID: 'nzTime', 
       location: 'Pacific/Auckland',
-      interval: 1000
+      interval: false
     });
     // Convert the placeholder template script to a string
     let clockCardTemplate = $('#clockCards').html();
