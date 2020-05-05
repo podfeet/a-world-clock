@@ -38,28 +38,36 @@ $(function(){
   setInterval(renderTime, 1000); // update clock every second
   makeDropDown();
 
-  // A class to create clocks
+  /**
+  * A class to create clocks
+  *
+  * Dictionary to build the clock: 
+  * @timeDescription - The text to explain what clock is showing
+  * @#timeID - name for the id of the div that will hold the clock
+  * @location - if specifying a particular location, a string of the format "region/city" per zones.js
+  * @interval - the refresh interval in ms
+  * @FORMATTEDTIME - string - global variable holding the format for displaying the time as chosen by show/hide seconds and 12/24 clock check boxes
+  * 
+  * Instance functions:
+  * @aRenderTime - renders the html for the clocks with inputs of timeID,location and time format
+  * @clockInterval - sets the interval for the clock
+  * Errors thrown e.g. @throws {RangeError} and why
+  * Errors thrown e.g. @throws {TypeError} and why
+  */
   class AClock{
     // define the constructor
     constructor(details){
       //  Initialize the data attributes
-      // let self = this;
       this.timeDescription = details.timeDescription;
       this.timeID = details.timeID;
       this.location = details.location;
-      // this.renderAs = details.renderAs; 
       this.interval = details.interval;
-      console.log(this.location);
-      // this.aRenderTime = this.aRenderTime.bind(this);
     };
     //  Define the Instance functions
     aRenderTime(){
       $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
-      // $(`#${this.timeID}`).html(this.renderAs); // renders but interval does NOT work
-      // $(`#${this.timeID}`).html(moment().format(FORMATTEDTIME)); // renders
     };
     clockInterval(){
-      // setInterval(this.aRenderTime(), this.interval);
       setInterval(this.aRenderTime.bind(this), this.interval);
     };
   };
@@ -71,15 +79,13 @@ $(function(){
       timeDescription: 'Classy: Your Local Time is…',
       timeID: 'localTime',
       location: moment.tz.guess(true),
-      // renderAs: `${moment.tz.format(FORMATTEDTIME)}`,
       interval: 1000
     });
     nzClock = new AClock({
-      timeDescription: 'Classy: The Time in New Zealand is...', // description shows in div
-      timeID: 'nzTime', // div id properly created
+      timeDescription: 'Classy: The Time in New Zealand is...', 
+      timeID: 'nzTime', 
       location: 'Pacific/Auckland',
-      // renderAs: `${moment().tz('Pacific/Auckland').format(FORMATTEDTIME)}`, // correct time in console for nzClock.renderAs
-      interval: '2000' // nzClock.interval correct in console
+      interval: 1000
     });
     // Convert the placeholder template script to a string
     let clockCardTemplate = $('#clockCards').html();
@@ -114,7 +120,6 @@ $(function(){
 
   // Original method to render 2 clocks
   function renderTime(){
-    $('#forTime').html(moment().format(FORMATTEDTIME)); // local time
     $('#forTime2').html(moment().tz(selectedZone).format(FORMATTEDTIME)); // time in selected zone
   }
 
