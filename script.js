@@ -26,9 +26,6 @@ let minShifted = '';
 // initialize the renderTime function as a global variable
 let rendertTime;
 
-// let localClock = {};
-// let nzClock = {};
-
 // 
 // Document Ready Handler
 // 
@@ -60,22 +57,19 @@ $(function(){
     constructor(details){
       //  Initialize the data attributes
       this.timeDescription = details.timeDescription;
-      this._timeID = details.timeID;
+      this.timeID = details.timeID;
       this.location = details.location;
       this.interval = details.interval;
     };
     //  Define the Instance functions
+    aRenderTime(){
+      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
+    };
     clockInterval(){
       if(this.interval){
-        function aRenderTime(){
-          $(`#${this._timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
-        };
-        aRenderTime()
         setInterval(this.aRenderTime.bind(this), this.interval);
       }else{return};
     };
-
-   
   };
 
   // Create a function to make the clocks
@@ -92,21 +86,22 @@ $(function(){
       timeID: 'nzTime', 
       location: 'Pacific/Auckland',
       interval: false,
-      startTimeH: 8
+      // startTimeH: 8
     });
-    localTSClock = newAClock({ // timeshifted local clock
+    localTSClock = new AClock({ // timeshifted local clock
       timeDescription: 'If the time where you are is...', 
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
       interval: false,
-      startTimeH: 8
+      // startTimeH: 8
     })
     // Convert the placeholder template script to a string
     let clockCardTemplate = $('#clockCards').html();
 
     // render the html for the clocks
-    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock))
-    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, nzClock))
+    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock));
+    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, nzClock));
+    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localTSClock));
 
     // start the clocks and set their intervals
     // Local
@@ -115,6 +110,9 @@ $(function(){
     // New Zealand
     nzClock.aRenderTime();
     nzClock.clockInterval();
+    // local Static Clock
+    localTSClock.aRenderTime();
+    localTSClock.clockInterval();
 
   };
   // make the clocks:
