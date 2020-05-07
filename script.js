@@ -45,7 +45,8 @@ $(function(){
   * @timeDescription - The text to explain what clock is showing
   * @#timeID - name for the id of the div that will hold the clock
   * @location - if specifying a particular location, a string of the format "region/city" per zones.js
-  * @interval - the refresh interval in ms
+  * @interval - boolean if true, setInterval() fires and keeps clock updated. Static clocks required for Time Shifting
+  * @startTimeH - for static clocks, the hour on which to start display
   * @FORMATTEDTIME - string - global variable holding the format for displaying the time as chosen by show/hide seconds and 12/24 clock check boxes
   * 
   * Instance functions:
@@ -59,16 +60,17 @@ $(function(){
     constructor(details){
       //  Initialize the data attributes
       this.timeDescription = details.timeDescription;
-      this.timeID = details.timeID;
+      this._timeID = details.timeID;
       this.location = details.location;
       this.interval = details.interval;
     };
     //  Define the Instance functions
-    aRenderTime(){
-      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
-    };
     clockInterval(){
       if(this.interval){
+        function aRenderTime(){
+          $(`#${this._timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
+        };
+        aRenderTime()
         setInterval(this.aRenderTime.bind(this), this.interval);
       }else{return};
     };
@@ -89,8 +91,16 @@ $(function(){
       timeDescription: 'Classy: The Time in New Zealand is...', 
       timeID: 'nzTime', 
       location: 'Pacific/Auckland',
-      interval: false
+      interval: false,
+      startTimeH: 8
     });
+    localTSClock = newAClock({ // timeshifted local clock
+      timeDescription: 'If the time where you are is...', 
+      timeID: 'localTSTime', 
+      location: moment.tz.guess(true),
+      interval: false,
+      startTimeH: 8
+    })
     // Convert the placeholder template script to a string
     let clockCardTemplate = $('#clockCards').html();
 
@@ -215,7 +225,8 @@ $(function(){
   function shiftTime(){
     $('#changeHrs').on('input change', function(){
       console.log(`you changed the hours by ${this.value}`); // this worked 
-      $('#forTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this works but it reverted on the next second
+      $('#nzTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this works but it reverted on the next second
+      // $('#nzTime').html(moment.tz('Pacific/Auckland').add(1, 'h').format(FORMATTEDTIME));
     })
   }
   shiftTime();
