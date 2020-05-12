@@ -129,15 +129,15 @@
             <form>
               <div class="form-group">
                 <div class="mb-2">
-                  <label for="changeHrs">Time Shift Hours</label>
-                  <input type="range" class="slider form-control-input" min="0" max="11" step="1" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
+                  <label for="changeHrs">Shift Time</label>
+                  <input type="range" class="slider form-control-input" min="0" max="23" step=".5" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
                   <p class="slider_label" id="hrsChosen"></p>
                 </div>
-                <div class="mb-2">
+                <!-- <div class="mb-2">
                   <label for="changeMin">Time Shift Min (by 15 min increments)</label>
                   <input type="range" class="slider form-control-input" min="0" max="45" step="15" value="0" id="changeMin" data-thumbwidth="20">
                   <p class="slider_label" id="hrsChosen"></p>
-                </div>
+                </div> -->
               </div>
             </form>
           </div>
@@ -194,11 +194,8 @@
           <div class="col col-md-6">
             <div class="card bg-primary text-white" style="width: 100%">
               <div class="card-body">
-                <!-- <h5 class="card-title bg-light rounded text-primary col p-2 pb-1">The time in: --> 
-                  <label class="h5 card-title bg-light rounded text-primary col p-2 pb-1" for="timeZone" sr-only="true">The time in:</label>
-                  <p><select class="mr-2 ml-2 col-5 col-md-11 text-primary" id="timeZone" name ="locality"></select></p></h5>
-                
-                <!-- <p class="card-text"></p> -->
+                <label class="h5 card-title bg-light rounded text-primary col p-2 pb-1" for="timeZone" sr-only="true">The time in:</label>
+                <p><select class="mr-2 ml-2 col-5 col-md-11 text-primary" id="timeZone" name ="locality"></select></p></h5>
                 <div class="h1" id="forTime2"></div> <!-- placeholder div for clock -->
               </div>
             </div>

@@ -82,19 +82,25 @@ $(function(){
       }else{return};
     };
     // Event Handler to change time via range sliders
-    
+    // shiftTime Hours
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
       let self = this;
       if (this.timeShifted){
+        // shift hours
         $('#changeHrs').on('input change', function(){
           let currentTime = moment.tz(self.location);
           let roundUpTime = currentTime.startOf('h');
           $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(self.timeFormat));
-          // $(`#${self.timeID}`).html(moment.tz(self.location).add(this.value, 'h').format(self.timeFormat));
-          // console.log(`I changed ${self.timeID} by ${this.value}`);
         })
-      }else{return};
+      // shift min
+      $('#changeMin').on('input change', function(){
+        // console.log('minutes changed');
+        // let currentTimeM = moment.tz(self.location);
+        // let roundUpTimeM = currentTimeM.startOf('m');
+        $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
+      })
+    }else{return};
     };
     
   }; // complete AClock class definition
@@ -105,7 +111,7 @@ $(function(){
     // create instances of AClock as desired
     localTSClock = new AClock({ // timeshifted local clock
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'If the local time becomes...', 
+      timeDescription: 'If your local time is:', 
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
       interval: false,
@@ -130,9 +136,7 @@ $(function(){
       timeShifted: false,
       timeFormat: FORMATTEDTIME
     });
-
-    // start the clocks and set their intervals
-
+    // Put the clocks up, enable/disable interval, and enable timeshifting
     // local timeshifted 
     localTSClock.putClockUp();
     localTSClock.clockInterval();
@@ -141,10 +145,10 @@ $(function(){
     nzClock.putClockUp();
     nzClock.clockInterval();
     nzClock.shiftTime();
-    // Local Clock
+    // Local Clock static
     localClock.putClockUp(staticClocksPlaceholder);
     localClock.clockInterval()
-
+    localClock.shiftTime();
   };
   // make the clocks:
   makeClocks();
