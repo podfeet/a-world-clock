@@ -63,6 +63,7 @@ $(function(){
       this.interval = details.interval;
       this.timeShifted = details.timeShifted;
       this.timeFormat = details.timeFormat;
+      this.requireDropDown = details.requireDropDown;
     };
     //  Define the Instance functions
     aRenderTime(){
@@ -116,7 +117,8 @@ $(function(){
       location: moment.tz.guess(true),
       interval: false,
       timeShifted: true,
-      timeFormat: TIME24WOSEC
+      timeFormat: TIME24WOSEC,
+      requireDropDown: false
     })
     nzClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
@@ -125,7 +127,18 @@ $(function(){
       location: 'Pacific/Auckland',
       interval: false,
       timeShifted: true,
-      timeFormat: TIME24WOSEC
+      timeFormat: TIME24WOSEC,
+      requireDropDown: false
+    });
+    chooseClock = new AClock({
+      clockPlaceholder: shiftingClocksPlaceholder,
+      timeDescription: 'Choose Timezone/city', 
+      timeID: 'chooseTime', 
+      location: 'Pacific/Auckland',
+      interval: false,
+      timeShifted: true,
+      timeFormat: TIME24WOSEC,
+      requireDropDown: true
     });
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
@@ -134,7 +147,8 @@ $(function(){
       location: moment.tz.guess(true),
       interval: true,
       timeShifted: false,
-      timeFormat: FORMATTEDTIME
+      timeFormat: FORMATTEDTIME,
+      requireDropDown: false
     });
     // Put the clocks up, enable/disable interval, and enable timeshifting
     // local timeshifted 
@@ -145,6 +159,10 @@ $(function(){
     nzClock.putClockUp();
     nzClock.clockInterval();
     nzClock.shiftTime();
+    // Chooseable timeshifted
+    chooseClock.putClockUp();
+    chooseClock.clockInterval();
+    chooseClock.shiftTime();
     // Local Clock static
     localClock.putClockUp(staticClocksPlaceholder);
     localClock.clockInterval()
