@@ -62,10 +62,11 @@ $(function(){
       this.location = details.location;
       this.interval = details.interval;
       this.timeShifted = details.timeShifted;
+      this.timeFormat = details.timeFormat;
     };
     //  Define the Instance functions
     aRenderTime(){
-      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
+      $(`#${this.timeID}`).html(moment.tz(this.location).format(this.timeFormat));
     };
     // render the html for the clocks
     putClockUp(){
@@ -92,7 +93,7 @@ $(function(){
       if (this.timeShifted){
         $('#changeHrs').on('input change', function(){
           // console.log(`clock ID is ${shiftTimeID} & should move by ${this.value}`);
-          $(`#${self.timeID}`).html(moment.tz(self.location).add(this.value, 'h').format(FORMATTEDTIME));
+          $(`#${self.timeID}`).html(moment.tz(self.location).add(this.value, 'h').format(self.timeFormat));
           console.log(`I changed ${self.timeID} by ${this.value}`);
         })
       }else{return};
@@ -110,7 +111,8 @@ $(function(){
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
       interval: false,
-      timeShifted: true
+      timeShifted: true,
+      timeFormat: TIME24WOSEC
     })
     nzClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
@@ -118,7 +120,8 @@ $(function(){
       timeID: 'nzTime', 
       location: 'Pacific/Auckland',
       interval: false,
-      timeShifted: true
+      timeShifted: true,
+      timeFormat: TIME24WOSEC
     });
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
@@ -126,7 +129,8 @@ $(function(){
       timeID: 'localTime',
       location: moment.tz.guess(true),
       interval: true,
-      timeShifted: false
+      timeShifted: false,
+      timeFormat: FORMATTEDTIME
     });
 
     // start the clocks and set their intervals
