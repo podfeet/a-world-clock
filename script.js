@@ -105,7 +105,7 @@ $(function(){
   function makeClocks(){
     // create instances of AClock as desired
     localTSClock = new AClock({ // timeshifted local clock
-      clockPlaceholder: 'shiftingClocksPlaceholder',
+      clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'If the local time becomes...', 
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
