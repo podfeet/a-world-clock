@@ -73,7 +73,7 @@ $(function(){
       // render the html for the clocks
       $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, this));
       this.aRenderTime();
-      this.shiftTime();
+      // this.shiftTime();
       };
     clockInterval(){
       if(this.interval){
@@ -86,61 +86,60 @@ $(function(){
     
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
-     let shiftTimeID = this.timeID; // if statement doesn't know the same "this"
-     console.log(`${shiftTimeID} timeShifted is set to ${this.timeShifted}`);
+    //  let shiftTimeID = this.timeID; // if statement doesn't know the same "this"
+    //  let shiftLocation = this.location;
+      let self = this;
+      console.log(`${self.timeID} timeShifted is set to ${this.timeShifted}`);
       if (this.timeShifted){
         $('#changeHrs').on('input change', function(){
-          console.log(`clock ID is ${shiftTimeID} & should move by ${this.value}`);
-          $(`#${shiftTimeID}`).html(moment().add(this.value, 'h').format(FORMATTEDTIME));
+          // console.log(`clock ID is ${shiftTimeID} & should move by ${this.value}`);
+          $(`#${self.timeID}`).html(moment.tz(self.location).add(this.value, 'h').format(FORMATTEDTIME));
+          console.log(`I changed ${self.timeID} by ${this.value}`);
         })
-      }else{};
+      }else{return};
     };
     
   }; // complete AClock class definition
-
   
 
   // Create a function to make the clocks
   function makeClocks(){
     // create instances of AClock as desired
+    localTSClock = new AClock({ // timeshifted local clock
+      timeDescription: 'If the local time becomes...', 
+      timeID: 'localTSTime', 
+      location: moment.tz.guess(true),
+      interval: false,
+      timeShifted: true
+    })
+    nzClock = new AClock({
+      timeDescription: 'Then in NZ it will be...', 
+      timeID: 'nzTime', 
+      location: 'Pacific/Auckland',
+      interval: false,
+      timeShifted: true
+    });
     localClock = new AClock ({
-      timeDescription: 'Local Time is…',
+      timeDescription: 'The real local time is:',
       timeID: 'localTime',
       location: moment.tz.guess(true),
       interval: true,
       timeShifted: false
     });
-    nzClock = new AClock({
-      timeDescription: 'Time in New Zealand is...', 
-      timeID: 'nzTime', 
-      location: 'Pacific/Auckland',
-      interval: false,
-      timeShifted: true
-      // startTimeH: 8
-    });
-    localTSClock = new AClock({ // timeshifted local clock
-      timeDescription: 'Timeshifted local clock', 
-      timeID: 'localTSTime', 
-      location: moment.tz.guess(true),
-      interval: false,
-      timeShifted: true
-      // startTimeH: 8
-    })
 
     // start the clocks and set their intervals
 
-    // Local
-    // localClock.aRenderTime(); // moved inside the class
-    localClock.putClockUp();
-    localClock.clockInterval();
-
-    // New Zealand
-    nzClock.putClockUp();
-    nzClock.clockInterval();
-
-    // local Static Clock
+    // local timeshifted 
     localTSClock.putClockUp();
     localTSClock.clockInterval();
+    localTSClock.shiftTime()
+    // New Zealand timeshifted
+    nzClock.putClockUp();
+    nzClock.clockInterval();
+    nzClock.shiftTime();
+    // Local Clock
+    localClock.putClockUp();
+    localClock.clockInterval()
 
   };
   // make the clocks:
