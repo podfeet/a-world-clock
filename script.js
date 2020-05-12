@@ -74,7 +74,6 @@ $(function(){
       let clockCardTemplate = $('#clockCards').html();
       // render the html for the clocks
       $(this.clockPlaceholder).append(Mustache.render(clockCardTemplate, this));
-      // $(`#${thisClockPlaceholder}`).append(Mustache.render(clockCardTemplate, this));
       this.aRenderTime();
       };
     clockInterval(){
@@ -86,15 +85,14 @@ $(function(){
     
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
-    //  let shiftTimeID = this.timeID; // if statement doesn't know the same "this"
-    //  let shiftLocation = this.location;
       let self = this;
-      console.log(`${self.timeID} timeShifted is set to ${this.timeShifted}`);
       if (this.timeShifted){
         $('#changeHrs').on('input change', function(){
-          // console.log(`clock ID is ${shiftTimeID} & should move by ${this.value}`);
-          $(`#${self.timeID}`).html(moment.tz(self.location).add(this.value, 'h').format(self.timeFormat));
-          console.log(`I changed ${self.timeID} by ${this.value}`);
+          let currentTime = moment.tz(self.location);
+          let roundUpTime = currentTime.startOf('h');
+          $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(self.timeFormat));
+          // $(`#${self.timeID}`).html(moment.tz(self.location).add(this.value, 'h').format(self.timeFormat));
+          // console.log(`I changed ${self.timeID} by ${this.value}`);
         })
       }else{return};
     };
