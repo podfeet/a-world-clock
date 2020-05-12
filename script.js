@@ -60,58 +60,86 @@ $(function(){
       this.timeID = details.timeID;
       this.location = details.location;
       this.interval = details.interval;
+      this.timeShifted = details.timeShifted;
     };
     //  Define the Instance functions
     aRenderTime(){
       $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
     };
+    // render the html for the clocks
+    putClockUp(){
+      // Convert the placeholder template script to a string
+      let clockCardTemplate = $('#clockCards').html();
+      // render the html for the clocks
+      $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, this));
+      this.aRenderTime();
+      this.shiftTime();
+      };
     clockInterval(){
       if(this.interval){
-        setInterval(this.aRenderTime.bind(this), this.interval);
+        setInterval(this.aRenderTime.bind(this), 1000);
       }else{return};
     };
-  };
+    // Event Handler to change time via range sliders
+    // put it in this when you get it captured
+    // $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
+    
+    shiftTime(){
+      // if this.timeShifted is true, then shift time with sliders
+     let shiftTimeID = this.timeID; // if statement doesn't know the same "this"
+     console.log(`${shiftTimeID} timeShifted is set to ${this.timeShifted}`);
+      if (this.timeShifted){
+        $('#changeHrs').on('input change', function(){
+          console.log(`clock ID is ${shiftTimeID} & should move by ${this.value}`);
+          $(`#${shiftTimeID}`).html(moment().add(this.value, 'h').format(FORMATTEDTIME));
+        })
+      }else{};
+    };
+    
+  }; // complete AClock class definition
+
+  
 
   // Create a function to make the clocks
   function makeClocks(){
     // create instances of AClock as desired
     localClock = new AClock ({
-      timeDescription: 'Classy: Your Local Time is…',
+      timeDescription: 'Local Time is…',
       timeID: 'localTime',
       location: moment.tz.guess(true),
-      interval: true
+      interval: true,
+      timeShifted: false
     });
     nzClock = new AClock({
-      timeDescription: 'Classy: The Time in New Zealand is...', 
+      timeDescription: 'Time in New Zealand is...', 
       timeID: 'nzTime', 
       location: 'Pacific/Auckland',
       interval: false,
+      timeShifted: true
       // startTimeH: 8
     });
     localTSClock = new AClock({ // timeshifted local clock
-      timeDescription: 'If the time where you are is...', 
+      timeDescription: 'Timeshifted local clock', 
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
       interval: false,
+      timeShifted: true
       // startTimeH: 8
     })
-    // Convert the placeholder template script to a string
-    let clockCardTemplate = $('#clockCards').html();
-
-    // render the html for the clocks
-    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localClock));
-    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, nzClock));
-    $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, localTSClock));
 
     // start the clocks and set their intervals
+
     // Local
-    localClock.aRenderTime();
+    // localClock.aRenderTime(); // moved inside the class
+    localClock.putClockUp();
     localClock.clockInterval();
+
     // New Zealand
-    nzClock.aRenderTime();
+    nzClock.putClockUp();
     nzClock.clockInterval();
+
     // local Static Clock
-    localTSClock.aRenderTime();
+    localTSClock.putClockUp();
     localTSClock.clockInterval();
 
   };
@@ -216,18 +244,6 @@ $(function(){
     renderTime();
   });
 
-  // Event Handler to change time via range sliders
-  // put it in this when you get it captured
-  // $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
-  let addHours = '0';
-  function shiftTime(){
-    $('#changeHrs').on('input change', function(){
-      console.log(`you changed the hours by ${this.value}`); // this worked 
-      $('#nzTime').html(moment().add(this.value, 'h').format(FORMATTEDTIME)); // this works but it reverted on the next second
-      // $('#nzTime').html(moment.tz('Pacific/Auckland').add(1, 'h').format(FORMATTEDTIME));
-    })
-  }
-  shiftTime();
 
   // function to show value chose on range sliders
   // https://codepen.io/prasanthmj/pen/OxoamJ
