@@ -121,6 +121,39 @@
     <main>
       <!-- html goes here -->
 
+
+      <!-- container to hold range sliders -->
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <form>
+              <div class="form-group">
+                <div class="mb-2">
+                  <label for="changeHrs">Time Shift Hours</label>
+                  <input type="range" class="slider form-control-input" min="0" max="11" step="1" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
+                  <p class="slider_label" id="hrsChosen"></p>
+                </div>
+                <div class="mb-2">
+                  <label for="changeMin">Time Shift Min (by 15 min increments)</label>
+                  <input type="range" class="slider form-control-input" min="0" max="45" step="15" value="0" id="changeMin" data-thumbwidth="20">
+                  <p class="slider_label" id="hrsChosen"></p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div> <!-- close container for range sliders -->
+
+         <!-- One placeholder for all clocks using clockCards template -->
+      <div class="container mb-5">
+        <div class="row" id="shiftingClocksPlaceholder"></div>
+      </div>
+      <div class="container mb-5">
+        <div class="row" id="staticClocksPlaceholder"></div>
+      </div>
+      <!-- end clocks -->
+      
+
       <!-- container to hold switches -->
       <div class="container"> 
         <!-- Switch to show/hide seconds -->
@@ -155,34 +188,6 @@
         <!-- end switch 12 vs 24 hr clock -->
       </div> <!-- close hold switches container -->
 
-      <!-- container to hold range sliders -->
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <form>
-              <div class="form-group">
-                <div class="mb-2">
-                  <label for="changeHrs">Time Shift Hours</label>
-                  <input type="range" class="slider form-control-input" min="0" max="11" step="1" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
-                  <p class="slider_label" id="hrsChosen"></p>
-                </div>
-                <div class="mb-2">
-                  <label for="changeMin">Time Shift Min (by 15 min increments)</label>
-                  <input type="range" class="slider form-control-input" min="0" max="45" step="15" value="0" id="changeMin" data-thumbwidth="20">
-                  <p class="slider_label" id="hrsChosen"></p>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div> <!-- close container for range sliders -->
-
-         <!-- One placeholder for all clocks using clockCards template -->
-      <div class="container mb-5">
-          <div class="row" id="clocksPlaceholder"></div>
-      </div>
-      <!-- end clocks -->
-      
       <!-- A card to hold the 2nd time -->
       <div class="container">
         <div class="row">

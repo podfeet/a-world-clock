@@ -56,6 +56,7 @@ $(function(){
     // define the constructor
     constructor(details){
       //  Initialize the data attributes
+      this.clockPlaceholder = details.clockPlaceholder;
       this.timeDescription = details.timeDescription;
       this.timeID = details.timeID;
       this.location = details.location;
@@ -71,9 +72,9 @@ $(function(){
       // Convert the placeholder template script to a string
       let clockCardTemplate = $('#clockCards').html();
       // render the html for the clocks
-      $('#clocksPlaceholder').append(Mustache.render(clockCardTemplate, this));
+      $(this.clockPlaceholder).append(Mustache.render(clockCardTemplate, this));
+      // $(`#${thisClockPlaceholder}`).append(Mustache.render(clockCardTemplate, this));
       this.aRenderTime();
-      // this.shiftTime();
       };
     clockInterval(){
       if(this.interval){
@@ -81,8 +82,6 @@ $(function(){
       }else{return};
     };
     // Event Handler to change time via range sliders
-    // put it in this when you get it captured
-    // $('#forTime').html(moment().subtract(1, 'h').format(FORMATTEDTIME)); // local time
     
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
@@ -106,6 +105,7 @@ $(function(){
   function makeClocks(){
     // create instances of AClock as desired
     localTSClock = new AClock({ // timeshifted local clock
+      clockPlaceholder: 'shiftingClocksPlaceholder',
       timeDescription: 'If the local time becomes...', 
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
@@ -113,6 +113,7 @@ $(function(){
       timeShifted: true
     })
     nzClock = new AClock({
+      clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'Then in NZ it will be...', 
       timeID: 'nzTime', 
       location: 'Pacific/Auckland',
@@ -120,6 +121,7 @@ $(function(){
       timeShifted: true
     });
     localClock = new AClock ({
+      clockPlaceholder: staticClocksPlaceholder,
       timeDescription: 'The real local time is:',
       timeID: 'localTime',
       location: moment.tz.guess(true),
@@ -138,7 +140,7 @@ $(function(){
     nzClock.clockInterval();
     nzClock.shiftTime();
     // Local Clock
-    localClock.putClockUp();
+    localClock.putClockUp(staticClocksPlaceholder);
     localClock.clockInterval()
 
   };
