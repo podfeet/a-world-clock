@@ -108,8 +108,20 @@ $(function(){
     addDropDown(){
       console.log(`the timeID is #${this.dropDownID}`);
       const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
-      $(`#${this.dropDownID}`).append($thisSelect);
-      
+      let aDropDownID = $(`#${this.dropDownID}`);
+      // add a select (dropdown) to the ID we created
+      aDropDownID.append($thisSelect);
+      // add a defualt selection in dropdown
+      $thisSelect.append('<option selected="true" disabled>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>');
+      $thisSelect.prop('selectedIndex', 0);
+      // give the json file a name
+      const jsonUrl = './zones.json';
+      // feels like an AJAX call to get the data
+      $.getJSON(jsonUrl, function(zones){
+        for (const z of zones){
+          $thisSelect.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
+        }
+      }); 
     }
     
   }; // complete AClock class definition
