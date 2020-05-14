@@ -106,16 +106,10 @@ $(function(){
     };
     // Add dropdown if required
     addDropDown(){
-      // console.log(`the timeID is ${this.timeID}`);
-      // const $thisDropDown = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attribute('id', this.dropDownID).attr('name', 'locality');
-      $(`#${this.timeID}`).append($('<select>')).addClass("mr-2 ml-2 col-5 col-md-11 text-primary");
-      // $(`#${this.timeID}`).append(`This is some text on ${this.timeID}`)
-      // $('.modal-body p', $modal).html("<strong>really</strong> like cake!<br><br>Don't You?");
-      // $(this).html(
-      //   "<label class="h5 card-title bg-light rounded text-primary col p-2 pb-1" for="timeZone" sr-only="true">The time in:</label>
-      //   <p><select class="mr-2 ml-2 col-5 col-md-11 text-primary" id="timeZone" name ="locality"></select></p>
-      //   <div class="h1" id="forTime2"></div>"
-      // )
+      console.log(`the timeID is #${this.dropDownID}`);
+      const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
+      $(`#${this.dropDownID}`).append($thisSelect);
+      
     }
     
   }; // complete AClock class definition
