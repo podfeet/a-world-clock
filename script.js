@@ -64,6 +64,7 @@ $(function(){
       this.timeShifted = details.timeShifted;
       this.timeFormat = details.timeFormat;
       this.requireDropDown = details.requireDropDown;
+      this.dropDownID = details.dropDownID;
     };
     //  Define the Instance functions
     aRenderTime(){
@@ -103,6 +104,19 @@ $(function(){
       })
     }else{return};
     };
+    // Add dropdown if required
+    addDropDown(){
+      // console.log(`the timeID is ${this.timeID}`);
+      // const $thisDropDown = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attribute('id', this.dropDownID).attr('name', 'locality');
+      $(`#${this.timeID}`).append($('<select>')).addClass("mr-2 ml-2 col-5 col-md-11 text-primary");
+      // $(`#${this.timeID}`).append(`This is some text on ${this.timeID}`)
+      // $('.modal-body p', $modal).html("<strong>really</strong> like cake!<br><br>Don't You?");
+      // $(this).html(
+      //   "<label class="h5 card-title bg-light rounded text-primary col p-2 pb-1" for="timeZone" sr-only="true">The time in:</label>
+      //   <p><select class="mr-2 ml-2 col-5 col-md-11 text-primary" id="timeZone" name ="locality"></select></p>
+      //   <div class="h1" id="forTime2"></div>"
+      // )
+    }
     
   }; // complete AClock class definition
   
@@ -120,7 +134,7 @@ $(function(){
       timeFormat: TIME24WOSEC,
       requireDropDown: false
     })
-    nzClock = new AClock({
+    nzTSClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'Then in NZ it will be...', 
       timeID: 'nzTime', 
@@ -138,7 +152,8 @@ $(function(){
       interval: false,
       timeShifted: true,
       timeFormat: TIME24WOSEC,
-      requireDropDown: true
+      requireDropDown: true,
+      dropDownID: 'chooseZone'
     });
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
@@ -156,13 +171,14 @@ $(function(){
     localTSClock.clockInterval();
     localTSClock.shiftTime()
     // New Zealand timeshifted
-    nzClock.putClockUp();
-    nzClock.clockInterval();
-    nzClock.shiftTime();
+    nzTSClock.putClockUp();
+    nzTSClock.clockInterval();
+    nzTSClock.shiftTime();
     // Chooseable timeshifted
     chooseClock.putClockUp();
     chooseClock.clockInterval();
     chooseClock.shiftTime();
+    chooseClock.addDropDown();
     // Local Clock static
     localClock.putClockUp(staticClocksPlaceholder);
     localClock.clockInterval()
@@ -281,4 +297,7 @@ $(function(){
         $(this).html(value);
       });
     });
+
+
+
 }); // end document ready
