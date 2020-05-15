@@ -204,8 +204,8 @@ $(function(){
   makeClocks();
 
   $('#chooseZone').change(function(){ // triggers the function EVERY time you change the select
-    console.log('poop');
-    localClock.location = $('#chooseZone option:selected').val();
+    chooseClock.location = $('#chooseZone option:selected').val();
+    chooseClock.aRenderTime();
   });
  
   // *********************************************************** //
