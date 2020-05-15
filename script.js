@@ -64,6 +64,7 @@ $(function(){
       this.timeShifted = details.timeShifted;
       this.timeFormat = details.timeFormat;
       this.requireDropDown = details.requireDropDown;
+      this.dropDownDivID = details.dropDownDivID;
       this.dropDownID = details.dropDownID;
     };
     //  Define the Instance functions
@@ -97,20 +98,18 @@ $(function(){
         })
       // shift min
       $('#changeMin').on('input change', function(){
-        // console.log('minutes changed');
-        // let currentTimeM = moment.tz(self.location);
-        // let roundUpTimeM = currentTimeM.startOf('m');
         $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
       })
     }else{return};
     };
     // Add dropdown if required
     addDropDown(){
-      console.log(`the timeID is #${this.dropDownID}`);
+      console.log(`the dropdown ID is #${this.dropDownID}`);
+      console.log(`the dropdown div ID is #${this.dropDownDivID}`);
       const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
-      let aDropDownID = $(`#${this.dropDownID}`);
-      // add a select (dropdown) to the ID we created
-      aDropDownID.append($thisSelect);
+      let aDropDownDivID = $(`#${this.dropDownDivID}`);
+      // append a select (dropdown) to the placeholder div ID we created
+      aDropDownDivID.append($thisSelect);
       // add a defualt selection in dropdown
       $thisSelect.append('<option selected="true" disabled>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>');
       $thisSelect.prop('selectedIndex', 0);
@@ -121,8 +120,17 @@ $(function(){
         for (const z of zones){
           $thisSelect.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
         }
-      }); 
-    }
+      });
+    };
+    // changeDropDown(){ // Event handler for when the dropdown is changed to choose a new zone
+    //   let aDropDownID = `#${this.dropDownID}`;
+    //   console.log(`aDropDownID is ${aDropDownID}`);
+
+    //   $('aDropDownID').change({ // triggers the function EVERY time you change the select
+    //     this.location = $('aDropDownID option:selected').val();
+    //   });
+      
+    // }
     
   }; // complete AClock class definition
   
@@ -159,6 +167,7 @@ $(function(){
       timeShifted: true,
       timeFormat: TIME24WOSEC,
       requireDropDown: true,
+      dropDownDivID: 'chooseZoneDiv',
       dropDownID: 'chooseZone'
     });
     localClock = new AClock ({
@@ -185,6 +194,7 @@ $(function(){
     chooseClock.clockInterval();
     chooseClock.shiftTime();
     chooseClock.addDropDown();
+    // chooseClock.changeDropDown();
     // Local Clock static
     localClock.putClockUp(staticClocksPlaceholder);
     localClock.clockInterval()
@@ -192,6 +202,11 @@ $(function(){
   };
   // make the clocks:
   makeClocks();
+
+  $('#chooseZone').change(function(){ // triggers the function EVERY time you change the select
+    console.log('poop');
+    localClock.location = $('#chooseZone option:selected').val();
+  });
  
   // *********************************************************** //
   // render the time in the chosen format and put it in the html //
@@ -243,7 +258,7 @@ $(function(){
 
   // Event handler for when the dropdown is changed to choose a new zone
   $('#timeZone').change(function(){ // triggers the function EVERY time you change the select
-    ifTrue();
+    ifTrue(); 
     selectedZone = $('#timeZone option:selected').val();
   });
 
@@ -292,7 +307,7 @@ $(function(){
   });
 
 
-  // function to show value chose on range sliders
+  // function to show value chosen on range sliders
   // https://codepen.io/prasanthmj/pen/OxoamJ
   $(function(){
     $('.slider').on('input change', function(){
