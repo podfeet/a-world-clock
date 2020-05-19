@@ -140,16 +140,16 @@ $(function(){
       dropDownDivID: 'chooseZoneDiv',
       dropDownID: 'chooseZone'
     });
-    localClock = new AClock ({
-      clockPlaceholder: staticClocksPlaceholder,
-      timeDescription: 'Your current local time is:',
-      timeID: 'localTime',
-      location: moment.tz.guess(true),
-      interval: true,
-      timeShifted: false,
-      timeFormat: FORMATTEDTIME,
-      requireDropDown: false
-    });
+    // localClock = new AClock ({
+    //   clockPlaceholder: staticClocksPlaceholder,
+    //   timeDescription: 'Your current local time is:',
+    //   timeID: 'localTime',
+    //   location: moment.tz.guess(true),
+    //   interval: true,
+    //   timeShifted: false,
+    //   timeFormat: FORMATTEDTIME,
+    //   requireDropDown: false
+    // });
     // Put the clocks up, enable/disable interval, and enable timeshifting
     // local timeshifted 
     localTSClock.putClockUp();
@@ -161,9 +161,9 @@ $(function(){
     chooseClock.shiftTime();
     chooseClock.addDropDown();
     // Local Clock static
-    localClock.putClockUp(staticClocksPlaceholder);
-    localClock.clockInterval()
-    localClock.shiftTime();
+    // localClock.putClockUp(staticClocksPlaceholder);
+    // localClock.clockInterval()
+    // localClock.shiftTime();
   };
   // make the individual clocks:
   makeClocks();
