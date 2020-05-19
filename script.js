@@ -31,9 +31,9 @@ let rendertTime;
 // 
 $(function(){
   selectedZone = 'Pacific/Auckland';
-  renderTime();
-  setInterval(renderTime, 1000); // update clock every second
-  makeDropDown();
+  // renderTime();
+  // setInterval(renderTime, 1000); // update clock every second
+  // makeDropDown();
 
   /**
   * A class to create clocks
