@@ -130,7 +130,7 @@ $(function(){
     })
     chooseClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'Choose Timezone/city', 
+      timeDescription: 'Then the time chosen will be:', 
       timeID: 'chooseTime', 
       location: 'Pacific/Auckland',
       interval: false,
