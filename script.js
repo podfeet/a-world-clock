@@ -16,7 +16,8 @@ let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 
 // Time Zone globally-scoped variables
 let zones = [];
-
+let TzNamesArray = moment.tz.names();
+let tzNamesObject = {};
 // 
 // Document Ready Handler
 // 
@@ -25,6 +26,24 @@ $(function(){
   // renderTime();
   // setInterval(renderTime, 1000); // update clock every second
   // makeDropDown();
+
+    // don't understand this but it takes the array which is just a list of the region/city and makes it into an object where the key is the region/city and so is the value. which for some reason works in autocomplete!
+    tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val] = val; return o; }, {});
+    
+    console.log(tzNamesObject);
+
+  function onSelectItem(item, element) {
+      $('#output').html(
+          'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
+          '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
+      );
+  }
+
+  $('#myAutocomplete').autocomplete({
+      source: tzNamesObject,
+      onSelectItem: onSelectItem,
+      highlightClass: 'text-danger'
+  });
 
   /**
   * A class to create clocks
@@ -93,6 +112,16 @@ $(function(){
       })
     }else{return};
     };
+
+    addSelect(){
+
+
+
+     
+    }
+
+
+
     // Add dropdown if required
     addDropDown(){
       // console.log(`the dropdown ID is #${this.dropDownID}`);
@@ -160,6 +189,7 @@ $(function(){
     chooseClock.clockInterval();
     chooseClock.shiftTime();
     chooseClock.addDropDown();
+    chooseClock.addSelect();
     // Local Clock static
     // localClock.putClockUp(staticClocksPlaceholder);
     // localClock.clockInterval()
