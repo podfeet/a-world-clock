@@ -16,33 +16,31 @@ let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 
 // Time Zone globally-scoped variables
 let zones = [];
+
+// Create an array from the official list of timezone names
 let TzNamesArray = moment.tz.names();
-let tzNamesObject = {};
+// don't understand this but it takes the array which is just a list of the region/city and makes it into an object where the key is the region/city and so is the value. which for some reason works in autocomplete!
+let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val] = val; return o; }, {});
+
 // 
 // Document Ready Handler
 // 
 $(function(){
-  // selectedZone = 'Pacific/Auckland';
-  // renderTime();
-  // setInterval(renderTime, 1000); // update clock every second
-  // makeDropDown();
-
-    // don't understand this but it takes the array which is just a list of the region/city and makes it into an object where the key is the region/city and so is the value. which for some reason works in autocomplete!
-    tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val] = val; return o; }, {});
-    
-    console.log(tzNamesObject);
-
-  function onSelectItem(item, element) {
-      $('#output').html(
-          'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
-          '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
-      );
-  }
-
+  // Bootstrap Autocomplete in html input - not in a class
+  // event handler when text box element is chosen
+  // function onSelectItem(item, element) {
+  //     $('#output').html(
+  //         'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
+  //         '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
+  //     );
+  // }
+  // Adds Bootstrap autocomplete fuunction to the ID #myAutocomplete
+  // Doesn't seem to work if I make it a class though
   $('#myAutocomplete').autocomplete({
-      source: tzNamesObject,
-      onSelectItem: onSelectItem,
-      highlightClass: 'text-danger'
+      source: tzNamesObject, // dictionary object with the values from which to search
+      // onSelectItem: onSelectItem, // callback to run when item is selected
+      highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
+      treshold: 1 // minimum characters to search before it starts displaying
   });
 
   /**
@@ -73,9 +71,11 @@ $(function(){
       this.interval = details.interval;
       this.timeShifted = details.timeShifted;
       this.timeFormat = details.timeFormat;
-      this.requireDropDown = details.requireDropDown;
+      this.requireDropDown = details.requireDropDown;       // do I ever use this? How do I tell if to make dropdown?
       this.dropDownDivID = details.dropDownDivID;
       this.dropDownID = details.dropDownID;
+      this.searchBoxDivID = details.searchBoxDivID;
+      this.searchBoxID = details.searchBoxID;
     };
     //  Define the Instance functions
     aRenderTime(){
@@ -113,19 +113,8 @@ $(function(){
     }else{return};
     };
 
-    addSelect(){
-
-
-
-     
-    }
-
-
-
     // Add dropdown if required
     addDropDown(){
-      // console.log(`the dropdown ID is #${this.dropDownID}`);
-      // console.log(`the dropdown div ID is #${this.dropDownDivID}`);
       const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
       let aDropDownDivID = $(`#${this.dropDownDivID}`);
       // append a select (dropdown) to the placeholder div ID we created
@@ -142,6 +131,13 @@ $(function(){
         }
       });
     };
+
+    addSearchBox(){
+      const $thisSearchBox = $('<input:text>').addClass("mySearchboxes form-control").attr('id', `${this.searchBoxID}`);
+      let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
+      aSearchBoxDivID.append($thisSearchBox);
+
+    }
   }; // complete AClock class definition
   
   // Create a function to make the clocks
@@ -155,7 +151,8 @@ $(function(){
       interval: false,
       timeShifted: true,
       timeFormat: TIME24WOSEC,
-      requireDropDown: false
+      requireDropDown: false,
+      searchBox: false
     })
     chooseClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
@@ -167,7 +164,9 @@ $(function(){
       timeFormat: TIME24WOSEC,
       requireDropDown: true,
       dropDownDivID: 'chooseZoneDiv',
-      dropDownID: 'chooseZone'
+      dropDownID: 'chooseZone',
+      searchBoxDivID: 'sbChooseClockDiv',
+      searchBoxID: 'sbChooseClock'
     });
     // localClock = new AClock ({
     //   clockPlaceholder: staticClocksPlaceholder,
@@ -189,7 +188,7 @@ $(function(){
     chooseClock.clockInterval();
     chooseClock.shiftTime();
     chooseClock.addDropDown();
-    chooseClock.addSelect();
+    chooseClock.addSearchBox();
     // Local Clock static
     // localClock.putClockUp(staticClocksPlaceholder);
     // localClock.clockInterval()

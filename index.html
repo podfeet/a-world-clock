@@ -120,17 +120,16 @@
     <main>
       <!-- html goes here -->
 
-      <!-- testing Bootstrap autocomplete -->
+    <!-- testing Bootstrap autocomplete -->
     <div class="container">
       <div id="parent" class="form-group">
           <label for="myAutocomplete">Bootstrap 4 Autocomplete</label>
           <input type="text" id="myAutocomplete" class="form-control"></input>
       </div>
-      <div id="output"></div>
-  </div>
+    <div id="output"></div>
 
-      
-      <!-- <label for="basicInput">This is a text input field</label>
+<!--       
+      <label for="basicInput">This is a text input field</label>
       <input class="form-control basicAutoComplete" type="text"
         data-url="zones-simple.json"
         autocomplete="off" id="basicInput"> -->
@@ -143,13 +142,15 @@
       </div>
 
       <!-- TIMESHIFTER CLOCKS -->
+      
       <div class="container">
+        <!-- row for time shifting explanation -->
         <div class="row m-2">
           <div class="col col-md-6 p-2 text-dark border border-dark rounded">
             <h2>Time Shifter</h2>
             <p>Shift your current time and find out what time that will be in another timezone</p>
           </div>
-        </div>
+        </div><!-- end row for time shifting explanation -->
 
         <!-- container to hold range sliders -->
         <div class="container mt-2">
@@ -178,19 +179,31 @@
     
     <!-- The clock card template for CLASS clocks -->
     <script type="text/html" id="clockCards">
+      
+      <!-- open container for class clock template -->
       <div class="container">
-        <div class="row">
-          <div class= "col col-md-6 mb-2">
-            <div class="card bg-primary text-white" style="width: 100%">
-              <div class="card-body">
+        <div class="row"> <!-- open row for each clock -->
+          <div class= "col col-md-6 mb-2"> <!-- open column for clock -->
+            <div class="card bg-primary text-white" style="width: 100%"> <!-- card -->
+              <div class="card-body"> <!-- card body -->
                 <div class="mb-3" id="{{dropDownDivID}}"></div> <!-- placeholder for dropdown select -->
-                <h5 class="card-title bg-light rounded text-primary col p-2">{{timeDescription}} <div class="h5 ml-5" id="{{timeID}}"></div><!-- placeholder div for clock -->
+
+                <div id="parent" class="form-group "> <!-- form -->
+                  <label for="myAutocomplete">Search for City</label>
+                  <div id="{{searchBoxDivID}}"></div>
+                  <!-- <input type="text" id="{{searchBoxDivID}}" class="form-control"></input> -->
+                </div> <!-- close form -->
+                
+                <div id="output"></div> <!-- placeholder for output from onSelectItem callback -->
+
+                <h5 class="card-title bg-light rounded text-primary col p-2">{{timeDescription}}
+                  <div class="h5 ml-5" id="{{timeID}}"></div><!-- placeholder div for clock -->
                 </h5>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              </div> <!-- close card body -->
+            </div> <!-- close div for card -->
+          </div><!-- close column for clock -->
+        </div> <!-- close row for each clock -->
+      </div> <!-- close container for class clocks -->
       
     </script>
     <!-- END NEW PROBABLY WRONG STUFF -->
