@@ -151,20 +151,20 @@ $(function(){
       searchBoxDivID: 'sbSearchClockDiv',
       searchBoxID: 'sbSearchClock'
     });
-    chooseClock = new AClock({
-      clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'Time Zone chosen WILL be:', 
-      timeID: 'chooseTime', 
-      location: moment.tz.guess(true),
-      interval: false,
-      timeShifted: true,
-      timeFormat: TIME24WOSEC,
-      requireDropDown: true,
-      dropDownDivID: 'chooseZoneDiv',
-      dropDownID: 'chooseZone',
-      // searchBoxDivID: 'sbChooseClockDiv',
-      // searchBoxID: 'sbChooseClock'
-    });
+    // chooseClock = new AClock({
+    //   clockPlaceholder: shiftingClocksPlaceholder,
+    //   timeDescription: 'Time Zone chosen WILL be:', 
+    //   timeID: 'chooseTime', 
+    //   location: moment.tz.guess(true),
+    //   interval: false,
+    //   timeShifted: true,
+    //   timeFormat: TIME24WOSEC,
+    //   requireDropDown: true,
+    //   dropDownDivID: 'chooseZoneDiv',
+    //   dropDownID: 'chooseZone',
+    //   // searchBoxDivID: 'sbChooseClockDiv',
+    //   // searchBoxID: 'sbChooseClock'
+    // });
     // localClock = new AClock ({
     //   clockPlaceholder: staticClocksPlaceholder,
     //   timeDescription: 'Your current local time is:',
@@ -187,10 +187,10 @@ $(function(){
     searchClock.addSearchBox();
     // Local Clock static
     // Chooseable timeshifted
-    chooseClock.putClockUp();
-    chooseClock.clockInterval();
-    chooseClock.shiftTime();
-    chooseClock.addDropDown();
+    // chooseClock.putClockUp();
+    // chooseClock.clockInterval();
+    // chooseClock.shiftTime();
+    // chooseClock.addDropDown();
     // chooseClock.addSearchBox();
     // Local Clock static
     // localClock.putClockUp(staticClocksPlaceholder);
@@ -205,9 +205,13 @@ $(function(){
     chooseClock.aRenderTime();
   });
   function onSelectItem(item){
+    // Set time on searchClock to the entered location
     searchClock.location = `${item.label}`;
-    console.log(searchClock.location);
     searchClock.aRenderTime();
+    // reset local clock back to current time (since searchClock starts at current time)
+    localTSClock.aRenderTime();
+    // reset range slider back to 0
+    $("input[type=range]").val(0);
   }
 
 
