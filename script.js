@@ -26,22 +26,6 @@ let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val] = val; return 
 // Document Ready Handler
 // 
 $(function(){
-  // Bootstrap Autocomplete in html input - not in a class
-  // event handler when text box element is chosen
-  // function onSelectItem(item, element) {
-  //     $('#output').html(
-  //         'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
-  //         '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
-  //     );
-  // }
-  // Adds Bootstrap autocomplete fuunction to the ID #myAutocomplete
-  // Doesn't seem to work if I make it a class though
-  $('#myAutocomplete').autocomplete({
-      source: tzNamesObject, // dictionary object with the values from which to search
-      // onSelectItem: onSelectItem, // callback to run when item is selected
-      highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
-      treshold: 1 // minimum characters to search before it starts displaying
-  });
 
   /**
   * A class to create clocks
@@ -131,13 +115,18 @@ $(function(){
         }
       });
     };
-
+    // Add text search box for cities instead of dropdown
     addSearchBox(){
-      const $thisSearchBox = $('<input:text>').addClass("mySearchboxes form-control").attr('id', `${this.searchBoxID}`);
+      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control").attr('id', `${this.searchBoxID}`);
       let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
       aSearchBoxDivID.append($thisSearchBox);
 
     }
+    
+    onSelectItem(item){
+      alert('you selected something');
+      this.location = item.label
+    };
   }; // complete AClock class definition
   
   // Create a function to make the clocks
@@ -213,5 +202,22 @@ $(function(){
         $(this).html(value);
       });
     });
+
+  // Bootstrap Autocomplete in html input - not in a class
+  // event handler when text box element is chosen
+  function onSelectItem(item, element) {
+    $('#output').html(
+        'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
+        '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
+    );
+  }
+  // Adds Bootstrap autocomplete function to the ID #myAutocomplete
+  // Doesn't seem to work if I make it a class though
+  $('.mySearchboxes').autocomplete({
+      source: tzNamesObject, // dictionary object with the values from which to search
+      onSelectItem: onSelectItem, // callback to run when item is selected
+      highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
+      treshold: 1 // minimum characters to search before it starts displaying
+  });
 
 }); // end document ready
