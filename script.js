@@ -212,21 +212,25 @@ $(function(){
     localTSClock.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
-    $('.slider_label').html(0)
+    showSliderLabel();
   }
 
 
   // function to show value chosen on range sliders
   // https://codepen.io/prasanthmj/pen/OxoamJ
-  $(function(){
-    $('.slider').on('input change', function(){
-      $(this).next($('.slider_label')).html(this.value);
+  function showSliderLabel(){
+    $(function(){
+      $('.slider').on('input change', function(){
+        $(this).next($('.slider_label')).html(this.value);
+        });
+        $('.slider_label').each(function(){
+          var value = $(this).prev().attr('value');
+          $(this).html(value);
+        });
       });
-      $('.slider_label').each(function(){
-        var value = $(this).prev().attr('value');
-        $(this).html(value);
-      });
-    });
+  }
+  showSliderLabel();
+  
 
   // Bootstrap Autocomplete in html input - not in a class
   // event handler when text box element is chosen
