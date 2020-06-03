@@ -117,16 +117,12 @@ $(function(){
     };
     // Add text search box for cities instead of dropdown
     addSearchBox(){
-      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control").attr('id', `${this.searchBoxID}`);
+      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search for City (default Dublin)');
+      // define a variable for the div which will hold the <input> text box
       let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
       aSearchBoxDivID.append($thisSearchBox);
 
     }
-    
-    onSelectItem(item){
-      alert('you selected something');
-      this.location = item.label
-    };
   }; // complete AClock class definition
   
   // Create a function to make the clocks
@@ -139,23 +135,35 @@ $(function(){
       location: moment.tz.guess(true),
       interval: false,
       timeShifted: true,
-      timeFormat: TIME24WOSEC,
+      timeFormat: TIME12WOSEC,
       requireDropDown: false,
       searchBox: false
     })
+    searchClock = new AClock({
+      clockPlaceholder: shiftingClocksPlaceholder,
+      timeDescription: 'Then the time chosen will be:', 
+      timeID: 'searchTime', 
+      location: 'Europe/Dublin',
+      interval: false,
+      timeShifted: true,
+      timeFormat: TIME12WOSEC,
+      requireDropDown: false,
+      searchBoxDivID: 'sbSearchClockDiv',
+      searchBoxID: 'sbSearchClock'
+    });
     chooseClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'Then the time chosen will be:', 
       timeID: 'chooseTime', 
-      location: 'Pacific/Auckland',
+      location: moment.tz.guess(true),
       interval: false,
       timeShifted: true,
       timeFormat: TIME24WOSEC,
       requireDropDown: true,
       dropDownDivID: 'chooseZoneDiv',
       dropDownID: 'chooseZone',
-      searchBoxDivID: 'sbChooseClockDiv',
-      searchBoxID: 'sbChooseClock'
+      // searchBoxDivID: 'sbChooseClockDiv',
+      // searchBoxID: 'sbChooseClock'
     });
     // localClock = new AClock ({
     //   clockPlaceholder: staticClocksPlaceholder,
@@ -172,12 +180,18 @@ $(function(){
     localTSClock.putClockUp();
     localTSClock.clockInterval();
     localTSClock.shiftTime()
+    // Searchbox clock timeshifted
+    searchClock.putClockUp();
+    searchClock.clockInterval();
+    searchClock.shiftTime();
+    searchClock.addSearchBox();
+    // Local Clock static
     // Chooseable timeshifted
     chooseClock.putClockUp();
     chooseClock.clockInterval();
     chooseClock.shiftTime();
     chooseClock.addDropDown();
-    chooseClock.addSearchBox();
+    // chooseClock.addSearchBox();
     // Local Clock static
     // localClock.putClockUp(staticClocksPlaceholder);
     // localClock.clockInterval()
@@ -190,6 +204,12 @@ $(function(){
     chooseClock.location = $('#chooseZone option:selected').val();
     chooseClock.aRenderTime();
   });
+  function onSelectItem(item){
+    searchClock.location = `${item.label}`;
+    console.log(searchClock.location);
+    searchClock.aRenderTime();
+  }
+
 
   // function to show value chosen on range sliders
   // https://codepen.io/prasanthmj/pen/OxoamJ
@@ -205,12 +225,13 @@ $(function(){
 
   // Bootstrap Autocomplete in html input - not in a class
   // event handler when text box element is chosen
-  function onSelectItem(item, element) {
-    $('#output').html(
-        'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
-        '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
-    );
-  }
+  // item is what was chosen (item.value and item.label), element is the ID of the searchbox used
+  // function onSelectItem(item, element) { 
+  //   $('#output').html(
+  //       'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
+  //       '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
+  //   );
+  // }
   // Adds Bootstrap autocomplete function to the ID #myAutocomplete
   // Doesn't seem to work if I make it a class though
   $('.mySearchboxes').autocomplete({
