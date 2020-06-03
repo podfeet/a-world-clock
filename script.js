@@ -141,7 +141,7 @@ $(function(){
     })
     searchClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'Then the time chosen will be:', 
+      timeDescription: 'Time chosen WILL be:', 
       timeID: 'searchTime', 
       location: 'Europe/Dublin',
       interval: false,
@@ -153,7 +153,7 @@ $(function(){
     });
     chooseClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'Then the time chosen will be:', 
+      timeDescription: 'Time Zone chosen WILL be:', 
       timeID: 'chooseTime', 
       location: moment.tz.guess(true),
       interval: false,
