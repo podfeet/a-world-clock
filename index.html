@@ -136,15 +136,6 @@
       <!-- TIMESHIFTER CLOCKS -->
       
       <div class="container">
-        <!-- row for time shifting explanation -->
-        <!-- <div class="row m-2">
-          <div class="col col-md-6 p-2 text-dark border border-dark rounded">
-            <h2>Time Shifter</h2>
-            <p>Shift your current time and find out what time that will be in another timezone</p>
-          </div>
-        </div> -->
-        <!-- end row for time shifting explanation -->
-
         <!-- container to hold range sliders -->
         <div class="container mt-2">
           <div class="row">
@@ -161,6 +152,41 @@
             </div>
           </div>
         </div> <!-- close container for range sliders -->
+
+        <!-- container to hold switches -->
+      <div class="container"> 
+        <!-- Switch to show/hide seconds -->
+        <!-- row for showSeconds switch -->
+        <!-- <div class="row pl-3 pb-3">
+          <div class="col col-md-6 form-control form-check-inline bg-light border border-dark rounded p-2 m3"> -->
+            <!-- Description of checkbox for screen readers -->
+          <!-- <div id="secondsDesc" class="sr-only">Switch to toggle between hide and show seconds</div>
+              <div class="mr-2 font-weight-bold align-baseline mySwitches d-none d-md-inline">Hide Seconds</div>
+              <div class="mr-2 font-weight-bold align-baseline mySwitches d-inline d-md-none">Hide</div>
+              <div class="custom-control custom-switch form-control-md" aria-describedby="secondsDesc">
+                <input type="checkbox" class="custom-control-input" id="showSeconds" name="showSeconds" checked>
+                <label class="custom-control-label mySwitches" for="showSeconds">Show Seconds</label>
+              </div>
+          </div> -->
+        </div>
+        <!-- end switch to show/hide seconds -->
+
+        <!-- Switch to  12 vs 24 hr clock -->
+        <div class="row pl-3 pb-3"> <!-- row for numHrs switch -->
+          <div class="col col-md-6 form-control form-check-inline bg-light border border-dark rounded p-2 m3">
+            <!-- Description of checkbox for screen readers -->
+            <div id="hrsDesc" class="sr-only">Switch to toggle between 24 and 12 hour clock</div> 
+            <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clock</div>
+            <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div>
+            <div class="custom-control custom-switch form-control-md">
+                <input type="checkbox" class="custom-control-input" checked id="numHrs" name="numHrs" >
+              <label class="custom-control-label mySwitches" for="numHrs">12 Hour Clock</label>
+            
+            </div>
+          </div>
+        </div>
+        <!-- end switch 12 vs 24 hr clock -->
+      </div> <!-- close hold switches container -->
 
         <!-- One placeholder for all clocks using clockCards template -->
         <div class="container">
@@ -185,7 +211,6 @@
                 <div id="parent" class="form-group"> <!-- form -->
                   <label for="myAutocomplete" class="sr-only" >Search for City</label>
                   <div id="{{searchBoxDivID}}"></div>
-                  <!-- <input type="text" id="{{searchBoxDivID}}" class="form-control"></input> -->
                 </div> <!-- close form -->
                 
                 <div class="card-title bg-light rounded text-primary col p-2">{{timeDescription}}
@@ -218,8 +243,6 @@
 
     <!-- Load the local JS Code AFTER the other libraries -->
     <script type="text/javascript" src="./script.js"></script>
-
-    
 
   </body>
 </html>

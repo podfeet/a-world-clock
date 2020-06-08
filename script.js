@@ -10,12 +10,18 @@ let TIME12WSEC = 'h:mm:ss a';
 let TIME12WOSEC = 'h:mm a';
 let TIME24WSEC = 'HH:mm:ss';
 let TIME24WOSEC = 'HH:mm';
-let FORMATTEDTIME = TIME12WSEC; // Default formatted time
-// let TRUESECONDS = true; // boolean true if show seconds is true
-// let TRUE12HR = true; // boolean true if numHrs is 12
+let FORMATTEDTIME = TIME12WOSEC; // Default formatted time
+// 
+let TRUESECONDS = true; // boolean true if show seconds is true
+let TRUE12HR = true; // boolean true if numHrs is 12
 
 // Time Zone globally-scoped variables
 let zones = [];
+
+// TimeShifter variables
+let hrsShifted = '';
+let minShifted = '';
+
 
 // Create an array from the official list of timezone names
 let TzNamesArray = moment.tz.names();
@@ -54,16 +60,19 @@ $(function(){
       this.location = details.location;
       this.interval = details.interval;
       this.timeShifted = details.timeShifted;
-      this.timeFormat = details.timeFormat;
-      this.requireDropDown = details.requireDropDown;       // do I ever use this? How do I tell if to make dropdown?
-      this.dropDownDivID = details.dropDownDivID;
-      this.dropDownID = details.dropDownID;
+      this.timeFormat = FORMATTEDTIME; 
+      // this.requireDropDown = details.requireDropDown;
+      // this.dropDownDivID = details.dropDownDivID;
+      // this.dropDownID = details.dropDownID;
       this.searchBoxDivID = details.searchBoxDivID;
       this.searchBoxID = details.searchBoxID;
     };
     //  Define the Instance functions
     aRenderTime(){
-      $(`#${this.timeID}`).html(moment.tz(this.location).format(this.timeFormat));
+      // This is correctly rendering the time to FORMATTED time when clocks are first built
+      // If I change FORMATTEDTIME, the initial clocks follow this rule
+      // if I replace FORMATTEDTIME here with something like TIME24WSEC, then the clocks are built following this new guidance.
+      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
     };
     // Render the html for the clocks
     putClockUp(){
@@ -90,39 +99,52 @@ $(function(){
           let roundUpTime = currentTime.startOf('h');
           $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(self.timeFormat));
         })
-      // shift min
-      $('#changeMin').on('input change', function(){
-        $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
-      })
-    }else{return};
+        // shift min
+        $('#changeMin').on('input change', function(){
+          $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
+        })
+      }else{return};
     };
 
     // Add dropdown if required
-    addDropDown(){
-      const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
-      let aDropDownDivID = $(`#${this.dropDownDivID}`);
-      // append a select (dropdown) to the placeholder div ID we created
-      aDropDownDivID.append($thisSelect);
-      // add a defualt selection in dropdown
-      $thisSelect.append('<option selected="true" disabled>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>');
-      $thisSelect.prop('selectedIndex', 0);
-      // give the json file a name
-      const jsonUrl = './zones.json';
-      // feels like an AJAX call to get the data
-      $.getJSON(jsonUrl, function(zones){
-        for (const z of zones){
-          $thisSelect.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
-        }
-      });
-    };
+    // addDropDown(){
+    //   const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
+    //   let aDropDownDivID = $(`#${this.dropDownDivID}`);
+    //   // append a select (dropdown) to the placeholder div ID we created
+    //   aDropDownDivID.append($thisSelect);
+    //   // add a defualt selection in dropdown
+    //   $thisSelect.append('<option selected="true" disabled>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>');
+    //   $thisSelect.prop('selectedIndex', 0);
+    //   // give the json file a name
+    //   const jsonUrl = './zones.json';
+    //   // feels like an AJAX call to get the data
+    //   $.getJSON(jsonUrl, function(zones){
+    //     for (const z of zones){
+    //       $thisSelect.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
+    //     }
+    //   });
+    // };
     // Add text search box for cities instead of dropdown
     addSearchBox(){
-      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search for City (default Dublin)');
+      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control ").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search for City (default Dublin)');
       // define a variable for the div which will hold the <input> text box
       let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
       aSearchBoxDivID.append($thisSearchBox);
 
     }
+    // showSeconds(){
+    //   $('#showSeconds').click(function(){
+    //     ifTrue();
+    //     this.aRenderTime();
+    //   });
+    // }
+    numHrs(){
+      $('#numHrs').click(function(){
+        ifTrue();
+        this.aRenderTime();
+      });
+    }
+
   }; // complete AClock class definition
   
   // Create a function to make the clocks
@@ -135,7 +157,7 @@ $(function(){
       location: moment.tz.guess(true),
       interval: false,
       timeShifted: true,
-      timeFormat: TIME12WOSEC,
+      // timeFormat: TIME12WOSEC,
       requireDropDown: false,
       searchBox: false
     })
@@ -146,7 +168,7 @@ $(function(){
       location: 'Europe/Dublin',
       interval: false,
       timeShifted: true,
-      timeFormat: TIME12WOSEC,
+      // timeFormat: TIME12WOSEC,
       requireDropDown: false,
       searchBoxDivID: 'sbSearchClockDiv',
       searchBoxID: 'sbSearchClock'
@@ -200,10 +222,12 @@ $(function(){
   // make the individual clocks:
   makeClocks();
 
-  $('#chooseZone').change(function(){ // triggers the function EVERY time you change the select
-    chooseClock.location = $('#chooseZone option:selected').val();
-    chooseClock.aRenderTime();
-  });
+  // Event handler from dropdown no longer used
+  // $('#chooseZone').change(function(){ // triggers the function EVERY time you change the select
+  //   chooseClock.location = $('#chooseZone option:selected').val();
+  //   chooseClock.aRenderTime();
+  // });
+
   function onSelectItem(item){
     // Set time on searchClock to the entered location
     searchClock.location = `${item.label}`;
@@ -214,7 +238,6 @@ $(function(){
     $("input[type=range]").val(0);
     showSliderLabel();
   }
-
 
   // function to show value chosen on range sliders
   // https://codepen.io/prasanthmj/pen/OxoamJ
@@ -230,17 +253,7 @@ $(function(){
       });
   }
   showSliderLabel();
-  
 
-  // Bootstrap Autocomplete in html input - not in a class
-  // event handler when text box element is chosen
-  // item is what was chosen (item.value and item.label), element is the ID of the searchbox used
-  // function onSelectItem(item, element) { 
-  //   $('#output').html(
-  //       'Element <b>' + $(element).attr('id') + '</b> was selected<br/>' +
-  //       '<b>Value:</b> ' + item.value + ' - <b>Label:</b> ' + item.label
-  //   );
-  // }
   // Adds Bootstrap autocomplete function to the ID #myAutocomplete
   // Doesn't seem to work if I make it a class though
   $('.mySearchboxes').autocomplete({
@@ -249,5 +262,50 @@ $(function(){
       highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
       treshold: 1 // minimum characters to search before it starts displaying
   });
+
+  // ********************************************************* //
+// Click Handler checking for 12/24 hr and show/hide seconds //
+// ********************************************************* //
+/**
+* Define Time format
+*
+* What comes in: 
+* @showSeconds {boolean}
+* @numHrs {string} 12 or 24
+* @return {string} Returns a string that defines the time format
+* Errors thrown e.g. @throws {RangeError} and why
+*/
+
+function ifTrue(){
+  TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
+  if (TRUE12HR){
+    FORMATTEDTIME = TIME12WOSEC;
+    console.log('Time should be 12 hour without seconds');
+  } else {
+    FORMATTEDTIME = TIME24WOSEC
+    console.log('Time should be 24 hour without seconds');
+    }
+}
+
+// function ifTrue(){
+//   TRUESECONDS = ($("input[id][name$='showSeconds']").prop( "checked" ));
+//   TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
+//   if (TRUESECONDS && TRUE12HR){
+//     FORMATTEDTIME = TIME12WSEC
+//     }
+//     else{
+//       if (TRUESECONDS && !TRUE12HR){
+//         FORMATTEDTIME = TIME24WSEC
+//         }
+//         else{
+//           if (!TRUESECONDS && TRUE12HR){
+//             FORMATTEDTIME = TIME12WOSEC
+//             }
+//             else{
+//                 FORMATTEDTIME = TIME24WOSEC
+//               }
+//             }
+//     }
+// }
 
 }); // end document ready
