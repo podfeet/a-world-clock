@@ -10,7 +10,7 @@ let TIME12WSEC = 'h:mm:ss a';
 let TIME12WOSEC = 'h:mm a';
 let TIME24WSEC = 'HH:mm:ss';
 let TIME24WOSEC = 'HH:mm';
-let FORMATTEDTIME = TIME12WOSEC; // Default formatted time
+let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 // 
 let TRUESECONDS = true; // boolean true if show seconds is true
 let TRUE12HR = true; // boolean true if numHrs is 12
@@ -60,18 +60,16 @@ $(function(){
       this.location = details.location;
       this.interval = details.interval;
       this.timeShifted = details.timeShifted;
-      this.timeFormat = FORMATTEDTIME; 
-      // this.requireDropDown = details.requireDropDown;
-      // this.dropDownDivID = details.dropDownDivID;
-      // this.dropDownID = details.dropDownID;
+      if (details.timeFormat !== undefined){
+        this.timeFormat = details.timeFormat;
+        } else{
+          this.timeFormat = FORMATTEDTIME;
+        }
       this.searchBoxDivID = details.searchBoxDivID;
       this.searchBoxID = details.searchBoxID;
     };
     //  Define the Instance functions
     aRenderTime(){
-      // This is correctly rendering the time to FORMATTED time when clocks are first built
-      // If I change FORMATTEDTIME, the initial clocks follow this rule
-      // if I replace FORMATTEDTIME here with something like TIME24WSEC, then the clocks are built following this new guidance.
       $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
     };
     // Render the html for the clocks
@@ -106,6 +104,22 @@ $(function(){
       }else{return};
     };
 
+    // Add text search box for cities instead of dropdown
+    addSearchBox(){
+      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control ").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search for City (default Dublin)');
+      // define a variable for the div which will hold the <input> text box
+      let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
+      aSearchBoxDivID.append($thisSearchBox);
+
+    }
+    // moved function outside of class because this.aRenderTime() throws type error "not a function" (even though it's fine in putClockUP)
+    // numHrs(){
+    //   $('#numHrs').click(function(){
+    //     ifTrue();
+    //     this.aRenderTime(); // throws type error "not a function"
+    //   });
+    // }
+
     // Add dropdown if required
     // addDropDown(){
     //   const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
@@ -124,26 +138,6 @@ $(function(){
     //     }
     //   });
     // };
-    // Add text search box for cities instead of dropdown
-    addSearchBox(){
-      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control ").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search for City (default Dublin)');
-      // define a variable for the div which will hold the <input> text box
-      let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
-      aSearchBoxDivID.append($thisSearchBox);
-
-    }
-    // showSeconds(){
-    //   $('#showSeconds').click(function(){
-    //     ifTrue();
-    //     this.aRenderTime();
-    //   });
-    // }
-    numHrs(){
-      $('#numHrs').click(function(){
-        ifTrue();
-        this.aRenderTime();
-      });
-    }
 
   }; // complete AClock class definition
   
@@ -187,26 +181,28 @@ $(function(){
     //   // searchBoxDivID: 'sbChooseClockDiv',
     //   // searchBoxID: 'sbChooseClock'
     // });
-    // localClock = new AClock ({
-    //   clockPlaceholder: staticClocksPlaceholder,
-    //   timeDescription: 'Your current local time is:',
-    //   timeID: 'localTime',
-    //   location: moment.tz.guess(true),
-    //   interval: true,
-    //   timeShifted: false,
-    //   timeFormat: FORMATTEDTIME,
-    //   requireDropDown: false
-    // });
+    localClock = new AClock ({
+      clockPlaceholder: staticClocksPlaceholder,
+      timeDescription: 'Your current local time is:',
+      timeID: 'localTime',
+      timeFormat: TIME12WSEC,
+      location: moment.tz.guess(true),
+      interval: true,
+      timeShifted: false,
+      // timeFormat: FORMATTEDTIME,
+      // requireDropDown: false
+    });
     // Put the clocks up, enable/disable interval, and enable timeshifting
     // local timeshifted 
     localTSClock.putClockUp();
     localTSClock.clockInterval();
-    localTSClock.shiftTime()
+    localTSClock.shiftTime();
     // Searchbox clock timeshifted
     searchClock.putClockUp();
     searchClock.clockInterval();
     searchClock.shiftTime();
     searchClock.addSearchBox();
+    // searchClock.numHrs();
     // Local Clock static
     // Chooseable timeshifted
     // chooseClock.putClockUp();
@@ -214,11 +210,13 @@ $(function(){
     // chooseClock.shiftTime();
     // chooseClock.addDropDown();
     // chooseClock.addSearchBox();
-    // Local Clock static
-    // localClock.putClockUp(staticClocksPlaceholder);
-    // localClock.clockInterval()
+    
+    // Local Clock static (non-shifting)
+    localClock.putClockUp(staticClocksPlaceholder);
+    localClock.clockInterval()
     // localClock.shiftTime();
   };
+
   // make the individual clocks:
   makeClocks();
 
@@ -238,6 +236,14 @@ $(function(){
     $("input[type=range]").val(0);
     showSliderLabel();
   }
+  // this works to change the time from 12/24 can't get inside class
+  $('#numHrs').click(function(){
+    ifTrue();
+    console.log(`localTSClock should be formatted ${localTSClock.timeFormat}`);
+    localTSClock.aRenderTime();
+    searchClock.aRenderTime();
+    localClock.aRenderTime();
+  });
 
   // function to show value chosen on range sliders
   // https://codepen.io/prasanthmj/pen/OxoamJ
@@ -279,33 +285,12 @@ $(function(){
 function ifTrue(){
   TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
   if (TRUE12HR){
-    FORMATTEDTIME = TIME12WOSEC;
-    console.log('Time should be 12 hour without seconds');
+    FORMATTEDTIME = TIME12WSEC;
+    console.log(`ifTrue() says time should be formatted with ${FORMATTEDTIME}`);
   } else {
-    FORMATTEDTIME = TIME24WOSEC
-    console.log('Time should be 24 hour without seconds');
+    FORMATTEDTIME = TIME24WSEC
+    console.log(`ifTrue() says time should be formatted with ${FORMATTEDTIME}`);
     }
 }
-
-// function ifTrue(){
-//   TRUESECONDS = ($("input[id][name$='showSeconds']").prop( "checked" ));
-//   TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
-//   if (TRUESECONDS && TRUE12HR){
-//     FORMATTEDTIME = TIME12WSEC
-//     }
-//     else{
-//       if (TRUESECONDS && !TRUE12HR){
-//         FORMATTEDTIME = TIME24WSEC
-//         }
-//         else{
-//           if (!TRUESECONDS && TRUE12HR){
-//             FORMATTEDTIME = TIME12WOSEC
-//             }
-//             else{
-//                 FORMATTEDTIME = TIME24WOSEC
-//               }
-//             }
-//     }
-// }
 
 }); // end document ready
