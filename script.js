@@ -106,7 +106,7 @@ $(function(){
 
     // Add text search box for cities instead of dropdown
     addSearchBox(){
-      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control ").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search for City (default Dublin)');
+      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search City (default Europe/Dublin)');
       // define a variable for the div which will hold the <input> text box
       let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
       aSearchBoxDivID.append($thisSearchBox);
@@ -146,7 +146,7 @@ $(function(){
     // create instances of AClock as desired
     localTSClock = new AClock({ // timeshifted local clock
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'If your local time is:', 
+      timeDescription: 'If your local time becomes:', 
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
       interval: false,
@@ -157,7 +157,7 @@ $(function(){
     })
     searchClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'Time chosen WILL be:', 
+      timeDescription: 'Time in this location WILL be:', 
       timeID: 'searchTime', 
       location: 'Europe/Dublin',
       interval: false,
@@ -239,7 +239,6 @@ $(function(){
   // this works to change the time from 12/24 can't get inside class
   $('#numHrs').click(function(){
     ifTrue();
-    console.log(`localTSClock should be formatted ${localTSClock.timeFormat}`);
     localTSClock.aRenderTime();
     searchClock.aRenderTime();
     localClock.aRenderTime();
@@ -286,10 +285,8 @@ function ifTrue(){
   TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
   if (TRUE12HR){
     FORMATTEDTIME = TIME12WSEC;
-    console.log(`ifTrue() says time should be formatted with ${FORMATTEDTIME}`);
   } else {
-    FORMATTEDTIME = TIME24WSEC
-    console.log(`ifTrue() says time should be formatted with ${FORMATTEDTIME}`);
+    FORMATTEDTIME = TIME24WSEC;
     }
 }
 
