@@ -26,7 +26,7 @@ let minShifted = '';
 // Create an array from the official list of timezone names
 let TzNamesArray = moment.tz.names();
 // don't understand this but it takes the array which is just a list of the region/city and makes it into an object where the key is the region/city and so is the value. which for some reason works in autocomplete!
-let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val] = val; return o; }, {});
+let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val.replace('_',' ')] = val; return o; }, {});
 
 // 
 // Document Ready Handler
@@ -228,7 +228,7 @@ $(function(){
 
   function onSelectItem(item){
     // Set time on searchClock to the entered location
-    searchClock.location = `${item.label}`;
+    searchClock.location = `${item.value}`;
     searchClock.aRenderTime();
     // reset local clock back to current time (since searchClock starts at current time)
     localTSClock.aRenderTime();
