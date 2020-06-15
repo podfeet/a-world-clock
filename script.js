@@ -15,9 +15,6 @@ let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 let TRUESECONDS = true; // boolean true if show seconds is true
 let TRUE12HR = true; // boolean true if numHrs is 12
 
-// Time Zone globally-scoped variables
-let zones = [];
-
 // TimeShifter variables
 let hrsShifted = '';
 let minShifted = '';
@@ -112,32 +109,6 @@ $(function(){
       aSearchBoxDivID.append($thisSearchBox);
 
     }
-    // moved function outside of class because this.aRenderTime() throws type error "not a function" (even though it's fine in putClockUP)
-    // numHrs(){
-    //   $('#numHrs').click(function(){
-    //     ifTrue();
-    //     this.aRenderTime(); // throws type error "not a function"
-    //   });
-    // }
-
-    // Add dropdown if required
-    // addDropDown(){
-    //   const $thisSelect = $('<select>').addClass("mr-2 ml-2 col-5 col-md-11 text-primary").attr('id', `${this.dropDownID}`).attr('name', 'locality');
-    //   let aDropDownDivID = $(`#${this.dropDownDivID}`);
-    //   // append a select (dropdown) to the placeholder div ID we created
-    //   aDropDownDivID.append($thisSelect);
-    //   // add a defualt selection in dropdown
-    //   $thisSelect.append('<option selected="true" disabled>(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>');
-    //   $thisSelect.prop('selectedIndex', 0);
-    //   // give the json file a name
-    //   const jsonUrl = './zones.json';
-    //   // feels like an AJAX call to get the data
-    //   $.getJSON(jsonUrl, function(zones){
-    //     for (const z of zones){
-    //       $thisSelect.append($('<option></option>').attr('value', z.city).text(`${z.name}`));
-    //     }
-    //   });
-    // };
 
   }; // complete AClock class definition
   
@@ -167,20 +138,6 @@ $(function(){
       searchBoxDivID: 'sbSearchClockDiv',
       searchBoxID: 'sbSearchClock'
     });
-    // chooseClock = new AClock({
-    //   clockPlaceholder: shiftingClocksPlaceholder,
-    //   timeDescription: 'Time Zone chosen WILL be:', 
-    //   timeID: 'chooseTime', 
-    //   location: moment.tz.guess(true),
-    //   interval: false,
-    //   timeShifted: true,
-    //   timeFormat: TIME24WOSEC,
-    //   requireDropDown: true,
-    //   dropDownDivID: 'chooseZoneDiv',
-    //   dropDownID: 'chooseZone',
-    //   // searchBoxDivID: 'sbChooseClockDiv',
-    //   // searchBoxID: 'sbChooseClock'
-    // });
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
       timeDescription: 'Your current local time is:',
@@ -202,14 +159,6 @@ $(function(){
     searchClock.clockInterval();
     searchClock.shiftTime();
     searchClock.addSearchBox();
-    // searchClock.numHrs();
-    // Local Clock static
-    // Chooseable timeshifted
-    // chooseClock.putClockUp();
-    // chooseClock.clockInterval();
-    // chooseClock.shiftTime();
-    // chooseClock.addDropDown();
-    // chooseClock.addSearchBox();
     
     // Local Clock static (non-shifting)
     localClock.putClockUp(staticClocksPlaceholder);
@@ -219,12 +168,6 @@ $(function(){
 
   // make the individual clocks:
   makeClocks();
-
-  // Event handler from dropdown no longer used
-  // $('#chooseZone').change(function(){ // triggers the function EVERY time you change the select
-  //   chooseClock.location = $('#chooseZone option:selected').val();
-  //   chooseClock.aRenderTime();
-  // });
 
   function onSelectItem(item){
     // Set time on searchClock to the entered location
