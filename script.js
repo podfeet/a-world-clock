@@ -19,11 +19,14 @@ let TRUE12HR = true; // boolean true if numHrs is 12
 let hrsShifted = '';
 let minShifted = '';
 
-
 // Create an array from the official list of timezone names
 let TzNamesArray = moment.tz.names();
 // don't understand this but it takes the array which is just a list of the region/city and makes it into an object where the key is the region/city and so is the value. which for some reason works in autocomplete!
 let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val.replace('_',' ')] = val; return o; }, {});
+
+// Create variable for the string value of the time-shifted versions of local and chosen distant clock
+let TSlocal = '';
+let TSdistant = '';
 
 // 
 // Document Ready Handler
@@ -231,6 +234,35 @@ function ifTrue(){
   } else {
     FORMATTEDTIME = TIME24WSEC;
     }
-}
+  }
+
+
 
 }); // end document ready
+
+
+  //
+  // Create sendable times
+  // Has to be outside the document ready because we want times after slider has moved
+
+  // these return the local and selected times
+  //$('#localTSTime').html(); returns "8:00:00 am"
+  // $('#searchTime').html(); returns "4:00:00 pm"
+  // $('#searchTime').replaceWith('9:00:00 am'); changed searchTime to 9am - also borked formatting
+
+  // TSlocal = $('#localTSTime').html();
+ 
+
+  // can change a browser to a new location with
+  // $(location).attr('href', 'https://podfeet.com')
+
+  // how do I attach the change to the time to the url...
+
+
+function getTSTimes(){
+  TSlocal = $('#localTSTime').html();
+  TSdistant = $('#searchTime').html();
+  // console.log(TSlocal);
+  console.log(`The time shifted local time is ${TSlocal} and time-shifted distance time is ${TSdistant}`);
+}
+getTSTimes();
