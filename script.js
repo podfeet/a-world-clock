@@ -51,12 +51,102 @@ $(function(){
   * Errors thrown e.g. @throws {TypeError} and why
   */
   class AClock{
+    //
+    // the ID into which the clock will be placed
+    //
+    /**
+    * @type {string}
+    */
+     get timeID(){
+      return this._timeID;
+    }
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    * @throws {RangeError}
+    */
+    set timeID(tid){
+      if(is.not.string(tid)){
+        throw new TypeError('timeID must be a string');
+      }
+      if(is.empty(tid)){
+        throw new RangeError('You must enter a timeID')
+      }
+      this._timeID = tid;
+    }
+
+    //
+    // Create the description of the clock instance
+    //
+    /**
+    * 
+    * @type {string}  
+    */
+    get timeDescription(){
+      return this._timeDescription;
+    }
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    * // no range error because I have a default
+    */
+    set timeDescription(td){
+      if(is.not.string(td)){
+        throw new TypeError('Time description must be a string');
+      }
+      return this._timeDescription = td;
+    }
+    //
+    // Clock will go into either the existing shifting or static placeholder div
+    /**
+     * 
+     * @type {object} div where the clock will be placed, default is shiftingClocksPlaceholderye
+     */
+    get clockPlaceholder(){
+      return this._clockPlaceholder;
+    }
+    /**
+     * 
+     * @type {object} div where the clock will be placed
+     * @throws {RangeError} if not one of two values
+     */
+    set clockPlaceholder(cph){
+      if((cph == shiftingClocksPlaceholder) || (cph == staticClocksPlaceholder)){
+          this._clockPlaceholder = cph;
+        }else{
+        throw new RangeError(`clockPlaceholder must be either shiftingClocksPlaceholder or staticClocksPlaceholder`)
+        }
+      this._clockPlaceholder = cph;
+    }
+
+    
+
+
+    //
     // define the constructor
+   //
     constructor(details){
+      // completed getter/setter data attributes
+      // Text to be shown before time in clock
+      if(typeof details.timeDescription === 'undefined'){ // if no description provided
+        this.timeDescription = "Generic Clock";
+        console.log(`The time description should be ${this._timeDescription}`);
+        }else{
+        this.timeDescription = details.timeDescription; // could throw error
+      };
+      // unique ID of the instance clock
+      this.timeID = details.timeID; // could throw error
+      // placeholder div into which this clock should go
+      if(typeof details.clockPlaceholder ==='undefined'){
+        this.clockPlaceholder = shiftingClocksPlaceholder;
+        } else {
+        this.clockPlaceholder = details.clockPlaceholder;
+      }
       //  Initialize the data attributes
-      this.clockPlaceholder = details.clockPlaceholder;
-      this.timeDescription = details.timeDescription;
-      this.timeID = details.timeID;
+      
+      
+      
+      
       this.location = details.location;
       this.interval = details.interval;
       this.timeShifted = details.timeShifted;
@@ -133,8 +223,8 @@ $(function(){
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'Time in this location WILL be:', 
       timeID: 'searchTime', 
-      location: 'Europe/Dublin',
-      interval: false,
+      location: 'Pacific/Wellington',
+      interval: true,
       timeShifted: true,
       // timeFormat: TIME12WOSEC,
       requireDropDown: false,
@@ -259,10 +349,10 @@ function ifTrue(){
   // how do I attach the change to the time to the url...
 
 
-function getTSTimes(){
-  TSlocal = $('#localTSTime').html();
-  TSdistant = $('#searchTime').html();
+// function getTSTimes(){
+//   TSlocal = $('#localTSTime').html();
+//   TSdistant = $('#searchTime').html();
   // console.log(TSlocal);
-  console.log(`The time shifted local time is ${TSlocal} and time-shifted distance time is ${TSdistant}`);
-}
-getTSTimes();
+  // console.log(`The time shifted local time is ${TSlocal} and time-shifted distance time is ${TSdistant}`);
+// }
+// getTSTimes();
