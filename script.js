@@ -170,20 +170,20 @@ $(function(){
         this.timeDescription = details.timeDescription; // could throw error
       };
 
-      // with unique IDs to hold the time (must have values)
+      // Unique IDs to hold the time (must have values)
       this.timeID = details.timeID; // could throw error
+      
+      // Unique Div to hold the text box for search
       // if a search box exists it must have a div ID to hold it
       if(typeof details.searchBoxDivID ==='undefined'){
         // if there should not be a search box, there's no div id for it
         this._searchBoxDivID = null;
-      }else{
+        }else{
         this.searchBoxDivID = details.searchBoxDivID;
       }
-      
-      //***************************** */
-      // I think the searchBox shouldn't exist if there's no searchBoxDivID defined
-      //******************************* */
 
+      // Unique ID to hold the text box for search
+      // Shouldn't be a searchBoxID if there's no searchBoxDivID
       this.searchBoxID = details.searchBoxID;
 
       // placeholder div into which this clock should go
@@ -248,11 +248,14 @@ $(function(){
 
     // Add text search box for cities instead of dropdown
     addSearchBox(){
-      const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search City (default Europe/Dublin)');
-      // define a variable for the div which will hold the <input> text box
-      let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
-      aSearchBoxDivID.append($thisSearchBox);
-
+      if (this.searchBoxDivID){
+        const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search City (default Europe/Dublin)');
+        // define a variable for the div which will hold the <input> text box
+        let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
+        aSearchBoxDivID.append($thisSearchBox);
+      }else{
+        throw new Error('You must provide a searchBoxDivID to hold the search box')
+      }
     }
 
   }; // complete AClock class definition
