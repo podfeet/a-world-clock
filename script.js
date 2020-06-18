@@ -99,14 +99,12 @@ $(function(){
     //
     // Clock will go into either the existing shifting or static placeholder div
     /**
-     * 
      * @type {object} div where the clock will be placed, default is shiftingClocksPlaceholderye
      */
     get clockPlaceholder(){
       return this._clockPlaceholder;
     }
     /**
-     * 
      * @type {object} div where the clock will be placed
      * @throws {RangeError} if not one of two values
      */
@@ -118,15 +116,39 @@ $(function(){
         }
       this._clockPlaceholder = cph;
     }
+    // Determine if clock will be timeshifted or static
+    // If static it will update with interval
+    /**
+     * @type {Boolean}
+     */
+    get timeShifted(){
+      return this._timeShifted;
+    }
+    /**
+     * @type {Boolean} defaults to true
+     * @throws {TypeError} if not Boolean
+     */
+    set timeShifted(ts){
+      if(typeof ts === Boolean){
+        this._timeShifted = ts;
+      }else{
+        throw new TypeError('timeShifted must be true or false')
+      }
+    }
+
+    // IF THERE IS NO SEARCHBOXDIVID, THEN NO SEARCHBOX!
+    // get searchBoxDivID
+
+    // set searchBoxDivID
 
     
-
 
     //
     // define the constructor
    //
     constructor(details){
       // completed getter/setter data attributes
+
       // Text to be shown before time in clock
       if(typeof details.timeDescription === 'undefined'){ // if no description provided
         this.timeDescription = "Generic Clock";
@@ -134,29 +156,35 @@ $(function(){
         }else{
         this.timeDescription = details.timeDescription; // could throw error
       };
-      // unique ID of the instance clock
+
+      // instance attributes with unique IDs (must have values)
       this.timeID = details.timeID; // could throw error
+      this.searchBoxDivID = details.searchBoxDivID;
+      this.searchBoxID = details.searchBoxID;
+
       // placeholder div into which this clock should go
       if(typeof details.clockPlaceholder ==='undefined'){
         this.clockPlaceholder = shiftingClocksPlaceholder;
-        } else {
+      } else {
         this.clockPlaceholder = details.clockPlaceholder;
+      }
+
+      // determine if the clock will move with the timeshifter
+      // set default to true
+      if(typeof details.timeShifted ==='undefined'){
+        this._timeShifted = true;
+        } else {
+          this._timeShifted = details.timeShifted;
       }
       //  Initialize the data attributes
       
-      
-      
-      
       this.location = details.location;
-      this.interval = details.interval;
-      this.timeShifted = details.timeShifted;
+      
       if (details.timeFormat !== undefined){
         this.timeFormat = details.timeFormat;
         } else{
           this.timeFormat = FORMATTEDTIME;
         }
-      this.searchBoxDivID = details.searchBoxDivID;
-      this.searchBoxID = details.searchBoxID;
     };
     //  Define the Instance functions
     aRenderTime(){
@@ -170,8 +198,8 @@ $(function(){
       $(this.clockPlaceholder).append(Mustache.render(clockCardTemplate, this));
       this.aRenderTime();
       };
-    clockInterval(){
-      if(this.interval){
+    clockInterval(){ // only static clocks show changing seconds
+      if(!this._timeShifted){
         setInterval(this.aRenderTime.bind(this), 1000);
       }else{return};
     };
@@ -180,7 +208,7 @@ $(function(){
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
       let self = this;
-      if (this.timeShifted){
+      if (this._timeShifted){
         // shift hours
         $('#changeHrs').on('input change', function(){
           let currentTime = moment.tz(self.location);
@@ -213,7 +241,6 @@ $(function(){
       timeDescription: 'If your local time becomes:', 
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
-      interval: false,
       timeShifted: true,
       // timeFormat: TIME12WOSEC,
       requireDropDown: false,
@@ -223,8 +250,7 @@ $(function(){
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'Time in this location WILL be:', 
       timeID: 'searchTime', 
-      location: 'Pacific/Wellington',
-      interval: true,
+      location: 'Europe/Dublin',
       timeShifted: true,
       // timeFormat: TIME12WOSEC,
       requireDropDown: false,
@@ -237,7 +263,6 @@ $(function(){
       timeID: 'localTime',
       timeFormat: TIME12WSEC,
       location: moment.tz.guess(true),
-      interval: true,
       timeShifted: false,
       // timeFormat: FORMATTEDTIME,
       // requireDropDown: false
