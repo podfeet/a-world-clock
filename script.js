@@ -137,11 +137,24 @@ $(function(){
     }
 
     // IF THERE IS NO SEARCHBOXDIVID, THEN NO SEARCHBOX!
-    // get searchBoxDivID
-
-    // set searchBoxDivID
-
-    
+    /**
+     * 
+     * @typeof {string} Unique name of div for search box 
+     */
+    get searchBoxDivID(){
+      return this._searchBoxDivID;
+    }
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    * @throws {RangeError}
+    */
+   set searchBoxDivID(sbdid){
+    if(is.not.string(sbdid)){
+      throw new TypeError('searchBoxDivID must be a string');
+    }
+    this._searchBoxDivID = sbdid;
+  } 
 
     //
     // define the constructor
@@ -157,9 +170,20 @@ $(function(){
         this.timeDescription = details.timeDescription; // could throw error
       };
 
-      // instance attributes with unique IDs (must have values)
+      // with unique IDs to hold the time (must have values)
       this.timeID = details.timeID; // could throw error
-      this.searchBoxDivID = details.searchBoxDivID;
+      // if a search box exists it must have a div ID to hold it
+      if(typeof details.searchBoxDivID ==='undefined'){
+        // if there should not be a search box, there's no div id for it
+        this._searchBoxDivID = null;
+      }else{
+        this.searchBoxDivID = details.searchBoxDivID;
+      }
+      
+      //***************************** */
+      // I think the searchBox shouldn't exist if there's no searchBoxDivID defined
+      //******************************* */
+
       this.searchBoxID = details.searchBoxID;
 
       // placeholder div into which this clock should go
@@ -199,7 +223,7 @@ $(function(){
       this.aRenderTime();
       };
     clockInterval(){ // only static clocks show changing seconds
-      if(!this._timeShifted){
+      if(!this.timeShifted){
         setInterval(this.aRenderTime.bind(this), 1000);
       }else{return};
     };
@@ -208,7 +232,7 @@ $(function(){
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
       let self = this;
-      if (this._timeShifted){
+      if (this.timeShifted){
         // shift hours
         $('#changeHrs').on('input change', function(){
           let currentTime = moment.tz(self.location);
@@ -265,7 +289,6 @@ $(function(){
       location: moment.tz.guess(true),
       timeShifted: false,
       // timeFormat: FORMATTEDTIME,
-      // requireDropDown: false
     });
     // Put the clocks up, enable/disable interval, and enable timeshifting
     // local timeshifted 
