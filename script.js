@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 // 
 // Define globally-scoped variables
 // 
@@ -78,25 +80,7 @@ $(function(){
     //
     // Create the description of the clock instance
     //
-    /**
-    * 
-    * @type {string}  
-    */
-    get timeDescription(){
-      return this._timeDescription;
-    }
-    /**
-    * @type {string}
-    * @throws {TypeError}
-    * // no range error because I have a default
-    */
-    set timeDescription(td){
-      if(is.not.string(td)){
-        throw new TypeError('Time description must be a string');
-      }
-      return this._timeDescription = td;
-    }
-    //
+    
     // Clock will go into either the existing shifting or static placeholder div
     /**
      * @type {object} div where the clock will be placed, default is shiftingClocksPlaceholderye
@@ -115,6 +99,24 @@ $(function(){
         throw new RangeError(`clockPlaceholder must be either shiftingClocksPlaceholder or staticClocksPlaceholder`)
         }
       this._clockPlaceholder = cph;
+    }
+    /**
+    * 
+    * @type {string}  
+    */
+    get timeDescription(){
+      return this._timeDescription;
+    }
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    * // no range error because I have a default
+    */
+    set timeDescription(td){
+      if(is.not.string(td)){
+        throw new TypeError('Time description must be a string');
+      }
+      this._timeDescription = td;
     }
     // Determine if clock will be timeshifted or static
     // If static it will update with interval
@@ -135,10 +137,8 @@ $(function(){
         throw new TypeError('timeShifted must be true or false')
       }
     }
-
-    // IF THERE IS NO SEARCHBOXDIVID, THEN NO SEARCHBOX!
+    // ID for the Div to hold the search box
     /**
-     * 
      * @typeof {string} Unique name of div for search box 
      */
     get searchBoxDivID(){
@@ -149,42 +149,41 @@ $(function(){
     * @throws {TypeError}
     * @throws {RangeError}
     */
-   set searchBoxDivID(sbdid){
-    if(is.not.string(sbdid)){
-      throw new TypeError('searchBoxDivID must be a string');
+    set searchBoxDivID(sbdid){
+        if(sbdid === null){
+          return;
+        }
+        if(is.not.string(sbdid)){
+        throw new TypeError('searchBoxDivID must be a string');
+      }
+      this._searchBoxDivID = sbdid;
+    } 
+    // ID for the search box itself
+     /**
+     * @typeof {string} Unique name of div for search box 
+     */
+    get searchBoxID(){
+      return this._searchBoxID;
     }
-    this._searchBoxDivID = sbdid;
-  } 
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    */
+    set searchBoxID(sbid){
+      if(sbid === null){
+        return;
+      }
+      if(is.not.string(sbid)){
+       throw new TypeError('searchBoxID must be a string');
+      }
+      this._searchBoxID = sbid;
+    } 
 
     //
     // define the constructor
-   //
+    //
     constructor(details){
       // completed getter/setter data attributes
-
-      // Text to be shown before time in clock
-      if(typeof details.timeDescription === 'undefined'){ // if no description provided
-        this.timeDescription = "Generic Clock";
-        console.log(`The time description should be ${this._timeDescription}`);
-        }else{
-        this.timeDescription = details.timeDescription; // could throw error
-      };
-
-      // Unique IDs to hold the time (must have values)
-      this.timeID = details.timeID; // could throw error
-      
-      // Unique Div to hold the text box for search
-      // if a search box exists it must have a div ID to hold it
-      if(typeof details.searchBoxDivID ==='undefined'){
-        // if there should not be a search box, there's no div id for it
-        this._searchBoxDivID = null;
-        }else{
-        this.searchBoxDivID = details.searchBoxDivID;
-      }
-
-      // Unique ID to hold the text box for search
-      // Shouldn't be a searchBoxID if there's no searchBoxDivID
-      this.searchBoxID = details.searchBoxID;
 
       // placeholder div into which this clock should go
       if(typeof details.clockPlaceholder ==='undefined'){
@@ -193,6 +192,17 @@ $(function(){
         this.clockPlaceholder = details.clockPlaceholder;
       }
 
+      // Text to be shown before time in clock
+      if(typeof details.timeDescription === 'undefined'){ // if no description provided
+        this.timeDescription = "Generic Clock";
+        console.log(`The time description should be ${this._timeDescription}`);
+        }else{
+        this.timeDescription = details.timeDescription; // could throw error
+      }
+
+      // Unique IDs to hold the time (must have values)
+      this.timeID = details.timeID; // could throw error
+
       // determine if the clock will move with the timeshifter
       // set default to true
       if(typeof details.timeShifted ==='undefined'){
@@ -200,6 +210,24 @@ $(function(){
         } else {
           this._timeShifted = details.timeShifted;
       }
+      
+      // Unique Div to hold the text box for search
+      // if a search box exists it must have a div ID to hold it
+      if(typeof details.searchBoxDivID ==='undefined'){
+        // if there should not be a search box, there's no div id for it
+        this.searchBoxDivID = null;
+        }else{
+        this.searchBoxDivID = details.searchBoxDivID;
+      }
+
+      // Unique ID to hold the text box for search
+      if(typeof details.searchBoxID ==='undefined'){
+        this.searchBoxID = null;
+        }else{
+        this.searchBoxID = details.searchBoxID;
+      }
+
+
       //  Initialize the data attributes
       
       this.location = details.location;
@@ -209,11 +237,11 @@ $(function(){
         } else{
           this.timeFormat = FORMATTEDTIME;
         }
-    };
+    }
     //  Define the Instance functions
     aRenderTime(){
       $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
-    };
+    }
     // Render the html for the clocks
     putClockUp(){
       // Convert the placeholder template script to a string
@@ -221,12 +249,12 @@ $(function(){
       // render the html for the clocks
       $(this.clockPlaceholder).append(Mustache.render(clockCardTemplate, this));
       this.aRenderTime();
-      };
+      }
     clockInterval(){ // only static clocks show changing seconds
       if(!this.timeShifted){
         setInterval(this.aRenderTime.bind(this), 1000);
-      }else{return};
-    };
+      }else{return}
+    }
     // Event Handler to change time via range sliders
     // shiftTime Hours
     shiftTime(){
@@ -243,8 +271,8 @@ $(function(){
         $('#changeMin').on('input change', function(){
           $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
         })
-      }else{return};
-    };
+      }else{return}
+    }
 
     // Add text search box for cities instead of dropdown
     addSearchBox(){
@@ -258,7 +286,7 @@ $(function(){
       }
     }
 
-  }; // complete AClock class definition
+  } // complete AClock Class definition
   
   // Create a function to make the clocks
   function makeClocks(){
@@ -269,8 +297,6 @@ $(function(){
       timeID: 'localTSTime', 
       location: moment.tz.guess(true),
       timeShifted: true,
-      // timeFormat: TIME12WOSEC,
-      requireDropDown: false,
       searchBox: false
     })
     searchClock = new AClock({
@@ -279,8 +305,6 @@ $(function(){
       timeID: 'searchTime', 
       location: 'Europe/Dublin',
       timeShifted: true,
-      // timeFormat: TIME12WOSEC,
-      requireDropDown: false,
       searchBoxDivID: 'sbSearchClockDiv',
       searchBoxID: 'sbSearchClock'
     });
@@ -291,7 +315,6 @@ $(function(){
       timeFormat: TIME12WSEC,
       location: moment.tz.guess(true),
       timeShifted: false,
-      // timeFormat: FORMATTEDTIME,
     });
     // Put the clocks up, enable/disable interval, and enable timeshifting
     // local timeshifted 
@@ -308,7 +331,7 @@ $(function(){
     localClock.putClockUp(staticClocksPlaceholder);
     localClock.clockInterval()
     // localClock.shiftTime();
-  };
+  }
 
   // make the individual clocks:
   makeClocks();
