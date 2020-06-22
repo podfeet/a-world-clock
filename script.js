@@ -203,6 +203,30 @@ $(function(){
       }
       this._searchBoxID = sbid;
     } 
+    /**
+     * 
+     * @typeof {string} location 
+     */
+    get location(){
+      return this._location;
+    }
+    /**
+     * 
+     * @typeof {string} location
+     * @throws {typeError}
+     * @throws {rangeError} if not from the TzNamesArray values 
+     */
+    set location(loc){
+      if(is.not.string(loc)){
+        throw new TypeError('Location must be a string')
+      } else {
+        if(!TzNamesArray.includes(loc)){
+          throw new RangeError('Location must be a city listed in moment.tz.names() from moment.js')
+        } else {
+        this._location = loc;
+        }
+      }
+    }
 
     //
     // define the constructor
@@ -272,7 +296,7 @@ $(function(){
     addSearchBox(){
       if (this.searchBoxDivID){
         if(this.searchBoxID){
-          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search City (default Dublin)`);
+          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search Major City (default Dublin)`);
           // define a variable for the div which will hold the <input> text box
           let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
           aSearchBoxDivID.append($thisSearchBox);
