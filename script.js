@@ -53,6 +53,46 @@ $(function(){
   * Errors thrown e.g. @throws {TypeError} and why
   */
   class AClock{
+     // Clock will go into either the existing shifting or static placeholder div
+    /**
+     * @type {object} div where the clock will be placed, default is shiftingClocksPlaceholderye
+     */
+    get clockPlaceholder(){
+      return this._clockPlaceholder;
+    }
+    /**
+     * @type {object} div where the clock will be placed
+     * @throws {RangeError} if not one of two values
+     */
+    set clockPlaceholder(cph){
+      if((cph == shiftingClocksPlaceholder) || (cph == staticClocksPlaceholder)){
+          this._clockPlaceholder = cph;
+        }else{
+        throw new RangeError(`clockPlaceholder must be either shiftingClocksPlaceholder or staticClocksPlaceholder`)
+        }
+      this._clockPlaceholder = cph;
+    }
+    //
+    // Create the description of the clock instance
+    //
+    /**
+    * 
+    * @type {string}  
+    */
+    get timeDescription(){
+      return this._timeDescription;
+    }
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    * // no range error because I have a default
+    */
+    set timeDescription(td){
+      if(is.not.string(td)){
+        throw new TypeError('Time description must be a string');
+      }
+      this._timeDescription = td;
+    }
     //
     // the ID into which the clock will be placed
     //
@@ -76,48 +116,6 @@ $(function(){
       }
       this._timeID = tid;
     }
-
-    //
-    // Create the description of the clock instance
-    //
-    
-    // Clock will go into either the existing shifting or static placeholder div
-    /**
-     * @type {object} div where the clock will be placed, default is shiftingClocksPlaceholderye
-     */
-    get clockPlaceholder(){
-      return this._clockPlaceholder;
-    }
-    /**
-     * @type {object} div where the clock will be placed
-     * @throws {RangeError} if not one of two values
-     */
-    set clockPlaceholder(cph){
-      if((cph == shiftingClocksPlaceholder) || (cph == staticClocksPlaceholder)){
-          this._clockPlaceholder = cph;
-        }else{
-        throw new RangeError(`clockPlaceholder must be either shiftingClocksPlaceholder or staticClocksPlaceholder`)
-        }
-      this._clockPlaceholder = cph;
-    }
-    /**
-    * 
-    * @type {string}  
-    */
-    get timeDescription(){
-      return this._timeDescription;
-    }
-    /**
-    * @type {string}
-    * @throws {TypeError}
-    * // no range error because I have a default
-    */
-    set timeDescription(td){
-      if(is.not.string(td)){
-        throw new TypeError('Time description must be a string');
-      }
-      this._timeDescription = td;
-    }
     // Determine if clock will be timeshifted or static
     // If static it will update with interval
     /**
@@ -127,16 +125,41 @@ $(function(){
       return this._timeShifted;
     }
     /**
-     * @type {Boolean} defaults to true
-     * @throws {TypeError} if not Boolean
+     * @type {boolean} defaults to true
+     * @throws {TypeError} if not boolean
      */
     set timeShifted(ts){
-      if(typeof ts === Boolean){
+      if(typeof ts === 'boolean'){
         this._timeShifted = ts;
-      }else{
-        throw new TypeError('timeShifted must be true or false')
-      }
+      } else {
+        if(typeof ts === 'undefined'){
+          this._timeShifted = true;
+        }else{
+            throw new TypeError('timeShifted must be true or false')}
+      }  
     }
+    // Choose a time format
+    /**
+     * @type {string}
+     */
+    get timeFormat(){
+      return this._timeFormat;
+    }
+    /**
+     * @type {Global Variable}
+     * @throws {TypeError} if not one of two variables
+     */
+    set timeFormat(tf){
+      if(tf == TIME12WSEC || tf == TIME24WSEC){
+        this._timeFormat = tf;
+      } else {
+        if(tf === 'undefined'){
+          tf = FORMATTEDTIME;
+        } else {
+          throw new RangeError('timeFormat must be TIME12WSEC or TIME24WSEC')
+        }
+      }
+    }        
     // ID for the Div to hold the search box
     /**
      * @typeof {string} Unique name of div for search box 
@@ -150,14 +173,16 @@ $(function(){
     * @throws {RangeError}
     */
     set searchBoxDivID(sbdid){
-        if(sbdid === null){
-          return;
-        }
+      if(!sbdid){
+        return;
+      } else {
         if(is.not.string(sbdid)){
-        throw new TypeError('searchBoxDivID must be a string');
-      }
-      this._searchBoxDivID = sbdid;
-    } 
+          throw new TypeError('searchBoxDivID must be a string');
+        } else {
+        this._searchBoxDivID = sbdid;
+        }
+      } 
+    }
     // ID for the search box itself
      /**
      * @typeof {string} Unique name of div for search box 
@@ -170,7 +195,7 @@ $(function(){
     * @throws {TypeError}
     */
     set searchBoxID(sbid){
-      if(sbid === null){
+      if(!sbid){
         return;
       }
       if(is.not.string(sbid)){
@@ -183,64 +208,30 @@ $(function(){
     // define the constructor
     //
     constructor(details){
-      // completed getter/setter data attributes
-
-      // placeholder div into which this clock should go
-      if(typeof details.clockPlaceholder ==='undefined'){
-        this.clockPlaceholder = shiftingClocksPlaceholder;
-      } else {
-        this.clockPlaceholder = details.clockPlaceholder;
-      }
+      // Choose whether clock goes in shifting or static div
+      this.clockPlaceholder = details.clockPlaceholder;
 
       // Text to be shown before time in clock
-      if(typeof details.timeDescription === 'undefined'){ // if no description provided
-        this.timeDescription = "Generic Clock";
-        console.log(`The time description should be ${this._timeDescription}`);
-        }else{
-        this.timeDescription = details.timeDescription; // could throw error
-      }
+      this.timeDescription = details.timeDescription; // could throw error
 
       // Unique IDs to hold the time (must have values)
       this.timeID = details.timeID; // could throw error
 
+      // Setting default location of clock if not defined
+      this.location = details.location;
+
       // determine if the clock will move with the timeshifter
-      // set default to true
-      if(typeof details.timeShifted ==='undefined'){
-        this._timeShifted = true;
-        } else {
-          this._timeShifted = details.timeShifted;
-      }
-      
+      this.timeShifted = details.timeShifted;
+  
       // Unique Div to hold the text box for search
-      // if a search box exists it must have a div ID to hold it
-      if(typeof details.searchBoxDivID ==='undefined'){
-        // if there should not be a search box, there's no div id for it
-        this.searchBoxDivID = null;
-        }else{
         this.searchBoxDivID = details.searchBoxDivID;
-      }
 
       // Unique ID to hold the text box for search
-      if(typeof details.searchBoxID ==='undefined'){
-        this.searchBoxID = null;
-        }else{
         this.searchBoxID = details.searchBoxID;
-      }
-
-
-      //  Initialize the data attributes
-      
-      this.location = details.location;
-      
-      if (details.timeFormat !== undefined){
-        this.timeFormat = details.timeFormat;
-        } else{
-          this.timeFormat = FORMATTEDTIME;
-        }
     }
     //  Define the Instance functions
     aRenderTime(){
-      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
+      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME)).html(this.timeD);
     }
     // Render the html for the clocks
     putClockUp(){
@@ -277,10 +268,12 @@ $(function(){
     // Add text search box for cities instead of dropdown
     addSearchBox(){
       if (this.searchBoxDivID){
-        const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', 'Search City (default Europe/Dublin)');
-        // define a variable for the div which will hold the <input> text box
-        let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
-        aSearchBoxDivID.append($thisSearchBox);
+        if(this.searchBoxID){
+          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search City (default ${this.location})`);
+          // define a variable for the div which will hold the <input> text box
+          let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
+          aSearchBoxDivID.append($thisSearchBox);
+        }else{throw new Error('You must provide a searchBoxID for the search box')}
       }else{
         throw new Error('You must provide a searchBoxDivID to hold the search box')
       }
@@ -294,17 +287,17 @@ $(function(){
     localTSClock = new AClock({ // timeshifted local clock
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'If your local time becomes:', 
-      timeID: 'localTSTime', 
+      timeID: 'localTSTime',
       location: moment.tz.guess(true),
       timeShifted: true,
-      searchBox: false
     })
     searchClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'Time in this location WILL be:', 
-      timeID: 'searchTime', 
-      location: 'Europe/Dublin',
+      timeID: 'searchTime',
+      timeFormat: TIME12WSEC,
       timeShifted: true,
+      // location: "Europe/Dublin",
       searchBoxDivID: 'sbSearchClockDiv',
       searchBoxID: 'sbSearchClock'
     });
@@ -339,6 +332,11 @@ $(function(){
   function onSelectItem(item){
     // Set time on searchClock to the entered location
     searchClock.location = `${item.value}`;
+
+
+
+    // this changes the description in console but not in card
+    // searchClock.timeDescription = `Time in ${item.value} becomes:`;
     searchClock.aRenderTime();
     // reset local clock back to current time (since searchClock starts at current time)
     localTSClock.aRenderTime();
@@ -384,11 +382,9 @@ $(function(){
 /**
 * Define Time format
 *
-* What comes in: 
-* @showSeconds {boolean}
+* What comes in:
 * @numHrs {string} 12 or 24
 * @return {string} Returns a string that defines the time format
-* Errors thrown e.g. @throws {RangeError} and why
 */
 
 function ifTrue(){
@@ -399,8 +395,6 @@ function ifTrue(){
     FORMATTEDTIME = TIME24WSEC;
     }
   }
-
-
 
 }); // end document ready
 
