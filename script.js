@@ -223,7 +223,7 @@ $(function(){
       // determine if the clock will move with the timeshifter
       this.timeShifted = details.timeShifted;
 
-      // still needs a setter/getter
+      // time format variable to allow change with scroller
       this.timeFormat = details.timeFormat;
       
       // Unique Div to hold the text box for search
@@ -259,7 +259,7 @@ $(function(){
         $('#changeHrs').on('input change', function(){
           let currentTime = moment.tz(self.location);
           let roundUpTime = currentTime.startOf('h');
-          $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(self.timeFormat));
+          $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
         })
         // shift min
         $('#changeMin').on('input change', function(){
@@ -272,7 +272,7 @@ $(function(){
     addSearchBox(){
       if (this.searchBoxDivID){
         if(this.searchBoxID){
-          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search City (default ${this.location})`);
+          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search City (default Dublin)`);
           // define a variable for the div which will hold the <input> text box
           let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
           aSearchBoxDivID.append($thisSearchBox);
@@ -301,7 +301,7 @@ $(function(){
       timeID: 'searchTime',
       timeFormat: TIME12WSEC,
       timeShifted: true,
-      // location: "Europe/Dublin",
+      location: "Europe/Dublin",
       searchBoxDivID: 'sbSearchClockDiv',
       searchBoxID: 'sbSearchClock'
     });
@@ -337,8 +337,6 @@ $(function(){
     // Set time on searchClock to the entered location
     searchClock.location = `${item.value}`;
 
-
-
     // this changes the description in console but not in card
     // searchClock.timeDescription = `Time in ${item.value} becomes:`;
     searchClock.aRenderTime();
@@ -351,6 +349,8 @@ $(function(){
   // this works to change the time from 12/24 can't get inside class
   $('#numHrs').click(function(){
     ifTrue();
+    $("input[type=range]").val(0);
+    showSliderLabel();
     localTSClock.aRenderTime();
     searchClock.aRenderTime();
     localClock.aRenderTime();
@@ -380,8 +380,8 @@ $(function(){
       treshold: 1 // minimum characters to search before it starts displaying
   });
 
-  // ********************************************************* //
-// Click Handler checking for 12/24 hr and show/hide seconds //
+// ********************************************************* //
+// Click Handler checking for 12/24 hr //
 // ********************************************************* //
 /**
 * Define Time format
