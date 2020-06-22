@@ -222,7 +222,10 @@ $(function(){
 
       // determine if the clock will move with the timeshifter
       this.timeShifted = details.timeShifted;
-  
+
+      // still needs a setter/getter
+      this.timeFormat = details.timeFormat;
+      
       // Unique Div to hold the text box for search
         this.searchBoxDivID = details.searchBoxDivID;
 
@@ -287,7 +290,8 @@ $(function(){
     localTSClock = new AClock({ // timeshifted local clock
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescription: 'If your local time becomes:', 
-      timeID: 'localTSTime',
+      timeID: 'localTSTime', 
+      timeFormat: TIME12WSEC,
       location: moment.tz.guess(true),
       timeShifted: true,
     })
