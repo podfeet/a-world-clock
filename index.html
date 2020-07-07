@@ -192,17 +192,15 @@
           <div class= "col col-md-6 mb-2"> <!-- open column for clock -->
             <div class="card bg-primary text-white" style="width: 100%"> <!-- card -->
               <div class="card-body"> <!-- card body -->
-                <!-- placeholder for dropdown select -->
-                <!-- <div class="mb-3" id="{{dropDownDivID}}"></div>  -->
-
+                
                 <div id="parent" class="form-group"> <!-- form -->
                   <label for="myAutocomplete" class="sr-only" >Search for City</label>
                   <div id="{{searchBoxDivID}}"></div>
                 </div> <!-- close form -->
                 
-                <div class="card-title bg-light rounded text-primary col p-2">{{timeDescription}}
-                  <div class="ml-5" id="{{timeID}}"></div><!-- placeholder div for clock -->
+                <div class="card-title bg-light rounded text-primary col p-2" id="{{timeDescriptionID}}">{{timeDescription}}
                 </div>
+                <div class="ml-5" id="{{timeID}}"></div><!-- placeholder div for clock -->
               </div> <!-- close card body -->
             </div> <!-- close div for card -->
           </div><!-- close column for clock -->

@@ -27,6 +27,7 @@ let TzNamesArray = moment.tz.names();
 let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val.replace('_',' ')] = val; return o; }, {});
 
 // Create variable for the string value of the time-shifted versions of local and chosen distant clock
+
 let TSlocal = '';
 let TSdistant = '';
 
@@ -71,6 +72,27 @@ $(function(){
         throw new RangeError(`clockPlaceholder must be either shiftingClocksPlaceholder or staticClocksPlaceholder`)
         }
       this._clockPlaceholder = cph;
+    }
+    //
+    // Create the ID into which the description for the clock instance will be placed
+    //
+    /**
+    * 
+    * @type {string}  
+    */
+    get timeDescriptionID(){
+      return this._timeDescriptionID;
+    }
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    * // no range error because I have a default
+    */
+    set timeDescriptionID(tdid){
+      if(is.not.string(tdid)){
+        throw new TypeError('Time description ID must be a string');
+      }
+      this._timeDescriptionID = tdid;
     }
     //
     // Create the description of the clock instance
@@ -236,6 +258,7 @@ $(function(){
       this.clockPlaceholder = details.clockPlaceholder;
 
       // Text to be shown before time in clock
+      this.timeDescriptionID = details.timeDescriptionID;
       this.timeDescription = details.timeDescription; // could throw error
 
       // Unique IDs to hold the time (must have values)
@@ -251,14 +274,15 @@ $(function(){
       this.timeFormat = details.timeFormat;
       
       // Unique Div to hold the text box for search
-        this.searchBoxDivID = details.searchBoxDivID;
+      this.searchBoxDivID = details.searchBoxDivID;
 
       // Unique ID to hold the text box for search
-        this.searchBoxID = details.searchBoxID;
+      this.searchBoxID = details.searchBoxID;
     }
     //  Define the Instance functions
     aRenderTime(){
-      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME)).html(this.timeD);
+      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME)); 
+      // can't put description here. trust me. no really, not here.   
     }
     // Render the html for the clocks
     putClockUp(){
@@ -312,8 +336,10 @@ $(function(){
   function makeClocks(){
     // create instances of AClock as desired
     localTSClock = new AClock({ // timeshifted local clock
-      clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'If your local time becomes:', 
+      clockPlaceholder: shiftingClocksPlaceholder, 
+      // this works!
+      timeDescriptionID: 'localTSID',
+      timeDescription: `Time in ${moment.tz.guess(true)} becomes:`,
       timeID: 'localTSTime', 
       timeFormat: TIME12WSEC,
       location: moment.tz.guess(true),
@@ -321,7 +347,8 @@ $(function(){
     })
     searchClock = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescription: 'Time in this location WILL be:', 
+      timeDescriptionID: 'searchTSID',
+      timeDescription: 'Time in Europe/Dublin becomes:',
       timeID: 'searchTime',
       timeFormat: TIME12WSEC,
       timeShifted: true,
@@ -331,6 +358,7 @@ $(function(){
     });
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
+      timeDescriptionID: 'localID',
       timeDescription: 'Your current local time is:',
       timeID: 'localTime',
       timeFormat: TIME12WSEC,
@@ -357,12 +385,11 @@ $(function(){
   // make the individual clocks:
   makeClocks();
 
+  // Set time on searchClock to the entered location
   function onSelectItem(item){
-    // Set time on searchClock to the entered location
     searchClock.location = `${item.value}`;
-
-    // this changes the description in console but not in card
-    // searchClock.timeDescription = `Time in ${item.value} becomes:`;
+    searchClock.timeDescription = `Time in ${item.value} becomes:`;
+    $(`#${searchClock.timeDescriptionID}`).html(searchClock.timeDescription);
     searchClock.aRenderTime();
     // reset local clock back to current time (since searchClock starts at current time)
     localTSClock.aRenderTime();
