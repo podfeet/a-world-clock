@@ -451,14 +451,44 @@ $(function(){
 * @return {string} Returns a string that defines the time format
 */
 
-function ifTrue(){
-  TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
-  if (TRUE12HR){
-    FORMATTEDTIME = TIME12WSEC;
-  } else {
-    FORMATTEDTIME = TIME24WSEC;
+  function ifTrue(){
+    TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
+    if (TRUE12HR){
+      FORMATTEDTIME = TIME12WSEC;
+    } else {
+      FORMATTEDTIME = TIME24WSEC;
+      }
     }
+
+// creating sendable times
+  const queryString = window.location.search;
+
+  // http://localhost:8888/a-world-clock/?time1=1:00pm&time2=9:00pm
+  // http://localhost:8888/a-world-clock/?time1=Tuesday+8:50:59+pm&time2=Wednesday+4pm
+  // this worked to set the two times
+  function setTimesFromURL(){
+    queryString;
+    myUrlParam = new URLSearchParams(queryString);
+    $('#localTSTime').html(`${myUrlParam.get('time1')}`)
+    $('#searchTime').html(`${myUrlParam.get('time2')}`)
   }
+  setTimesFromURL();
+  
+  // Event handler for the copy button to create the URL
+  $('#copyBtn').click(function(){
+    let localT = $('#localTSTime').html();
+    console.log(localT);
+    let searchT = $('#searchTime').html();
+    const space =/\s/g;
+    let t1 = localT.replace(space, '+')
+    let t2 = searchT.replace(space, '+')
+    let sendableURL = `http://localhost:8888/a-world-clock/?time1=${t1}&time2=${t2}`
+
+    alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
+  })
+
+
+
 
 }); // end document ready
 
