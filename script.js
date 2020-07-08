@@ -8,10 +8,10 @@
 let h = 'h';
 let m = 'mm';
 let s = 'ss a';
-let TIME12WSEC = 'h:mm:ss a';
-let TIME12WOSEC = 'h:mm a';
-let TIME24WSEC = 'HH:mm:ss';
-let TIME24WOSEC = 'HH:mm';
+let TIME12WSEC = 'dddd h:mm:ss a';
+let TIME12WOSEC = 'dddd h:mm a';
+let TIME24WSEC = 'dddd HH:mm:ss';
+let TIME24WOSEC = 'dddd HH:mm';
 let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 // 
 let TRUESECONDS = true; // boolean true if show seconds is true
