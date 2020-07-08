@@ -467,10 +467,12 @@ $(function(){
   // http://localhost:8888/a-world-clock/?time1=Tuesday+8:50:59+pm&time2=Wednesday+4pm
   // this worked to set the two times
   function setTimesFromURL(){
-    queryString;
-    myUrlParam = new URLSearchParams(queryString);
-    $('#localTSTime').html(`${myUrlParam.get('time1')}`)
-    $('#searchTime').html(`${myUrlParam.get('time2')}`)
+    if (queryString){
+      queryString;
+      myUrlParam = new URLSearchParams(queryString);
+      $('#localTSTime').html(`${myUrlParam.get('time1')}`)
+      $('#searchTime').html(`${myUrlParam.get('time2')}`)
+    }
   }
   setTimesFromURL();
   
@@ -482,7 +484,7 @@ $(function(){
     const space =/\s/g;
     let t1 = localT.replace(space, '+')
     let t2 = searchT.replace(space, '+')
-    let sendableURL = `http://localhost:8888/a-world-clock/?time1=${t1}&time2=${t2}`
+    let sendableURL = `${$(location).attr('href')}/?time1=${t1}&time2=${t2}`
 
     alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
   })
