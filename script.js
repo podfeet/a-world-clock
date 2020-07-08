@@ -426,13 +426,14 @@ $(function(){
   // Adds Bootstrap autocomplete function to the ID #myAutocomplete
   // Doesn't seem to work if I make it a class though
 
-  $('.mySearchboxes').keydown(function(){
-    var key = e.which;
-    if (key==13){
-      // ASCII code for ENTER key is "13"
-      $('.mySearchboxes').submit(); // submit the form
-    }
-  });
+  // $('.mySearchboxes').keydown(function(){
+  //   var key = e.keyCode || e.which;
+  //   if (key==13){
+  //     // ASCII code for ENTER key is "13"
+  //     $('.mySearchboxes').submit(); // submit the form
+  //   }
+  // });
+
   $('.mySearchboxes').autocomplete({
       source: tzNamesObject, // dictionary object with the values from which to search
       onSelectItem: onSelectItem, // callback to run when item is selected
@@ -465,7 +466,8 @@ $(function(){
 
   // http://localhost:8888/a-world-clock/?time1=1:00pm&time2=9:00pm
   // http://localhost:8888/a-world-clock/?time1=Tuesday+8:50:59+pm&time2=Wednesday+4pm
-  // this worked to set the two times
+  // http://localhost:8888/a-world-clock/?time1=Wednesday+10:12:10+am&time2=Wednesday+1:12:10+pm&searchB=ss%20a&loc1=Time+in+America/Los_Angeles+becomes:+++++++++++++++++&loc2=Time+in+America/New+York+becomes:&searchB=America/New+York
+  
   function setTimesFromURL(){
     if (queryString){
       queryString;
@@ -474,7 +476,8 @@ $(function(){
       $('#searchTime').html(`${myUrlParam.get('time2')}`)
       $('#localTSID').html(`${myUrlParam.get('loc1')}`)
       $('#searchTSID').html(`${myUrlParam.get('loc2')}`)
-      $('#searchBoxDivID').html(`${myUrlParam.get('searchB')}`)
+      $('#sbSearchClock').val(`${myUrlParam.get('searchCity')}`)
+      // &searchB=America/Detroit
     }
   }
   setTimesFromURL();
@@ -491,14 +494,15 @@ $(function(){
     // find time descriptions (locations) & remove spaces
     let localL = $('#localTSID').html();
     let searchL = $('#searchTSID').html();
-    // let searchB = $('#searchBoxDivID').html();
+    let searchCity = $('.mySearchboxes').val();
     let l1 = localL.replace(space, '+');
     let l2 = searchL.replace(space, '+');
-    // let s = searchB.replace(space, '+')
+    let sb = searchCity.replace(space, '+')
+    console.log(sb);
     // split the url to remove any existing search queries
     let thisURL = $(location).attr('href').split("?")[0];
     // create the url
-    sendableURL = `${thisURL}?time1=${t1}&time2=${t2}&loc1=${l1}&loc2=${l2}`
+    sendableURL = `${thisURL}?time1=${t1}&time2=${t2}&searchB=${s}&loc1=${l1}&loc2=${l2}&searchCity=${sb}`
 
     alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
   })
