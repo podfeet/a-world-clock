@@ -388,7 +388,7 @@ $(function(){
   // Set time on searchClock to the entered location
   function onSelectItem(item){
     searchClock.location = `${item.value}`;
-    searchClock.timeDescription = `Time in ${item.value} becomes:`;
+    searchClock.timeDescription = `Time in ${item.label} becomes:`;
     $(`#${searchClock.timeDescriptionID}`).html(searchClock.timeDescription);
     searchClock.aRenderTime();
     // reset local clock back to current time (since searchClock starts at current time)
@@ -397,6 +397,7 @@ $(function(){
     $("input[type=range]").val(0);
     showSliderLabel();
   }
+
   // this works to change the time from 12/24 can't get inside class
   $('#numHrs').click(function(){
     ifTrue();
@@ -424,6 +425,14 @@ $(function(){
 
   // Adds Bootstrap autocomplete function to the ID #myAutocomplete
   // Doesn't seem to work if I make it a class though
+
+  $('.mySearchboxes').keydown(function(){
+    var key = e.which;
+    if (key==13){
+      // ASCII code for ENTER key is "13"
+      $('.mySearchboxes').submit(); // submit the form
+    }
+  });
   $('.mySearchboxes').autocomplete({
       source: tzNamesObject, // dictionary object with the values from which to search
       onSelectItem: onSelectItem, // callback to run when item is selected
