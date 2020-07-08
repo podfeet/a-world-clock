@@ -472,19 +472,33 @@ $(function(){
       myUrlParam = new URLSearchParams(queryString);
       $('#localTSTime').html(`${myUrlParam.get('time1')}`)
       $('#searchTime').html(`${myUrlParam.get('time2')}`)
+      $('#localTSID').html(`${myUrlParam.get('loc1')}`)
+      $('#searchTSID').html(`${myUrlParam.get('loc2')}`)
+      $('#searchBoxDivID').html(`${myUrlParam.get('searchB')}`)
     }
   }
   setTimesFromURL();
   
   // Event handler for the copy button to create the URL
   $('#copyBtn').click(function(){
-    let localT = $('#localTSTime').html();
-    console.log(localT);
-    let searchT = $('#searchTime').html();
+    // need to remove spaces in values & replace with +
     const space =/\s/g;
+    // find local and search times and remove spaces
+    let localT = $('#localTSTime').html();
+    let searchT = $('#searchTime').html();
     let t1 = localT.replace(space, '+')
     let t2 = searchT.replace(space, '+')
-    let sendableURL = `${$(location).attr('href')}/?time1=${t1}&time2=${t2}`
+    // find time descriptions (locations) & remove spaces
+    let localL = $('#localTSID').html();
+    let searchL = $('#searchTSID').html();
+    // let searchB = $('#searchBoxDivID').html();
+    let l1 = localL.replace(space, '+');
+    let l2 = searchL.replace(space, '+');
+    // let s = searchB.replace(space, '+')
+    // split the url to remove any existing search queries
+    let thisURL = $(location).attr('href').split("?")[0];
+    // create the url
+    sendableURL = `${thisURL}?time1=${t1}&time2=${t2}&loc1=${l1}&loc2=${l2}`
 
     alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
   })
