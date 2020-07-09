@@ -304,10 +304,15 @@ $(function(){
       let self = this;
       if (this.timeShifted){
         // shift hours
-        
-
         $('#changeHrs').on('input change', function(){
-          let currentTime = moment.tz(self.location);
+          const queryString2 = window.location.search;
+          let currentTime = '';
+          if (!queryString2){
+            currentTime = moment.tz(self.location);
+          } else {
+            currentTime = $('#timeID').html(`${myUrlParam.get('time1')}`)
+          }
+          
           let roundUpTime = currentTime.startOf('h');
           $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
           // console.log(`#${self.timeID}`);
@@ -323,7 +328,7 @@ $(function(){
     addSearchBox(){
       if (this.searchBoxDivID){
         if(this.searchBoxID){
-          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search Major City (default Dublin)`);
+          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search (default ${this.location})`);
           // define a variable for the div which will hold the <input> text box
           let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
           aSearchBoxDivID.append($thisSearchBox);
@@ -348,16 +353,27 @@ $(function(){
       location: moment.tz.guess(true),
       timeShifted: true,
     })
-    searchClock = new AClock({
+    searchClock1 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
-      timeDescriptionID: 'searchTSID',
+      timeDescriptionID: 'search1TSID',
+      timeDescription: 'Time in America/Los_Angeles becomes:',
+      timeID: 'search1Time',
+      timeFormat: TIME12WSEC,
+      timeShifted: true,
+      location: "America/Los_Angeles",
+      searchBoxDivID: 'sbsearchClock1Div',
+      searchBoxID: 'sbsearchClock1'
+    });
+    searchClock2 = new AClock({
+      clockPlaceholder: shiftingClocksPlaceholder,
+      timeDescriptionID: 'search2TSID',
       timeDescription: 'Time in Europe/Dublin becomes:',
-      timeID: 'searchTime',
+      timeID: 'search2Time',
       timeFormat: TIME12WSEC,
       timeShifted: true,
       location: "Europe/Dublin",
-      searchBoxDivID: 'sbSearchClockDiv',
-      searchBoxID: 'sbSearchClock'
+      searchBoxDivID: 'sbsearchClock2Div',
+      searchBoxID: 'sbsearchClock2'
     });
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
@@ -373,11 +389,16 @@ $(function(){
     localTSClock.putClockUp();
     localTSClock.clockInterval();
     localTSClock.shiftTime();
-    // Searchbox clock timeshifted
-    searchClock.putClockUp();
-    searchClock.clockInterval();
-    searchClock.shiftTime();
-    searchClock.addSearchBox();
+    // Searchboxes clock timeshifted
+    searchClock1.putClockUp();
+    searchClock1.clockInterval();
+    searchClock1.shiftTime();
+    searchClock1.addSearchBox();
+
+    searchClock2.putClockUp();
+    searchClock2.clockInterval();
+    searchClock2.shiftTime();
+    searchClock2.addSearchBox();
     
     // Local Clock static (non-shifting)
     localClock.putClockUp(staticClocksPlaceholder);
@@ -388,13 +409,26 @@ $(function(){
   // make the individual clocks:
   makeClocks();
 
-  // Set time on searchClock to the entered location
-  function onSelectItem(item){
-    searchClock.location = `${item.value}`;
-    searchClock.timeDescription = `Time in ${item.label} becomes:`;
-    $(`#${searchClock.timeDescriptionID}`).html(searchClock.timeDescription);
-    searchClock.aRenderTime();
-    // reset local clock back to current time (since searchClock starts at current time)
+  // Set time on searchClock1 to the entered location
+  function onSelectItem1(item){
+    searchClock1.location = `${item.value}`;
+    console.log(`selected value is ${item.value}`);
+    searchClock1.timeDescription = `Time in ${item.label} becomes:`;
+    $(`#${searchClock1.timeDescriptionID}`).html(searchClock1.timeDescription);
+    searchClock1.aRenderTime();
+    // reset local clock back to current time (since searchClock2 starts at current time)
+    localTSClock.aRenderTime();
+    // reset range slider and label back to 0
+    $("input[type=range]").val(0);
+    showSliderLabel();
+  }
+  // Set time on searchClock2 to the entered location
+  function onSelectItem2(item){
+    searchClock2.location = `${item.value}`;
+    searchClock2.timeDescription = `Time in ${item.label} becomes:`;
+    $(`#${searchClock2.timeDescriptionID}`).html(searchClock2.timeDescription);
+    searchClock2.aRenderTime();
+    // reset local clock back to current time (since searchClock2 starts at current time)
     localTSClock.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
@@ -407,7 +441,8 @@ $(function(){
     $("input[type=range]").val(0);
     showSliderLabel();
     localTSClock.aRenderTime();
-    searchClock.aRenderTime();
+    searchClock1.aRenderTime();
+    searchClock2.aRenderTime();
     localClock.aRenderTime();
   });
 
@@ -427,22 +462,20 @@ $(function(){
   showSliderLabel();
 
   // Adds Bootstrap autocomplete function to the ID #myAutocomplete
-  // Doesn't seem to work if I make it a class though
 
-  // $('.mySearchboxes').keydown(function(){
-  //   var key = e.keyCode || e.which;
-  //   if (key==13){
-  //     // ASCII code for ENTER key is "13"
-  //     $('.mySearchboxes').submit(); // submit the form
-  //   }
-  // });
-
-  $('.mySearchboxes').autocomplete({
+  $('#sbsearchClock1').autocomplete({
       source: tzNamesObject, // dictionary object with the values from which to search
-      onSelectItem: onSelectItem, // callback to run when item is selected
+      onSelectItem: onSelectItem1, // callback to run when item is selected
       highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
       treshold: 1 // minimum characters to search before it starts displaying
   });
+  $('#sbsearchClock2').autocomplete({
+      source: tzNamesObject, // dictionary object with the values from which to search
+      onSelectItem: onSelectItem2, // callback to run when item is selected
+      highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
+      treshold: 1 // minimum characters to search before it starts displaying
+  });
+
 
 // ********************************************************* //
 // Click Handler checking for 12/24 hr //
@@ -472,10 +505,10 @@ $(function(){
       queryString;
       myUrlParam = new URLSearchParams(queryString);
       $('#localTSTime').html(`${myUrlParam.get('time1')}`)
-      $('#searchTime').html(`${myUrlParam.get('time2')}`)
+      $('#search2Time').html(`${myUrlParam.get('time2')}`)
       $('#localTSID').html(`${myUrlParam.get('loc1')}`)
-      $('#searchTSID').html(`${myUrlParam.get('loc2')}`)
-      $('#sbSearchClock').val(`${myUrlParam.get('searchCity')}`)
+      $('#search2TSID').html(`${myUrlParam.get('loc2')}`)
+      $('#sbsearchClock2').val(`${myUrlParam.get('searchCity')}`)
       // &searchB=America/Detroit
     }
   }
@@ -487,17 +520,16 @@ $(function(){
     const space =/\s/g;
     // find local and search times and remove spaces
     let localT = $('#localTSTime').html();
-    let searchT = $('#searchTime').html();
+    let searchT = $('#search2Time').html();
     let t1 = localT.replace(space, '+')
     let t2 = searchT.replace(space, '+')
     // find time descriptions (locations) & remove spaces
     let localL = $('#localTSID').html();
-    let searchL = $('#searchTSID').html();
+    let searchL = $('#search2TSID').html();
     let searchCity = $('.mySearchboxes').val();
     let l1 = localL.replace(space, '+');
     let l2 = searchL.replace(space, '+');
     let sb = searchCity.replace(space, '+')
-    console.log(sb);
     // split the url to remove any existing search queries
     let thisURL = $(location).attr('href').split("?")[0];
     // create the url
