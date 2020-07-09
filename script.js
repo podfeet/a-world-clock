@@ -304,10 +304,13 @@ $(function(){
       let self = this;
       if (this.timeShifted){
         // shift hours
+        
+
         $('#changeHrs').on('input change', function(){
           let currentTime = moment.tz(self.location);
           let roundUpTime = currentTime.startOf('h');
           $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
+          // console.log(`#${self.timeID}`);
         })
         // shift min
         $('#changeMin').on('input change', function(){
@@ -463,10 +466,6 @@ $(function(){
 
 // creating sendable times
   const queryString = window.location.search;
-
-  // http://localhost:8888/a-world-clock/?time1=1:00pm&time2=9:00pm
-  // http://localhost:8888/a-world-clock/?time1=Tuesday+8:50:59+pm&time2=Wednesday+4pm
-  // http://localhost:8888/a-world-clock/?time1=Wednesday+10:12:10+am&time2=Wednesday+1:12:10+pm&searchB=ss%20a&loc1=Time+in+America/Los_Angeles+becomes:+++++++++++++++++&loc2=Time+in+America/New+York+becomes:&searchB=America/New+York
   
   function setTimesFromURL(){
     if (queryString){
@@ -511,30 +510,3 @@ $(function(){
 
 
 }); // end document ready
-
-
-  //
-  // Create sendable times
-  // Has to be outside the document ready because we want times after slider has moved
-
-  // these return the local and selected times
-  //$('#localTSTime').html(); returns "8:00:00 am"
-  // $('#searchTime').html(); returns "4:00:00 pm"
-  // $('#searchTime').replaceWith('9:00:00 am'); changed searchTime to 9am - also borked formatting
-
-  // TSlocal = $('#localTSTime').html();
- 
-
-  // can change a browser to a new location with
-  // $(location).attr('href', 'https://podfeet.com')
-
-  // how do I attach the change to the time to the url...
-
-
-// function getTSTimes(){
-//   TSlocal = $('#localTSTime').html();
-//   TSdistant = $('#searchTime').html();
-  // console.log(TSlocal);
-  // console.log(`The time shifted local time is ${TSlocal} and time-shifted distance time is ${TSdistant}`);
-// }
-// getTSTimes();
