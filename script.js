@@ -416,8 +416,9 @@ $(function(){
     searchClock1.timeDescription = `Time in ${item.label} becomes:`;
     $(`#${searchClock1.timeDescriptionID}`).html(searchClock1.timeDescription);
     searchClock1.aRenderTime();
-    // reset local clock back to current time (since searchClock2 starts at current time)
+    // reset local and other search clock back to current time (since searchClock2 starts at current time)
     localTSClock.aRenderTime();
+    lsearchClock2.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
     showSliderLabel();
@@ -428,8 +429,9 @@ $(function(){
     searchClock2.timeDescription = `Time in ${item.label} becomes:`;
     $(`#${searchClock2.timeDescriptionID}`).html(searchClock2.timeDescription);
     searchClock2.aRenderTime();
-    // reset local clock back to current time (since searchClock2 starts at current time)
+    // reset local and other search clock back to current time (since searchClock2 starts at current time)
     localTSClock.aRenderTime();
+    searchClock1.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
     showSliderLabel();
@@ -498,45 +500,62 @@ $(function(){
     }
 
 // creating sendable times
-  const queryString = window.location.search;
+const queryString = window.location.search;
   
-  function setTimesFromURL(){
-    if (queryString){
-      queryString;
-      myUrlParam = new URLSearchParams(queryString);
-      $('#localTSTime').html(`${myUrlParam.get('time1')}`)
-      $('#search2Time').html(`${myUrlParam.get('time2')}`)
-      $('#localTSID').html(`${myUrlParam.get('loc1')}`)
-      $('#search2TSID').html(`${myUrlParam.get('loc2')}`)
-      $('#sbsearchClock2').val(`${myUrlParam.get('searchCity')}`)
-      // &searchB=America/Detroit
-    }
+function setTimesFromURL(){
+  if (queryString){
+    queryString;
+    myUrlParam = new URLSearchParams(queryString);
+    // set times
+    $('#localTSTime').html(`${myUrlParam.get('loctime')}`)
+    $('#search1Time').html(`${myUrlParam.get('searchtime1')}`)
+    $('#search2Time').html(`${myUrlParam.get('searchtime2')}`)
+    // set location names (timeDescription)
+    $('#localTSID').html(`${myUrlParam.get('localloc')}`)
+    $('#search1TSID').html(`${myUrlParam.get('searchloc1')}`)
+    $('#search2TSID').html(`${myUrlParam.get('searchloc2')}`)
+    // if no search city is entered, this will be blank and go to default location
+    $('#sbsearchClock1').val(`${myUrlParam.get('searchCity1')}`)
+    $('#sbsearchClock2').val(`${myUrlParam.get('searchCity2')}`)
   }
+}
+
   setTimesFromURL();
   
   // Event handler for the copy button to create the URL
   $('#copyBtn').click(function(){
     // need to remove spaces in values & replace with +
     const space =/\s/g;
+
     // find local and search times and remove spaces
     let localT = $('#localTSTime').html();
-    let searchT = $('#search2Time').html();
-    let t1 = localT.replace(space, '+')
-    let t2 = searchT.replace(space, '+')
+    let searchT1 = $('#search1Time').html();
+    let searchT2 = $('#search2Time').html();
+
+    let lt = localT.replace(space, '+')
+    let st1 = searchT1.replace(space, '+')
+    let st2 = searchT2.replace(space, '+')
+
     // find time descriptions (locations) & remove spaces
     let localL = $('#localTSID').html();
-    let searchL = $('#search2TSID').html();
-    let searchCity = $('.mySearchboxes').val();
-    let l1 = localL.replace(space, '+');
-    let l2 = searchL.replace(space, '+');
-    let sb = searchCity.replace(space, '+')
+    let searchL1 = $('#search1TSID').html();
+    let searchL2 = $('#search2TSID').html();
+    let searchCity1 = $('#sbsearchClock1').val();
+    let searchCity2 = $('#sbsearchClock2').val();
+
+    let ll = localL.replace(space, '+');
+    let sl1 = searchL1.replace(space, '+');
+    let sl2 = searchL2.replace(space, '+');
+    let sc1 = searchCity1.replace(space, '+')
+    let sc2 = searchCity2.replace(space, '+')
     // split the url to remove any existing search queries
     let thisURL = $(location).attr('href').split("?")[0];
     // create the url
-    sendableURL = `${thisURL}?time1=${t1}&time2=${t2}&searchB=${s}&loc1=${l1}&loc2=${l2}&searchCity=${sb}`
+    sendableURL = `${thisURL}?loctime=${lt}&searchtime1=${st1}&searchtime2=${st2}&localloc=${ll}&searchloc1=${sl1}&searchloc2=${sl2}&searchCity1=${sc1}&searchCity2=${sc2}`
 
     alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
   })
+
 
 
 
