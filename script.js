@@ -299,23 +299,41 @@ $(function(){
     }
     // Event Handler to change time via range sliders
     // shiftTime Hours
+    // shiftTime(){
+    //   // if this.timeShifted is true, then shift time with sliders
+    //   let self = this;
+    //   if (this.timeShifted){
+    //     // shift hours
+    //     $('#changeHrs').on('input change', function(){
+    //       let queryStringReceived = window.location.search;
+    //       let currentTime = '';
+    //       if (!queryStringReceived){
+    //         // currentTime is the time in that location when the user loads the page
+    //         currentTime = moment.tz(self.location); 
+    //       } else {
+    //         currentTime = $('#timeID').html(`${myUrlParam.get('time1')}`)
+    //       }
+          
+    //       let roundUpTime = currentTime.startOf('h');
+    //       $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
+    //       // console.log(`#${self.timeID}`);
+    //     })
+    //     // shift min
+    //     $('#changeMin').on('input change', function(){
+    //       $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
+    //     })
+    //   }else{return}
+    // }
+
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
       let self = this;
       if (this.timeShifted){
         // shift hours
         $('#changeHrs').on('input change', function(){
-          const queryString2 = window.location.search;
-          let currentTime = '';
-          if (!queryString2){
-            currentTime = moment.tz(self.location);
-          } else {
-            currentTime = $('#timeID').html(`${myUrlParam.get('time1')}`)
-          }
-          
+          let currentTime = moment.tz(self.location);
           let roundUpTime = currentTime.startOf('h');
           $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
-          // console.log(`#${self.timeID}`);
         })
         // shift min
         $('#changeMin').on('input change', function(){
@@ -500,12 +518,12 @@ $(function(){
     }
 
 // creating sendable times
-const queryString = window.location.search;
+const queryStringSend = window.location.search;
   
 function setTimesFromURL(){
-  if (queryString){
-    queryString;
-    myUrlParam = new URLSearchParams(queryString);
+  if (queryStringSend){
+    queryStringSend;
+    myUrlParam = new URLSearchParams(queryStringSend);
     // set times
     $('#localTSTime').html(`${myUrlParam.get('loctime')}`)
     $('#search1Time').html(`${myUrlParam.get('searchtime1')}`)
@@ -519,8 +537,7 @@ function setTimesFromURL(){
     $('#sbsearchClock2').val(`${myUrlParam.get('searchCity2')}`)
   }
 }
-
-  setTimesFromURL();
+setTimesFromURL();
   
   // Event handler for the copy button to create the URL
   $('#copyBtn').click(function(){
