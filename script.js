@@ -418,7 +418,7 @@ $(function(){
     searchClock1.aRenderTime();
     // reset local and other search clock back to current time (since searchClock2 starts at current time)
     localTSClock.aRenderTime();
-    lsearchClock2.aRenderTime();
+    searchClock2.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
     showSliderLabel();
