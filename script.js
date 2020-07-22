@@ -331,6 +331,9 @@ $(function(){
       if (this.timeShifted){
         // shift hours
         $('#changeHrs').on('input change', function(){
+          // reset times using code from aRenderTime?
+          // $(`#${self.timeID}`).html(moment.tz(self.location).format(FORMATTEDTIME));
+          // 
           let currentTime = moment.tz(self.location);
           let roundUpTime = currentTime.startOf('h');
           $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
@@ -359,7 +362,10 @@ $(function(){
   } // complete AClock Class definition
   
   // Create a function to make the clocks
-  function makeClocks(){
+  // Accept parameters a,b,c,d as the query string values to populate searchClock1 and 2 for location and timeDescription
+  // a and c are the location names in the search boxes
+  // b and d are the timeDescriptions, e.g. "Time in Europe/London becomes"
+  function makeClocks(a,b,c,d){ 
     // create instances of AClock as desired
     localTSClock = new AClock({ // timeshifted local clock
       clockPlaceholder: shiftingClocksPlaceholder, 
@@ -374,22 +380,26 @@ $(function(){
     searchClock1 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescriptionID: 'search1TSID',
-      timeDescription: 'Time in America/Los_Angeles becomes:',
+      //timeDescription: 'Time in America/Los_Angeles becomes:',
+      timeDescription: b,
       timeID: 'search1Time',
       timeFormat: TIME12WSEC,
       timeShifted: true,
-      location: "America/Los_Angeles",
+      // location: "America/Los_Angeles",
+      location: a,
       searchBoxDivID: 'sbsearchClock1Div',
       searchBoxID: 'sbsearchClock1'
     });
     searchClock2 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescriptionID: 'search2TSID',
-      timeDescription: 'Time in Europe/Dublin becomes:',
+      //timeDescription: 'Time in Europe/Dublin becomes:',
+      timeDescription: d,
       timeID: 'search2Time',
       timeFormat: TIME12WSEC,
       timeShifted: true,
-      location: "Europe/Dublin",
+      // location: "Europe/Dublin",
+      location: c,
       searchBoxDivID: 'sbsearchClock2Div',
       searchBoxID: 'sbsearchClock2'
     });
@@ -424,8 +434,35 @@ $(function(){
     // localClock.shiftTime();
   }
 
+  // pull the query string that may have been received in the URL
+  const queryStringReceived = window.location.search;
+
+  // Determine if URL has a query string and pass values to search clocks or send defaults if not
+  function checkQuery(){
+    // if URL has no query string use these defaults
+    if ((queryStringReceived=="")){
+      // default city and location description for searchClock1
+      sc1 = "America/Los_Angeles";
+      sl1 = 'Time in America/Los_Angeles becomes:';
+      // default city and location description for searchClock1
+      sc2 = "Europe/Dublin";
+      sl2 = 'Time in Europe/Dublin becomes:';
+    } else {
+      // if URL does have a query string, pull the cities and location descriptions from it and pass them into makeClocks so they can be controlled by the slider
+      myUrlParam = new URLSearchParams(queryStringReceived);
+      // City and location description for searchClock1
+      sc1 = myUrlParam.get('searchCity1');
+      sl1 = myUrlParam.get('searchloc1')
+      // City and location description for searchClock2
+      sc2 = myUrlParam.get('searchCity2')
+      sl2 = myUrlParam.get('searchloc2')
+    }
+  }
+  checkQuery();
+
   // make the individual clocks:
-  makeClocks();
+  // pass parameters for cities and locations to searchClock 1 and 2  that were parsed from the URL query string
+  makeClocks(sc1,sl1,sc2,sl2);  // check to see if those are the right names
 
   // Set time on searchClock1 to the entered location
   function onSelectItem1(item){
