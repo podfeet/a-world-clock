@@ -440,29 +440,42 @@ $(function(){
   // Determine if URL has a query string and pass values to search clocks or send defaults if not
   function checkQuery(){
     // if URL has no query string use these defaults
-    if ((queryStringReceived=="")){
+    if (queryStringReceived==""){
       // default city and location description for searchClock1
-      sc1 = "America/Los_Angeles";
-      sl1 = 'Time in America/Los_Angeles becomes:';
+      sC1 = "America/Los_Angeles";
+      sTD1 = 'Time in America/Los_Angeles becomes:';
       // default city and location description for searchClock1
-      sc2 = "Europe/Dublin";
-      sl2 = 'Time in Europe/Dublin becomes:';
+      sC2 = "Europe/Dublin";
+      sTD2 = 'Time in Europe/Dublin becomes:';
     } else {
-      // if URL does have a query string, pull the cities and location descriptions from it and pass them into makeClocks so they can be controlled by the slider
       myUrlParam = new URLSearchParams(queryStringReceived);
-      // City and location description for searchClock1
-      sc1 = myUrlParam.get('searchCity1');
-      sl1 = myUrlParam.get('searchloc1')
-      // City and location description for searchClock2
-      sc2 = myUrlParam.get('searchCity2')
-      sl2 = myUrlParam.get('searchloc2')
+      // If URL does have a query string, pull the time descriptions for search clocks
+      // These exist even if the user hasn't entered a search city
+      sTD1 = myUrlParam.get('searchTimeDesc1')
+      sTD2 = myUrlParam.get('searchTimeDesc2')
+
+      // Check to see if a search city has been entered for the ssearch clocks
+      // If not set it to the defaults
+      // If they have, pull it from the query string
+      if (myUrlParam.get('searchCity1') == ""){
+        sC1 = "America/Los_Angeles";
+      } else {
+        sC1 = myUrlParam.get('searchCity1'); 
+      }
+
+      if (myUrlParam.get('searchCity2') == ""){
+        sC2 = "Europe/Dublin";
+      } else {
+        sC2 = myUrlParam.get('searchCity2'); 
+      }
     }
   }
+   
   checkQuery();
 
   // make the individual clocks:
   // pass parameters for cities and locations to searchClock 1 and 2  that were parsed from the URL query string
-  makeClocks(sc1,sl1,sc2,sl2);  // check to see if those are the right names
+  makeClocks(sC1,sTD1,sC2,sTD2);  // check to see if those are the right names
 
   // Set time on searchClock1 to the entered location
   function onSelectItem1(item){
@@ -566,10 +579,10 @@ function setTimesFromURL(){
     $('#search1Time').html(`${myUrlParam.get('searchtime1')}`)
     $('#search2Time').html(`${myUrlParam.get('searchtime2')}`)
     // set location names (timeDescription)
-    $('#localTSID').html(`${myUrlParam.get('localloc')}`)
-    $('#search1TSID').html(`${myUrlParam.get('searchloc1')}`)
-    $('#search2TSID').html(`${myUrlParam.get('searchloc2')}`)
-    // if no search city is entered, this will be blank and go to default location
+    $('#localTSID').html(`${myUrlParam.get('localTimeDesc')}`)
+    $('#search1TSID').html(`${myUrlParam.get('searchTimeDesc1')}`)
+    $('#search2TSID').html(`${myUrlParam.get('searchTimeDesc2')}`)
+    // if no search city is entered, this will be blank 
     $('#sbsearchClock1').val(`${myUrlParam.get('searchCity1')}`)
     $('#sbsearchClock2').val(`${myUrlParam.get('searchCity2')}`)
   }
@@ -579,37 +592,77 @@ setTimesFromURL();
   // Event handler for the copy button to create the URL
   $('#copyBtn').click(function(){
     // need to remove spaces in values & replace with +
-    const space =/\s/g;
+    const space = /\s/g;
 
     // find local and search times and remove spaces
     let localT = $('#localTSTime').html();
     let searchT1 = $('#search1Time').html();
     let searchT2 = $('#search2Time').html();
 
-    let lt = localT.replace(space, '+')
-    let st1 = searchT1.replace(space, '+')
-    let st2 = searchT2.replace(space, '+')
+    let lT = localT.replace(space, '+')
+    let sT1 = searchT1.replace(space, '+')
+    let sT2 = searchT2.replace(space, '+')
 
     // find time descriptions (locations) & remove spaces
-    let localL = $('#localTSID').html();
-    let searchL1 = $('#search1TSID').html();
-    let searchL2 = $('#search2TSID').html();
+    let localTimeDesc = $('#localTSID').html();
+    let searchTimeDesc1 = $('#search1TSID').html();
+    let searchTimeDesc2 = $('#search2TSID').html();
     let searchCity1 = $('#sbsearchClock1').val();
     let searchCity2 = $('#sbsearchClock2').val();
 
-    let ll = localL.replace(space, '+');
-    let sl1 = searchL1.replace(space, '+');
-    let sl2 = searchL2.replace(space, '+');
-    let sc1 = searchCity1.replace(space, '+')
-    let sc2 = searchCity2.replace(space, '+')
+    let lTD = localTimeDesc.replace(space, '+');
+    let sTD1 = searchTimeDesc1.replace(space, '+');
+    let sTD2 = searchTimeDesc2.replace(space, '+');
+    let sC1 = searchCity1.replace(space, '+')
+    let sC2 = searchCity2.replace(space, '+')
     // split the url to remove any existing search queries
     let thisURL = $(location).attr('href').split("?")[0];
     // create the url
-    sendableURL = `${thisURL}?loctime=${lt}&searchtime1=${st1}&searchtime2=${st2}&localloc=${ll}&searchloc1=${sl1}&searchloc2=${sl2}&searchCity1=${sc1}&searchCity2=${sc2}`
+    sendableURL = `${thisURL}?loctime=${lT}&searchtime1=${sT1}&searchtime2=${sT2}&localTimeDesc=${lTD}&searchTimeDesc1=${sTD1}&searchTimeDesc2=${sTD2}&searchCity1=${sC1}&searchCity2=${sC2}`
 
     alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
   })
+  // $('#copyBtn').click(function(){
+  //   // find local and search times
+  //   let lT = $('#localTSTime').html();
+  //   let sT1 = $('#search1Time').html();
+  //   let sT2 = $('#search2Time').html();
 
+  //   // find time descriptions (locations)
+  //   let lTD = $('#localTSID').html();
+  //   let sTD1 = $('#search1TSID').html();
+  //   let sTD2 = $('#search2TSID').html();
+  //   let sC1 = $('#sbsearchClock1').val();
+  //   let sC2 = $('#sbsearchClock2').val();
+
+  //   // put search parameters into a dictionary
+  //   let myURLSearchParams = {
+  //     loctime: lT,
+  //     searchtime1: sT1,
+  //     searchtime2: sT2,
+  //     localTimeDesc: lTD,
+  //     searchTimeDesc1: sTD1,
+  //     searchTimeDesc2: sTD2,
+  //     searchCity1: sC1,
+  //     searchCity2: sC2
+  //   }
+   
+
+  //   // create the url
+  //   // let sendableURL = new URL(thisURL);
+  //   for(let [name, value] in myURLSearchParams){
+  //      // split the url to remove any existing search queries
+  //     let thisURL = $(location).attr('href').split("?")[0];
+  //     let newQueryString = new URLSearchParams(thisURL);
+  //     newQueryString.append(name, value)
+  //     console.log(newQueryString);  // returns http://localhost:8888/a-world-clock/
+      
+  //     sendableURL =`${thisURL}?${newQueryString}`;
+  //   }
+
+  //   alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
+
+  // });
 
 
 
