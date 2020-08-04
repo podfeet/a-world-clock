@@ -8,10 +8,10 @@
 let h = 'h';
 let m = 'mm';
 let s = 'ss a';
-let TIME12WSEC = 'dddd h:mm:ss a';
-let TIME12WOSEC = 'dddd h:mm a';
-let TIME24WSEC = 'dddd HH:mm:ss';
-let TIME24WOSEC = 'dddd HH:mm';
+let TIME12WSEC = 'DD MMMM YYYY h:mm:ss a';
+let TIME12WOSEC = 'DD MMMM YYYY h:mm a';
+let TIME24WSEC = 'DD MMMM YYYY HH:mm:ss';
+let TIME24WOSEC = 'DD MMMM YYYY HH:mm';
 let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 // 
 let TRUESECONDS = true; // boolean true if show seconds is true
@@ -27,9 +27,6 @@ let TzNamesArray = moment.tz.names();
 let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val.replace('_',' ')] = val; return o; }, {});
 
 // Create variable for the string value of the time-shifted versions of local and chosen distant clock
-
-let TSlocal = '';
-let TSdistant = '';
 
 // 
 // Document Ready Handler
@@ -297,33 +294,6 @@ $(function(){
         setInterval(this.aRenderTime.bind(this), 1000);
       }else{return}
     }
-    // Event Handler to change time via range sliders
-    // shiftTime Hours
-    // shiftTime(){
-    //   // if this.timeShifted is true, then shift time with sliders
-    //   let self = this;
-    //   if (this.timeShifted){
-    //     // shift hours
-    //     $('#changeHrs').on('input change', function(){
-    //       let queryStringReceived = window.location.search;
-    //       let currentTime = '';
-    //       if (!queryStringReceived){
-    //         // currentTime is the time in that location when the user loads the page
-    //         currentTime = moment.tz(self.location); 
-    //       } else {
-    //         currentTime = $('#timeID').html(`${myUrlParam.get('time1')}`)
-    //       }
-          
-    //       let roundUpTime = currentTime.startOf('h');
-    //       $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
-    //       // console.log(`#${self.timeID}`);
-    //     })
-    //     // shift min
-    //     $('#changeMin').on('input change', function(){
-    //       $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
-    //     })
-    //   }else{return}
-    // }
 
     shiftTime(){
       // if this.timeShifted is true, then shift time with sliders
@@ -367,16 +337,18 @@ $(function(){
   // b and d are the timeDescriptions, e.g. "Time in Europe/London becomes"
   function makeClocks(a,b,c,d){ 
     // create instances of AClock as desired
-    localTSClock = new AClock({ // timeshifted local clock
-      clockPlaceholder: shiftingClocksPlaceholder, 
-      // this works!
-      timeDescriptionID: 'localTSID',
-      timeDescription: `Time in ${moment.tz.guess(true)} becomes:`,
-      timeID: 'localTSTime', 
-      timeFormat: TIME12WSEC,
-      location: moment.tz.guess(true),
-      timeShifted: true,
-    })
+
+    // HIDE LOCALTSCLOCK SHIFTED
+    // localTSClock = new AClock({ // timeshifted local clock
+    //   clockPlaceholder: shiftingClocksPlaceholder, 
+    //   // this works!
+    //   timeDescriptionID: 'localTSID',
+    //   timeDescription: `Time in ${moment.tz.guess(true)} becomes:`,
+    //   timeID: 'localTSTime', 
+    //   timeFormat: TIME12WSEC,
+    //   location: moment.tz.guess(true),
+    //   timeShifted: true,
+    // })
     searchClock1 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescriptionID: 'search1TSID',
@@ -413,10 +385,12 @@ $(function(){
       timeShifted: false,
     });
     // Put the clocks up, enable/disable interval, and enable timeshifting
+
     // local timeshifted 
-    localTSClock.putClockUp();
-    localTSClock.clockInterval();
-    localTSClock.shiftTime();
+    // localTSClock.putClockUp();
+    // localTSClock.clockInterval();
+    // localTSClock.shiftTime();
+
     // Searchboxes clock timeshifted
     searchClock1.putClockUp();
     searchClock1.clockInterval();
@@ -454,7 +428,7 @@ $(function(){
       sTD1 = myUrlParam.get('searchTimeDesc1')
       sTD2 = myUrlParam.get('searchTimeDesc2')
 
-      // Check to see if a search city has been entered for the ssearch clocks
+      // Check to see if a search city has been entered for the search clocks
       // If not set it to the defaults
       // If they have, pull it from the query string
       if (myUrlParam.get('searchCity1') == ""){
@@ -484,8 +458,8 @@ $(function(){
     searchClock1.timeDescription = `Time in ${item.label} becomes:`;
     $(`#${searchClock1.timeDescriptionID}`).html(searchClock1.timeDescription);
     searchClock1.aRenderTime();
-    // reset local and other search clock back to current time (since searchClock2 starts at current time)
-    localTSClock.aRenderTime();
+    // reset local and other search clock back to current time (since searchClock1 starts at current time)
+    // localTSClock.aRenderTime();
     searchClock2.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
@@ -498,22 +472,54 @@ $(function(){
     $(`#${searchClock2.timeDescriptionID}`).html(searchClock2.timeDescription);
     searchClock2.aRenderTime();
     // reset local and other search clock back to current time (since searchClock2 starts at current time)
-    localTSClock.aRenderTime();
+    // localTSClock.aRenderTime();
     searchClock1.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
     showSliderLabel();
   }
 
+  // $('#localTSTime').html(moment().format(TIME24WOSEC));
+  // changes to 24
+  // declare two global variables for moment objects
+  let momentObjST1 = ''
+  let momentObjST2 = ''
+  // Create two moment objects with the time delivered by the query string (if there is one)
+  if (window.location.search){
+    const queryStringSend = window.location.search;
+    myUrlParam = new URLSearchParams(queryStringSend);
+    // create moment objects from the strings for the received time in the URL
+    momentObjST1 = moment(`${myUrlParam.get('searchtime1')}`, FORMATTEDTIME);
+    momentObjST2 = moment(`${myUrlParam.get('searchtime2')}`, FORMATTEDTIME);
+  }
+  
+  console.log(momentObjST1);
+
   // this works to change the time from 12/24 can't get inside class
   $('#numHrs').click(function(){
     ifTrue();
+    // does this set the slider to 0 and redisplay the value of the slider when flipping 12/24?
     $("input[type=range]").val(0);
     showSliderLabel();
-    localTSClock.aRenderTime();
-    searchClock1.aRenderTime();
-    searchClock2.aRenderTime();
-    localClock.aRenderTime();
+    // localTSClock.aRenderTime(); // this worked
+    // $('#localTSTime').html(moment().format(FORMATTEDTIME));
+    // momentObjLocTSTime.format(FORMATTEDTIME);
+    if (window.location.search){
+      $('#search1Time').html(momentObjST1.format(FORMATTEDTIME));
+      $('#search2Time').html(momentObjST2.format(FORMATTEDTIME));
+      console.log(momentObjST1);
+    }else{
+      searchClock1.aRenderTime();
+      searchClock2.aRenderTime();
+      localClock.aRenderTime();
+    }
+    // $('#localTime').html(moment().format(FORMATTEDTIME));
+    // $('#search1Time').html(moment().format(FORMATTEDTIME));
+    // $('#search2Time').html(moment().format(FORMATTEDTIME));
+
+    // if this runs, changing the 12/24 toggle resets all the times (undesirable)
+    // and sets localTSClock to the RECEIVER'S local time and leaves description as SENDER'S local city
+    // localTSClock.aRenderTime();
   });
 
   // function to show value chosen on range sliders
@@ -568,16 +574,17 @@ $(function(){
     }
 
 // creating sendable times
-const queryStringSend = window.location.search;
   
 function setTimesFromURL(){
-  if (queryStringSend){
-    queryStringSend;
-    myUrlParam = new URLSearchParams(queryStringSend);
+  if (window.location.search){
+    // queryStringSend;
+    // myUrlParam = new URLSearchParams(queryStringSend);
     // set times
+    
     $('#localTSTime').html(`${myUrlParam.get('loctime')}`)
     $('#search1Time').html(`${myUrlParam.get('searchtime1')}`)
     $('#search2Time').html(`${myUrlParam.get('searchtime2')}`)
+
     // set location names (timeDescription)
     $('#localTSID').html(`${myUrlParam.get('localTimeDesc')}`)
     $('#search1TSID').html(`${myUrlParam.get('searchTimeDesc1')}`)
@@ -594,77 +601,35 @@ setTimesFromURL();
     // need to remove spaces in values & replace with +
     const space = /\s/g;
 
-    // find local and search times and remove spaces
-    let localT = $('#localTSTime').html();
+    // find search times and remove spaces
+    // let localT = $('#localTSTime').html();
     let searchT1 = $('#search1Time').html();
     let searchT2 = $('#search2Time').html();
 
-    let lT = localT.replace(space, '+')
+    // let lT = localT.replace(space, '+')
     let sT1 = searchT1.replace(space, '+')
     let sT2 = searchT2.replace(space, '+')
 
-    // find time descriptions (locations) & remove spaces
-    let localTimeDesc = $('#localTSID').html();
+    // find time descriptions (locations) and search city names & remove spaces
+    // let localTimeDesc = $('#localTSID').html();
     let searchTimeDesc1 = $('#search1TSID').html();
     let searchTimeDesc2 = $('#search2TSID').html();
     let searchCity1 = $('#sbsearchClock1').val();
     let searchCity2 = $('#sbsearchClock2').val();
 
-    let lTD = localTimeDesc.replace(space, '+');
-    let sTD1 = searchTimeDesc1.replace(space, '+');
-    let sTD2 = searchTimeDesc2.replace(space, '+');
-    let sC1 = searchCity1.replace(space, '+')
-    let sC2 = searchCity2.replace(space, '+')
+    // trim any spaces on either side and replace spaces with + so the URL works
+    // let lTD = localTimeDesc.trim().replace(space, '+');
+    let sTD1 = searchTimeDesc1.trim().replace(space, '+');
+    let sTD2 = searchTimeDesc2.trim().replace(space, '+');
+    let sC1 = searchCity1.trim().replace(space, '+')
+    let sC2 = searchCity2.trim().replace(space, '+')
+
     // split the url to remove any existing search queries
     let thisURL = $(location).attr('href').split("?")[0];
     // create the url
-    sendableURL = `${thisURL}?loctime=${lT}&searchtime1=${sT1}&searchtime2=${sT2}&localTimeDesc=${lTD}&searchTimeDesc1=${sTD1}&searchTimeDesc2=${sTD2}&searchCity1=${sC1}&searchCity2=${sC2}`
+    sendableURL = `${thisURL}?&searchtime1=${sT1}&searchtime2=${sT2}&searchTimeDesc1=${sTD1}&searchTimeDesc2=${sTD2}&searchCity1=${sC1}&searchCity2=${sC2}`
 
     alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
   })
-  // $('#copyBtn').click(function(){
-  //   // find local and search times
-  //   let lT = $('#localTSTime').html();
-  //   let sT1 = $('#search1Time').html();
-  //   let sT2 = $('#search2Time').html();
-
-  //   // find time descriptions (locations)
-  //   let lTD = $('#localTSID').html();
-  //   let sTD1 = $('#search1TSID').html();
-  //   let sTD2 = $('#search2TSID').html();
-  //   let sC1 = $('#sbsearchClock1').val();
-  //   let sC2 = $('#sbsearchClock2').val();
-
-  //   // put search parameters into a dictionary
-  //   let myURLSearchParams = {
-  //     loctime: lT,
-  //     searchtime1: sT1,
-  //     searchtime2: sT2,
-  //     localTimeDesc: lTD,
-  //     searchTimeDesc1: sTD1,
-  //     searchTimeDesc2: sTD2,
-  //     searchCity1: sC1,
-  //     searchCity2: sC2
-  //   }
-   
-
-  //   // create the url
-  //   // let sendableURL = new URL(thisURL);
-  //   for(let [name, value] in myURLSearchParams){
-  //      // split the url to remove any existing search queries
-  //     let thisURL = $(location).attr('href').split("?")[0];
-  //     let newQueryString = new URLSearchParams(thisURL);
-  //     newQueryString.append(name, value)
-  //     console.log(newQueryString);  // returns http://localhost:8888/a-world-clock/
-      
-  //     sendableURL =`${thisURL}?${newQueryString}`;
-  //   }
-
-  //   alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
-
-  // });
-
-
-
 
 }); // end document ready
