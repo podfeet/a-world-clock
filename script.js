@@ -12,7 +12,7 @@ let TIME12WSEC = 'DD MMMM YYYY h:mm:ss a';
 let TIME12WOSEC = 'DD MMMM YYYY h:mm a';
 let TIME24WSEC = 'DD MMMM YYYY HH:mm:ss';
 let TIME24WOSEC = 'DD MMMM YYYY HH:mm';
-let FORMATTEDTIME = TIME12WSEC; // Default formatted time
+let FORMATTEDTIME = TIME12WOSEC; // Default formatted time
 // 
 let TRUESECONDS = true; // boolean true if show seconds is true
 let TRUE12HR = true; // boolean true if numHrs is 12
@@ -413,6 +413,8 @@ $(function(){
 
   // Determine if URL has a query string and pass values to search clocks or send defaults if not
   function checkQuery(){
+    // regex to find spaces
+    const space = /\s/g;
     // if URL has no query string use these defaults
     if (queryStringReceived==""){
       // default city and location description for searchClock1
@@ -434,13 +436,16 @@ $(function(){
       if (myUrlParam.get('searchCity1') == ""){
         sC1 = "America/Los_Angeles";
       } else {
-        sC1 = myUrlParam.get('searchCity1'); 
+        // pull search city from the url and replace any spaces in the name with underscores
+        sC1 = myUrlParam.get('searchCity1').replace(space, '_'); 
+        console.log(sC1);
       }
 
       if (myUrlParam.get('searchCity2') == ""){
         sC2 = "Europe/Dublin";
       } else {
-        sC2 = myUrlParam.get('searchCity2'); 
+        // pull search city from the url and replace any spaces in the name with underscores
+        sC2 = myUrlParam.get('searchCity2').replace(space, '_'); 
       }
     }
   }
@@ -454,7 +459,6 @@ $(function(){
   // Set time on searchClock1 to the entered location
   function onSelectItem1(item){
     searchClock1.location = `${item.value}`;
-    console.log(`selected value is ${item.value}`);
     searchClock1.timeDescription = `Time in ${item.label} becomes:`;
     $(`#${searchClock1.timeDescriptionID}`).html(searchClock1.timeDescription);
     searchClock1.aRenderTime();
@@ -492,8 +496,6 @@ $(function(){
     momentObjST1 = moment(`${myUrlParam.get('searchtime1')}`, FORMATTEDTIME);
     momentObjST2 = moment(`${myUrlParam.get('searchtime2')}`, FORMATTEDTIME);
   }
-  
-  console.log(momentObjST1);
 
   // this works to change the time from 12/24 can't get inside class
   $('#numHrs').click(function(){
@@ -567,9 +569,9 @@ $(function(){
   function ifTrue(){
     TRUE12HR = ($("input[id][name$='numHrs']").prop( "checked" ))
     if (TRUE12HR){
-      FORMATTEDTIME = TIME12WSEC;
+      FORMATTEDTIME = TIME12WOSEC;
     } else {
-      FORMATTEDTIME = TIME24WSEC;
+      FORMATTEDTIME = TIME24WOSEC;
       }
     }
 
@@ -598,38 +600,54 @@ setTimesFromURL();
   
   // Event handler for the copy button to create the URL
   $('#copyBtn').click(function(){
-    // need to remove spaces in values & replace with +
-    const space = /\s/g;
 
-    // find search times and remove spaces
-    // let localT = $('#localTSTime').html();
-    let searchT1 = $('#search1Time').html();
-    let searchT2 = $('#search2Time').html();
+    function createURL(){
+      // need to remove spaces in values & replace with +
+      const space = /\s/g;
 
-    // let lT = localT.replace(space, '+')
-    let sT1 = searchT1.replace(space, '+')
-    let sT2 = searchT2.replace(space, '+')
+      // find search times and remove spaces
+      // let localT = $('#localTSTime').html();
+      let searchT1 = $('#search1Time').html();
+      let searchT2 = $('#search2Time').html();
 
-    // find time descriptions (locations) and search city names & remove spaces
-    // let localTimeDesc = $('#localTSID').html();
-    let searchTimeDesc1 = $('#search1TSID').html();
-    let searchTimeDesc2 = $('#search2TSID').html();
-    let searchCity1 = $('#sbsearchClock1').val();
-    let searchCity2 = $('#sbsearchClock2').val();
+      // let lT = localT.replace(space, '+')
+      let sT1 = searchT1.replace(space, '+')
+      let sT2 = searchT2.replace(space, '+')
 
-    // trim any spaces on either side and replace spaces with + so the URL works
-    // let lTD = localTimeDesc.trim().replace(space, '+');
-    let sTD1 = searchTimeDesc1.trim().replace(space, '+');
-    let sTD2 = searchTimeDesc2.trim().replace(space, '+');
-    let sC1 = searchCity1.trim().replace(space, '+')
-    let sC2 = searchCity2.trim().replace(space, '+')
+      // find time descriptions (locations) and search city names & remove spaces
+      // let localTimeDesc = $('#localTSID').html();
+      let searchTimeDesc1 = $('#search1TSID').html();
+      let searchTimeDesc2 = $('#search2TSID').html();
+      let searchCity1 = $('#sbsearchClock1').val();
+      let searchCity2 = $('#sbsearchClock2').val();
 
-    // split the url to remove any existing search queries
-    let thisURL = $(location).attr('href').split("?")[0];
-    // create the url
-    sendableURL = `${thisURL}?&searchtime1=${sT1}&searchtime2=${sT2}&searchTimeDesc1=${sTD1}&searchTimeDesc2=${sTD2}&searchCity1=${sC1}&searchCity2=${sC2}`
+      // trim any spaces on either side and replace spaces with + so the URL works
+      // let lTD = localTimeDesc.trim().replace(space, '+');
+      let sTD1 = searchTimeDesc1.trim().replace(space, '+');
+      let sTD2 = searchTimeDesc2.trim().replace(space, '+');
+      let sC1 = searchCity1.trim().replace(space, '+')
+      let sC2 = searchCity2.trim().replace(space, '+')
 
-    alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
+      // split the url to remove any existing search queries
+      let thisURL = $(location).attr('href').split("?")[0];
+      // create the url
+      sendableURL = `${thisURL}?searchtime1=${sT1}&searchtime2=${sT2}&searchTimeDesc1=${sTD1}&searchTimeDesc2=${sTD2}&searchCity1=${sC1}&searchCity2=${sC2}`
+
+      alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
+    }
+    // if both search boxes are empty, create the URL with the defaults
+    if (($('#sbsearchClock1').val() == '') && ($('#sbsearchClock2').val() == '')) {
+      createURL();
+    } else {
+      // if either search box has a value in it but has not been chosen from the dropdown push an alert and make them use the dropdown
+      if (!TzNamesArray.includes($('#sbsearchClock1').val()) || !TzNamesArray.includes($('#sbsearchClock2').val())){
+        alert('You must search and select a valid city from the dropdown')
+      } else {
+        // if both values in both searchboxes have been chosen from the dropdown, create the URL
+        createURL();
+    }
+    }
+    
   })
 
 }); // end document ready
