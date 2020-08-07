@@ -639,13 +639,22 @@ setTimesFromURL();
     if (($('#sbsearchClock1').val() == '') && ($('#sbsearchClock2').val() == '')) {
       createURL();
     } else {
-      // if either search box has a value in it but has not been chosen from the dropdown push an alert and make them use the dropdown
-      if (!TzNamesArray.includes($('#sbsearchClock1').val()) || !TzNamesArray.includes($('#sbsearchClock2').val())){
+      
+      // put underscores in region/city name before testing if it's in the time zone array
+      const space = /\s/g;
+      let sbclock1Under = $('#sbsearchClock1').val().replace(space, '_')
+      let sbclock2Under = $('#sbsearchClock2').val().replace(space, '_')
+    
+      // (if 1 is not in array AND 1 is not blank) OR (2 is not in array and 2 is not blank)
+      if ((!TzNamesArray.includes(sbclock1Under) && !sbclock1Under == '') 
+      || 
+      (!TzNamesArray.includes(sbclock2Under) && !sbclock2Under == ''))
+      {
         alert('You must search and select a valid city from the dropdown')
       } else {
         // if both values in both searchboxes have been chosen from the dropdown, create the URL
         createURL();
-    }
+      }
     }
     
   })
