@@ -482,9 +482,6 @@ $(function(){
     showSliderLabel();
   }
 
-
- 
-
   // Click function for 12/24 hour toggle
   $('#numHrs').click(function(){
     // run ifTrue function which sets the FORMATTEDTIME variable to either 12 (checked) or 24 (unchecked). Just sets this value, no visual change onscreen
@@ -496,9 +493,8 @@ $(function(){
     // $("input[type=range]").val(0);
     // showSliderLabel();
 
-
   // Create two moment objects with the time delivered by the query string (if there is one)
-  if (window.location.search){
+  if (window.location.search && ($('.slider_label') == 0)){
     const queryStringSend = window.location.search;
     myUrlParam = new URLSearchParams(queryStringSend);
     // create moment objects from the strings for the received time in the URL
@@ -590,7 +586,7 @@ function setTimesFromURL(){
     time12 = myUrlParam.get('time12')
     if (time12 == "false"){
       $('#numHrs').prop('checked', false);
-      ifTrue();
+      FORMATTEDTIME = TIME24WOSEC;
     }
     $('#localTSTime').html(`${myUrlParam.get('loctime')}`)
     $('#search1Time').html(`${myUrlParam.get('searchtime1')}`)
@@ -606,7 +602,7 @@ function setTimesFromURL(){
   }
 }
 setTimesFromURL();
-  
+
   // Event handler for the copy button to create the URL
   $('#copyBtn').click(function(){
 
@@ -615,12 +611,13 @@ setTimesFromURL();
       const space = /\s/g;
 
       // check to see if 12/24 toggle is on 24
-      let time12 = new Boolean();
-      if ($('#numHrs').prop('checked', false)){
+      let time12 = new Boolean(); // defaults to false
+      if ($('#numHrs').prop('checked') == 'false'){
         time12 = false;
       }else{
         time12 = true;
-      }
+      } 
+
       // find search times and remove spaces
       // let localT = $('#localTSTime').html();
       let searchT1 = $('#search1Time').html();
