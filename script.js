@@ -269,7 +269,7 @@ $(function(){
       // determine if the clock will move with the timeshifter
       this.timeShifted = details.timeShifted;
 
-      // time format variable to allow change with scroller
+      // time format variable to allow change with slider
       this.timeFormat = details.timeFormat;
       
       // Unique Div to hold the text box for search
@@ -586,13 +586,18 @@ function setTimesFromURL(){
     // queryStringSend;
     // myUrlParam = new URLSearchParams(queryStringSend);
     // set times
-    
+    // Set 12/24 hour toggle to match format of incoming times
+    time12 = myUrlParam.get('time12')
+    if (time12 == "false"){
+      $('#numHrs').prop('checked', false);
+      ifTrue();
+    }
     $('#localTSTime').html(`${myUrlParam.get('loctime')}`)
     $('#search1Time').html(`${myUrlParam.get('searchtime1')}`)
     $('#search2Time').html(`${myUrlParam.get('searchtime2')}`)
 
     // set location names (timeDescription)
-    $('#localTSID').html(`${myUrlParam.get('localTimeDesc')}`)
+    // $('#localTSID').html(`${myUrlParam.get('localTimeDesc')}`)
     $('#search1TSID').html(`${myUrlParam.get('searchTimeDesc1')}`)
     $('#search2TSID').html(`${myUrlParam.get('searchTimeDesc2')}`)
     // if no search city is entered, this will be blank 
@@ -609,6 +614,13 @@ setTimesFromURL();
       // need to remove spaces in values & replace with +
       const space = /\s/g;
 
+      // check to see if 12/24 toggle is on 24
+      let time12 = new Boolean();
+      if ($('#numHrs').prop('checked', false)){
+        time12 = false;
+      }else{
+        time12 = true;
+      }
       // find search times and remove spaces
       // let localT = $('#localTSTime').html();
       let searchT1 = $('#search1Time').html();
@@ -634,8 +646,8 @@ setTimesFromURL();
 
       // split the url to remove any existing search queries
       let thisURL = $(location).attr('href').split("?")[0];
-      // create the url
-      sendableURL = `${thisURL}?searchtime1=${sT1}&searchtime2=${sT2}&searchTimeDesc1=${sTD1}&searchTimeDesc2=${sTD2}&searchCity1=${sC1}&searchCity2=${sC2}`
+      // create the url adding FORMATTEDTIME to the end
+      sendableURL = `${thisURL}?searchtime1=${sT1}&searchtime2=${sT2}&searchTimeDesc1=${sTD1}&searchTimeDesc2=${sTD2}&searchCity1=${sC1}&searchCity2=${sC2}&time12=${time12}`
 
       alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
     }
