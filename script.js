@@ -26,7 +26,9 @@ let TzNamesArray = moment.tz.names();
 // don't understand this but it takes the array which is just a list of the region/city and makes it into an object where the key is the region/city and so is the value. which for some reason works in autocomplete!
 let tzNamesObject = TzNamesArray.reduce(function(o, val) { o[val.replace('_',' ')] = val; return o; }, {});
 
-// Create variable for the string value of the time-shifted versions of local and chosen distant clock
+ // declare two global moment objects to be used in 12/24 hour toggle
+ let momentObjST1 = {};
+ let momentObjST2 = {};
 
 // 
 // Document Ready Handler
@@ -301,16 +303,13 @@ $(function(){
       if (this.timeShifted){
         // shift hours
         $('#changeHrs').on('input change', function(){
-          // reset times using code from aRenderTime?
-          // $(`#${self.timeID}`).html(moment.tz(self.location).format(FORMATTEDTIME));
-          // 
           let currentTime = moment.tz(self.location);
-          let roundUpTime = currentTime.startOf('h');
-          $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'h').format(FORMATTEDTIME));
+          let roundDownTime = currentTime.startOf('h');
+          $(`#${self.timeID}`).html(roundDownTime.add(this.value, 'h').format(FORMATTEDTIME));
         })
         // shift min
         $('#changeMin').on('input change', function(){
-          $(`#${self.timeID}`).html(roundUpTime.add(this.value, 'm').format(self.timeFormat));
+          $(`#${self.timeID}`).html(roundDownTime.add(this.value, 'm').format(self.timeFormat));
         })
       }else{return}
     }
@@ -403,9 +402,9 @@ $(function(){
     searchClock2.addSearchBox();
     
     // Local Clock static (non-shifting)
+    // Doesn't shift time and doesn't have a search box
     localClock.putClockUp(staticClocksPlaceholder);
     localClock.clockInterval()
-    // localClock.shiftTime();
   }
 
   // pull the query string that may have been received in the URL
@@ -454,7 +453,7 @@ $(function(){
 
   // make the individual clocks:
   // pass parameters for cities and locations to searchClock 1 and 2  that were parsed from the URL query string
-  makeClocks(sC1,sTD1,sC2,sTD2);  // check to see if those are the right names
+  makeClocks(sC1,sTD1,sC2,sTD2);  
 
   // Set time on searchClock1 to the entered location
   function onSelectItem1(item){
@@ -483,44 +482,49 @@ $(function(){
     showSliderLabel();
   }
 
-  // $('#localTSTime').html(moment().format(TIME24WOSEC));
-  // changes to 24
-  // declare two global variables for moment objects
-  let momentObjST1 = ''
-  let momentObjST2 = ''
+
+ 
+
+  // Click function for 12/24 hour toggle
+  $('#numHrs').click(function(){
+    // run ifTrue function which sets the FORMATTEDTIME variable to either 12 (checked) or 24 (unchecked). Just sets this value, no visual change onscreen
+    ifTrue();
+    // local clock will always obey ifTrue because it has an interval at which it runs aRenderTime. No need to specify it here
+
+    // set the slider to 0 and redisplay the value of the slider when toggling 12/24
+    // draw the slider at 0 and set it's value to 0
+    // $("input[type=range]").val(0);
+    // showSliderLabel();
+
+
   // Create two moment objects with the time delivered by the query string (if there is one)
   if (window.location.search){
     const queryStringSend = window.location.search;
     myUrlParam = new URLSearchParams(queryStringSend);
     // create moment objects from the strings for the received time in the URL
-    momentObjST1 = moment(`${myUrlParam.get('searchtime1')}`, FORMATTEDTIME);
-    momentObjST2 = moment(`${myUrlParam.get('searchtime2')}`, FORMATTEDTIME);
+    // This works perfectly - keeps the times that came in and does the 12/24 toggle
+    // console.log(`searchtime1 from query string is ${myUrlParam.get('searchtime1')}`);
+    momentObjST1 = moment(`${myUrlParam.get('searchtime1')}`);
+    momentObjST2 = moment(`${myUrlParam.get('searchtime2')}`);
+    } else {
+
+    // works to toggle but uses the time when the page loaded instead of the timeshifted time,
+    // creates strings from the visible time values for time-shifted clocks
+    let searchT1 = $('#search1Time').html(); 
+    // console.log(`searchT1 is currently: ${searchT1}`); // date/time
+    // console.log(`searchT1 is of type: ${typeof searchT1}`); // string
+    let searchT2 = $('#search2Time').html();
+    // creates a moment objects from time strings
+    momentObjST1 = moment(searchT1); 
+    // console.log(`moment object ST1 is: ${momentObjST1}`);
+    // console.log(`moment object ST1 is of type: ${typeof momentObjST1}`); // object
+    momentObjST2 = moment(searchT2);
   }
-
-  // this works to change the time from 12/24 can't get inside class
-  $('#numHrs').click(function(){
-    ifTrue();
-    // does this set the slider to 0 and redisplay the value of the slider when flipping 12/24?
-    $("input[type=range]").val(0);
-    showSliderLabel();
-    // localTSClock.aRenderTime(); // this worked
-    // $('#localTSTime').html(moment().format(FORMATTEDTIME));
-    // momentObjLocTSTime.format(FORMATTEDTIME);
-    if (window.location.search){
-      $('#search1Time').html(momentObjST1.format(FORMATTEDTIME));
-      $('#search2Time').html(momentObjST2.format(FORMATTEDTIME));
-      console.log(momentObjST1);
-    }else{
-      searchClock1.aRenderTime();
-      searchClock2.aRenderTime();
-      localClock.aRenderTime();
-    }
-    // $('#localTime').html(moment().format(FORMATTEDTIME));
-    // $('#search1Time').html(moment().format(FORMATTEDTIME));
-    // $('#search2Time').html(moment().format(FORMATTEDTIME));
-
-    // if this runs, changing the 12/24 toggle resets all the times (undesirable)
-    // and sets localTSClock to the RECEIVER'S local time and leaves description as SENDER'S local city
+    
+    // render moment objects with toggled time format back into clocks
+    $('#search1Time').html(momentObjST1.format(FORMATTEDTIME));
+    $('#search2Time').html(momentObjST2.format(FORMATTEDTIME));
+      
     // localTSClock.aRenderTime();
   });
 
