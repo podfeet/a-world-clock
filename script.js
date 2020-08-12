@@ -612,7 +612,7 @@ setTimesFromURL();
 
       // check to see if 12/24 toggle is on 24
       let time12 = new Boolean(); // defaults to false
-      if ($('#numHrs').prop('checked') == 'false'){
+      if ($('#numHrs').prop('checked') == false){
         time12 = false;
       }else{
         time12 = true;
