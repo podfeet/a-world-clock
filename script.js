@@ -317,7 +317,7 @@ $(function(){
     addSearchBox(){
       if (this.searchBoxDivID){
         if(this.searchBoxID){
-          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search (default ${this.location})`);
+          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search (default ${this.location})`).attr('aria-autocomplete', 'both').attr('aria-activedescendant', `${this.location}`);
           // define a variable for the div which will hold the <input> text box
           let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
           aSearchBoxDivID.append($thisSearchBox);
@@ -485,12 +485,6 @@ $(function(){
   $('#numHrs').click(function(){
     // run ifTrue function which sets the FORMATTEDTIME variable to either 12 (checked) or 24 (unchecked). Just sets this value, no visual change onscreen
     ifTrue();
-    // local clock will always obey ifTrue because it has an interval at which it runs aRenderTime. No need to specify it here
-
-    // set the slider to 0 and redisplay the value of the slider when toggling 12/24
-    // draw the slider at 0 and set it's value to 0
-    // $("input[type=range]").val(0);
-    // showSliderLabel();
 
   // Create two moment objects with the time delivered by the query string (if there is one)
   if (window.location.search && ($('.slider_label') == 0)){
@@ -544,7 +538,7 @@ $(function(){
       source: tzNamesObject, // dictionary object with the values from which to search
       onSelectItem: onSelectItem1, // callback to run when item is selected
       highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
-      treshold: 1 // minimum characters to search before it starts displaying
+      treshold: 3 // minimum characters to search before it starts displaying
   });
   $('#sbsearchClock2').autocomplete({
       source: tzNamesObject, // dictionary object with the values from which to search
@@ -650,7 +644,12 @@ setTimesFromURL();
       var dummyTextInput = $('<input>').val(sendableURL).attr('id',"#dummyText").appendTo('#dummy').select()
       document.execCommand("copy");
       alert('Sendable times URL copied! Ready to paste.')
-      
+      function removeElement(elementId) {
+        // Removes an element from the document
+        var element = document.getElementById(elementId);
+        element.parentNode.removeChild(element);
+      }
+      removeElement($('#dummyText'))
      
       
       // alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
