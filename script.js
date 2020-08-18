@@ -317,7 +317,7 @@ $(function(){
     addSearchBox(){
       if (this.searchBoxDivID){
         if(this.searchBoxID){
-          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search (default ${this.location})`).attr('aria-autocomplete', 'both').attr('aria-activedescendant', `${this.location}`);
+          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search (default ${this.location})`);
           // define a variable for the div which will hold the <input> text box
           let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
           aSearchBoxDivID.append($thisSearchBox);
@@ -641,15 +641,15 @@ setTimesFromURL();
       
       // create dummy text area to hold sendableURL so we can copy it, then remove text area
       // https://www.sharmaprakash.com.np/javascript/copying-value-from-variable-to-clipboard/
-      var dummyTextInput = $('<input>').val(sendableURL).attr('id',"#dummyText").appendTo('#dummy').select()
+      var dummyTextInput = $('<input>').val(sendableURL).attr('id',"#dummyText").attr('class', 'dummy').appendTo('#dummy').select()
       document.execCommand("copy");
-      alert('Sendable times URL copied! Ready to paste.')
+      alert('Sendable times URL copied to your clipboard and ready to send to your colleague.')
       function removeElement(elementId) {
         // Removes an element from the document
         var element = document.getElementById(elementId);
         element.parentNode.removeChild(element);
       }
-      removeElement($('#dummyText'))
+      $('input').remove('.dummy')
      
       
       // alert(`Copy this URL and send it to someone:\n\n${sendableURL}`);
