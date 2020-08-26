@@ -122,11 +122,9 @@ $(function(){
   */
   set boardr(brdr){
     // need to define range error - annoying because so many wrong answers
-    console.log(brdr);
+
     this._boardr = brdr;
   }
-
-
     //
     // Create the description of the clock instance
     //
@@ -171,6 +169,27 @@ $(function(){
       }
       this._timeID = tid;
     }
+
+    // Evaluate whether the time should be pulsed
+    /**
+     * @type {Boolean}
+     */
+    get pulseMe(){
+      return this._pulseMe;
+    }
+    /**
+     * @type {Boolean}
+     * @throws {TypeError} if not Boolean, defaults to false
+     */
+    set pulseMe(pm){
+      if (typeof pm !== 'boolean'){
+        console.log(pm);
+        throw new RangeError('pulseMe value must be true or false')
+      }else{
+        this._pulseMe = pm;
+      }
+    }
+
     // Determine if clock will be timeshifted or static
     // If static it will update with interval
     /**
@@ -303,6 +322,9 @@ $(function(){
       // Unique IDs to hold the time (must have values)
       this.timeID = details.timeID; // could throw error
 
+      // pulse if value of pulseMe is the class .pulse
+      this.pulseMe = details.pulseMe;
+
       // Setting default location of clock if not defined
       this.location = details.location;
 
@@ -320,7 +342,12 @@ $(function(){
     }
     //  Define the Instance functions
     aRenderTime(){
-      $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME)); 
+      if (this.pulseMe == false){
+        $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME))
+      }else{
+        $(`#${this.timeID}`).addClass('pulse').html(moment.tz(this.location).format(FORMATTEDTIME));
+      }
+      // $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME)); 
       // can't put description here. trust me. no really, not here.   
     }
     // Render the html for the clocks
@@ -380,13 +407,14 @@ $(function(){
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
       timeDescriptionID: 'localID',
-      bgcolor: 'bg-white',
+      bgcolor: 'bg-light',
       // boardr: ''
       timeDescription: 'Your current local time is:',
       timeID: 'localTime',
       timeFormat: TIME12WSEC,
       location: moment.tz.guess(true),
       timeShifted: false,
+      pulseMe: true
     });
     searchClock1 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
@@ -396,7 +424,8 @@ $(function(){
       timeDescription: b,
       timeID: 'search1Time',
       timeFormat: TIME12WSEC,
-      timeShifted: false,
+      timeShifted: true,
+      pulseMe: false,
       location: a,
       searchBoxDivID: 'sbsearchClock1Div',
       searchBoxID: 'sbsearchClock1'
@@ -411,17 +440,17 @@ $(function(){
       timeID: 'search2Time',
       timeFormat: TIME12WSEC,
       timeShifted: true,
-      // location: "Europe/Dublin",
+      pulseMe: false,
       location: c,
       searchBoxDivID: 'sbsearchClock2Div',
       searchBoxID: 'sbsearchClock2'
     });
     // Put the clocks up, enable/disable interval, and enable timeshifting
-
-    // local timeshifted 
-    // localTSClock.putClockUp();
-    // localTSClock.clockInterval();
-    // localTSClock.shiftTime();
+   
+    // Local Clock static (non-shifting)
+    // Doesn't shift time and doesn't have a search box
+    localClock.putClockUp(staticClocksPlaceholder);
+    localClock.clockInterval()
 
     // Searchboxes clock timeshifted
     searchClock1.putClockUp();
@@ -433,11 +462,7 @@ $(function(){
     searchClock2.clockInterval();
     searchClock2.shiftTime();
     searchClock2.addSearchBox();
-    
-    // Local Clock static (non-shifting)
-    // Doesn't shift time and doesn't have a search box
-    localClock.putClockUp(staticClocksPlaceholder);
-    localClock.clockInterval()
+ 
   }
 
   // pull the query string that may have been received in the URL

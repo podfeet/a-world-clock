@@ -63,6 +63,17 @@
         color: #007bff;  /* same color as Bootstrap "primary" */
         vertical-align: text-top;
       }
+      
+      /* Pulse time in non-shifting clocks */
+      .pulse {
+        animation: blinker 2s linear infinite;
+      }
+
+      @keyframes blinker {
+        50% {
+          opacity: .2;
+        }
+      }
 
     </style>
   </head>
@@ -113,7 +124,19 @@
           <p class="lead">
             <div class="col-2 mr-2"><img width="75" alt="Programming by Stealth Logo" src="https://pbs.bartificer.net/assets/logo.png"></div> <!-- open/close col-2 for logo -->
             <div class="col-6"><!-- open col-6 for title and explanation button -->
-              <h1 class="row h3 d-md-inline">Time Shifter Clock</h1> <!-- row for title and explanation button -->
+              <h1 class="row h3 d-md-inline">Time Shifter Clock</h1> <!-- row for Heading -->
+
+              <div class="row"><!-- row for current local time -->
+                <!-- Placeholder for current local time -->
+                <div class="container">
+                  <div class="row">
+                    <div class="col col-md-6">
+                      <div class="row" id="staticClocksPlaceholder"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- row for explanation button -->
               <div class="row mt-3"> <!-- row for explanation button -->
                 <p>
                   <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#explanationText" aria-expanded="false" aria-controls="explanationText">
@@ -137,16 +160,6 @@
     <main>
 
     <!-- html goes here -->
-
-
-      <!-- Placeholder for current time -->
-      <div class="container">
-        <div class="row">
-          <div class="col col-md-6">
-            <div class="row" id="staticClocksPlaceholder"></div>
-          </div>
-        </div>
-      </div>
 
       <div class="container"> <!-- open container for switches -->
         <!-- Switch to  12 vs 24 hr clock -->
@@ -180,7 +193,7 @@
         </div>
         <!-- end clock divs -->
       </div><!-- end container for timeshifter clocks --> 
-      
+
       <div class="container mt-2">  <!-- open container to hold range sliders -->
         <div class="row">
           <!-- <div class="col col-md-6"> -->
@@ -188,7 +201,7 @@
               <div class="form-group">
                 <div >
                   <label class="mr2" for="changeHrs">Drag to Shift Time (hrs)</label>
-                  <button class="btn" type="button" data-toggle="collapse" data-target="#explainSlider" aria-expanded="false" aria-controls="explainSlider"><i class="fas fa-info-circle"></i></button>
+                  <button class="btn" type="button" data-toggle="collapse" data-target="#explainSlider" aria-expanded="false" aria-controls="explainSlider"><i class="fas fa-question-circle ">  Help</i></button>
                   <div class="collapse" id="explainSlider">
                     <div class="card card-body">
                       Note that clocks will round down to nearest hour before current time and shift forward from there.
@@ -236,7 +249,7 @@
           
           <div style="color: blue" class="rounded col" id="{{timeDescriptionID}}">{{timeDescription}}
           </div>
-          <div class="ml-5 mb-3 text-dark" id="{{timeID}}"></div><!-- placeholder div for the actual time -->
+          <div class="ml-5 mb-3 text-dark {{pulseMe}}" id="{{timeID}}"></div><!-- placeholder div for the actual time -->
       </div> <!-- close div for card -->     
     </script>
     <!-- END NEW PROBABLY WRONG STUFF -->
