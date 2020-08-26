@@ -92,6 +92,44 @@ $(function(){
       }
       this._timeDescriptionID = tdid;
     }
+    // Ensure clock's card background color is one defined in Bootstrap documentation
+    // https://getbootstrap.com/docs/4.0/utilities/colors/#background-color
+    /**
+    * 
+    * @type {string}  
+    */
+   get bgcolor(){
+    return this._bgcolor;
+  }
+  /**
+  * @type {string}
+  * @throws {RangeError}
+  */
+  set bgcolor(bgc){
+    if((bgc !== 'bg-primary') && (bgc !== 'bg-secondary') && (bgc !== 'bg-success') && (bgc !== 'bg-info') && (bgc !== 'bg-light')){
+      throw new RangeError('Card background color must be one defined by Bootstrap documentation at https://getbootstrap.com/docs/4.0/utilities/colors/#background-color');
+    }
+    this._bgcolor = bgc;
+  }
+   // Ensure clock time color is one defined in Bootstrap documentation
+    // https://getbootstrap.com/docs/4.0/utilities/colors/#background-color
+    /**
+    * 
+    * @type {string}  
+    */
+   get timecolor(){
+    return this._timecolor;
+  }
+  /**
+  * @type {string}
+  * @throws {RangeError}
+  */
+  set timecolor(tc){
+    if((tc !== 'text-primary') && (tc !== 'text-secondary') && (tc !== 'text-success') && (tc !== 'text-info') && (tc !== 'text-light')){
+      throw new RangeError('Time color must be one defined by Bootstrap documentation at https://getbootstrap.com/docs/4.0/utilities/colors/#background-color');
+    }
+    this._timecolor = tc;
+  }
     //
     // Create the description of the clock instance
     //
@@ -259,6 +297,9 @@ $(function(){
       this.timeDescriptionID = details.timeDescriptionID;
       this.timeDescription = details.timeDescription; // could throw error
 
+      // set color of card
+      this.bgcolor = details.bgcolor;
+
       // Unique IDs to hold the time (must have values)
       this.timeID = details.timeID; // could throw error
 
@@ -350,6 +391,8 @@ $(function(){
     searchClock1 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescriptionID: 'search1TSID',
+      bgcolor: 'bg-light',
+      timecolor: 'text-light',
       //timeDescription: 'Time in America/Los_Angeles becomes:',
       timeDescription: b,
       timeID: 'search1Time',
@@ -363,6 +406,8 @@ $(function(){
     searchClock2 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescriptionID: 'search2TSID',
+      bgcolor: 'bg-light',
+      timecolor: 'text-danger',
       //timeDescription: 'Time in Europe/Dublin becomes:',
       timeDescription: d,
       timeID: 'search2Time',
@@ -376,6 +421,8 @@ $(function(){
     localClock = new AClock ({
       clockPlaceholder: staticClocksPlaceholder,
       timeDescriptionID: 'localID',
+      bgcolor: 'bg-light',
+      timecolor: 'text-light',
       timeDescription: 'Your current local time is:',
       timeID: 'localTime',
       timeFormat: TIME12WSEC,
