@@ -55,7 +55,15 @@
         background: #007bff; /* Green background */
         cursor: pointer; /* Cursor on hover */
       }
-      
+
+      /* Searchboxes */
+      .mySearchboxes {
+        /* font-size: 1.25rem; */
+        font-weight: bold;
+        color: #007bff;  /* same color as Bootstrap "primary" */
+        vertical-align: text-top;
+      }
+
     </style>
   </head>
   
@@ -108,11 +116,11 @@
               <h1 class="row h3 d-md-inline">Time Shifter Clock</h1> <!-- row for title and explanation button -->
               <div class="row mt-3"> <!-- row for explanation button -->
                 <p>
-                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#explanationText" aria-expanded="false" aria-controls="explanationText">
                     Push to Learn How This Works
                   </button>
                 </p>
-                <div class="collapse" id="collapseExample">
+                <div class="collapse" id="explanationText">
                   <div class="card card-body">
                     <p>The purpose of this clock is to take the guess work out of telling someone in another time zone what time you want to meet. </p>
                     <p> Search for your own city and your partner's city and drag the shifter until you see the time you like and then hit the copy URL button.</p> <p>Send the URL to your partner and they'll see the exact times you've chosen. In turn they can offer an alternate time by using their own time shifter.</p>
@@ -130,75 +138,83 @@
 
     <!-- html goes here -->
 
-    <div class="container">
-      <!-- Switch to  12 vs 24 hr clock -->
-      <div class="row pl-3 pb-3"> <!-- row for numHrs switch -->
-        <div class="col col-md-7 form-control form-check-inline bg-light border border-dark rounded p-2 m3">
-          <!-- Description of checkbox for screen readers -->
-          <div id="hrsDesc" class="sr-only">Switch to toggle between 24 and 12 hour clocks</div> 
-          <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clocks</div>
-          <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div>
-          <div class="custom-control custom-switch form-control-md">
-              <input type="checkbox" class="custom-control-input" checked id="numHrs" name="numHrs" >
-            <label class="custom-control-label mySwitches" for="numHrs">12 Hour Clocks</label>
-          
+
+      <!-- Placeholder for current time -->
+      <div class="container">
+        <div class="row">
+          <div class="col col-md-6">
+            <div class="row" id="staticClocksPlaceholder"></div>
           </div>
         </div>
       </div>
-      <!-- end switch 12 vs 24 hr clock -->
-    </div>
-      <!-- Placeholder for current time -->
-      <div class="container">
-        <div class="row" >
-          <div class="col" id="staticClocksPlaceholder"></div>
+
+      <div class="container"> <!-- open container for switches -->
+        <!-- Switch to  12 vs 24 hr clock -->
+        <div class="row pb-3"> <!-- row for numHrs switch -->
+          <div class="col col-md-6 form-control form-check-inline bg-light border border-dark rounded p-2 m3 d-flex justify-content-center">
+            <!-- Description of checkbox for screen readers -->
+            <div id="hrsDesc" class="sr-only">Switch to toggle between 24 and 12 hour clocks</div> 
+            <!-- <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clocks</div>
+            <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div> -->
+            <div class="custom-control custom-switch form-control-md">
+                <input type="checkbox" class="custom-control-input" checked id="numHrs" name="numHrs" >
+              <label class="custom-control-label mySwitches" for="numHrs">Toggle 12/24 Hour Clocks</label>
+            
+            </div>
+          </div>
         </div>
-      </div>
+      </div> <!-- close switch 12 vs 24 hr clock -->
 
       <div class="tooltip">Hover over me
         <span class="tooltiptext">Tooltip text</span>
       </div>
       <!-- TIMESHIFTER CLOCKS -->
-      
-      <div class="container">
-        <!-- container to hold range sliders -->
-        <div class="container mt-2">
-          <div class="row">
-            <div class="col">
-              <form>
-                <div class="form-group">
-                  <div >
-                    <label for="changeHrs">Drag to Shift Time (hrs)&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    <i class="fas fa-info-circle" data-toggle='popover' data-trigger="hover" title= "Drag slider to shift time" data-content="Note that clocks will round down to nearest hour before current time first, and shift forward from there.">
-                    </i>
-                    <input type="range" class="slider form-control-input" min="0" max="23.5" step=".5" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
-                    <p class="slider_label" id="hrsChosen"></p>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div> <!-- close container for range sliders -->
-
-      </div> <!-- close hold switches container -->
 
         <!-- One placeholder for all time shifting clocks using clockCards template -->
         <div class="container">
-          <div class="row" id="shiftingClocksPlaceholder"></div>
+          <div class="row">
+            <div class="col col-md-6">
+              <div class="row" id="shiftingClocksPlaceholder"></div>
+             </div>
+          </div>
         </div>
         <!-- end clock divs -->
       </div><!-- end container for timeshifter clocks --> 
+      
+      <div class="container mt-2">  <!-- open container to hold range sliders -->
+        <div class="row">
+          <!-- <div class="col col-md-6"> -->
+            <form class="col col-md-6 ">
+              <div class="form-group">
+                <div >
+                  <label class="mr2" for="changeHrs">Drag to Shift Time (hrs)</label>
+                  <button class="btn" type="button" data-toggle="collapse" data-target="#explainSlider" aria-expanded="false" aria-controls="explainSlider"><i class="fas fa-info-circle"></i></button>
+                  <div class="collapse" id="explainSlider">
+                    <div class="card card-body">
+                      Note that clocks will round down to nearest hour before current time and shift forward from there.
+                    </div>
+                  </div>
+                  <!-- <i class="fas fa-info-circle" data-toggle='popover' data-trigger="hover" title= "Drag slider to shift time" data-content="Note that clocks will round down to nearest hour before current time first, and shift forward from there.">
+                  </i> -->
+                  <input type="range" class="slider form-control-input" min="0" max="23.5" step=".5" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
+                  <p class="slider_label" id="hrsChosen"></p>
+                </div>
+              </div>
+            </form>
+          <!-- </div>  -->
+          <!-- close col for range sliders -->
+        </div> <!-- close row for range sliders -->
+      </div> <!-- close container for range sliders -->
 
       <!-- Button to copy the times to a sendable URL -->
       <div class="container">
         <div class="row">
-          <div class="col pb-3 pl-3 ml-5">
-            <button class = "btn btn-danger" id="copyBtn">Copy URL to send times</button>
+            <button class = "col-md-6 btn btn-danger copyBtn" id="copyBtn">Copy URL to send times</button>
             <div id="dummy"></div>
-          </div>
         </div>
       </div>
       <!-- Close container for Button -->
-
+      
       <!-- Credits -->
       <div class="container mb-2">
         <div class="small" name="homage">Time Shifter Clock was inspired by Terry Brett's <a href="http://timescroller.com">TimeScroller</a> iOS app and widget for OSX</div>
@@ -210,27 +226,18 @@
     
     <!-- The clock card template for CLASS clocks -->
     <script type="text/html" id="clockCards">
-      
-      <!-- open container for class clock template -->
-      <div class="container">
-        <!-- <div class="row"> open row for each clock -->
-          <div class= "col col-md-6 mb-2"> <!-- open column for clock -->
-            <!-- box that the entire clock sits in -->
-            <div class="border border-primary rounded {{bgcolor}}" style="width: 100%"> 
-              
-                <div id="parent" class="form-group" role="combobox"> <!-- form -->
-                  <label for="{{searchBoxID}}" class="sr-only" >Type 3 characters and look for dropdown</label>
-                  <div id="{{searchBoxDivID}}" aria-expanded="false"></div>
-                </div> <!-- close form -->
-                
-                <div style="color: blue" class="{{bgcolor}} rounded col p-2" id="{{timeDescriptionID}}">{{timeDescription}}
-                </div>
-                <div class="ml-5 mb-3 text-dark" id="{{timeID}}"></div><!-- placeholder div for the actual time -->
-            </div> <!-- close div for card -->
-          </div><!-- close column for clock -->
-        <!-- </div> close row for each clock -->
-      </div> <!-- close container for class clocks -->
-      
+      <!-- box that the entire clock sits in -->
+      <div class="mb-2 {{boardr}} {{bgcolor}}" style="width: 100%"> 
+        
+          <div id="parent" class="form-group" role="combobox"> <!-- form -->
+            <label for="{{searchBoxID}}" class="sr-only" >Type 3 characters and look for dropdown</label>
+            <div id="{{searchBoxDivID}}" aria-expanded="false"></div>
+          </div> <!-- close form -->
+          
+          <div style="color: blue" class="rounded col" id="{{timeDescriptionID}}">{{timeDescription}}
+          </div>
+          <div class="ml-5 mb-3 text-dark" id="{{timeID}}"></div><!-- placeholder div for the actual time -->
+      </div> <!-- close div for card -->     
     </script>
     <!-- END NEW PROBABLY WRONG STUFF -->
 

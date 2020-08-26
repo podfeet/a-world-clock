@@ -75,7 +75,6 @@ $(function(){
     // Create the ID into which the description for the clock instance will be placed
     //
     /**
-    * 
     * @type {string}  
     */
     get timeDescriptionID(){
@@ -95,7 +94,6 @@ $(function(){
     // Ensure clock's card background color is one defined in Bootstrap documentation
     // https://getbootstrap.com/docs/4.0/utilities/colors/#background-color
     /**
-    * 
     * @type {string}  
     */
    get bgcolor(){
@@ -106,30 +104,29 @@ $(function(){
   * @throws {RangeError}
   */
   set bgcolor(bgc){
-    if((bgc !== 'bg-primary') && (bgc !== 'bg-secondary') && (bgc !== 'bg-success') && (bgc !== 'bg-info') && (bgc !== 'bg-light')){
+    if((bgc !== 'bg-primary') && (bgc !== 'bg-secondary') && (bgc !== 'bg-success') && (bgc !== 'bg-info') && (bgc !== 'bg-light') && (bgc !== 'bg-dark') && (bgc !== 'bg-white')){
       throw new RangeError('Card background color must be one defined by Bootstrap documentation at https://getbootstrap.com/docs/4.0/utilities/colors/#background-color');
     }
     this._bgcolor = bgc;
   }
-   // Ensure clock time color is one defined in Bootstrap documentation
-    // https://getbootstrap.com/docs/4.0/utilities/colors/#background-color
-    /**
-    * 
-    * @type {string}  
-    */
-   get timecolor(){
-    return this._timecolor;
+  // Create border around clocks
+  /**
+  * @type {string}  
+  */
+  get boardr(){
+    return this._boardr;
   }
   /**
   * @type {string}
   * @throws {RangeError}
   */
-  set timecolor(tc){
-    if((tc !== 'text-primary') && (tc !== 'text-secondary') && (tc !== 'text-success') && (tc !== 'text-info') && (tc !== 'text-light')){
-      throw new RangeError('Time color must be one defined by Bootstrap documentation at https://getbootstrap.com/docs/4.0/utilities/colors/#background-color');
-    }
-    this._timecolor = tc;
+  set boardr(brdr){
+    // need to define range error - annoying because so many wrong answers
+    console.log(brdr);
+    this._boardr = brdr;
   }
+
+
     //
     // Create the description of the clock instance
     //
@@ -297,8 +294,11 @@ $(function(){
       this.timeDescriptionID = details.timeDescriptionID;
       this.timeDescription = details.timeDescription; // could throw error
 
-      // set color of card
+      // set background color of clock
       this.bgcolor = details.bgcolor;
+
+      // set border for clock
+      this.boardr = details.boardr;
 
       // Unique IDs to hold the time (must have values)
       this.timeID = details.timeID; // could throw error
@@ -354,7 +354,7 @@ $(function(){
       }else{return}
     }
 
-    // Add text search box for cities instead of dropdown
+    // Add text search box for cities
     addSearchBox(){
       if (this.searchBoxDivID){
         if(this.searchBoxID){
@@ -377,28 +377,26 @@ $(function(){
   function makeClocks(a,b,c,d){ 
     // create instances of AClock as desired
 
-    // HIDE LOCALTSCLOCK SHIFTED
-    // localTSClock = new AClock({ // timeshifted local clock
-    //   clockPlaceholder: shiftingClocksPlaceholder, 
-    //   // this works!
-    //   timeDescriptionID: 'localTSID',
-    //   timeDescription: `Time in ${moment.tz.guess(true)} becomes:`,
-    //   timeID: 'localTSTime', 
-    //   timeFormat: TIME12WSEC,
-    //   location: moment.tz.guess(true),
-    //   timeShifted: true,
-    // })
+    localClock = new AClock ({
+      clockPlaceholder: staticClocksPlaceholder,
+      timeDescriptionID: 'localID',
+      bgcolor: 'bg-white',
+      // boardr: ''
+      timeDescription: 'Your current local time is:',
+      timeID: 'localTime',
+      timeFormat: TIME12WSEC,
+      location: moment.tz.guess(true),
+      timeShifted: false,
+    });
     searchClock1 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescriptionID: 'search1TSID',
       bgcolor: 'bg-light',
-      timecolor: 'text-light',
-      //timeDescription: 'Time in America/Los_Angeles becomes:',
+      boardr: 'border border-primary rounded',
       timeDescription: b,
       timeID: 'search1Time',
       timeFormat: TIME12WSEC,
-      timeShifted: true,
-      // location: "America/Los_Angeles",
+      timeShifted: false,
       location: a,
       searchBoxDivID: 'sbsearchClock1Div',
       searchBoxID: 'sbsearchClock1'
@@ -407,7 +405,7 @@ $(function(){
       clockPlaceholder: shiftingClocksPlaceholder,
       timeDescriptionID: 'search2TSID',
       bgcolor: 'bg-light',
-      timecolor: 'text-danger',
+      boardr: 'border border-primary rounded',
       //timeDescription: 'Time in Europe/Dublin becomes:',
       timeDescription: d,
       timeID: 'search2Time',
@@ -417,17 +415,6 @@ $(function(){
       location: c,
       searchBoxDivID: 'sbsearchClock2Div',
       searchBoxID: 'sbsearchClock2'
-    });
-    localClock = new AClock ({
-      clockPlaceholder: staticClocksPlaceholder,
-      timeDescriptionID: 'localID',
-      bgcolor: 'bg-light',
-      timecolor: 'text-light',
-      timeDescription: 'Your current local time is:',
-      timeID: 'localTime',
-      timeFormat: TIME12WSEC,
-      location: moment.tz.guess(true),
-      timeShifted: false,
     });
     // Put the clocks up, enable/disable interval, and enable timeshifting
 
@@ -508,7 +495,6 @@ $(function(){
     $(`#${searchClock1.timeDescriptionID}`).html(searchClock1.timeDescription);
     searchClock1.aRenderTime();
     // reset local and other search clock back to current time (since searchClock1 starts at current time)
-    // localTSClock.aRenderTime();
     searchClock2.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
@@ -521,7 +507,6 @@ $(function(){
     $(`#${searchClock2.timeDescriptionID}`).html(searchClock2.timeDescription);
     searchClock2.aRenderTime();
     // reset local and other search clock back to current time (since searchClock2 starts at current time)
-    // localTSClock.aRenderTime();
     searchClock1.aRenderTime();
     // reset range slider and label back to 0
     $("input[type=range]").val(0);
