@@ -2,7 +2,7 @@
     var defaults = {
         treshold: 4,
         maximumItems: 5,
-        highlightTyped: false,
+        highlightTyped: true,
         highlightClass: 'text-primary'
     };
     function createItem(lookup, item, opts) {
@@ -67,9 +67,22 @@
         _field.dropdown('dispose');
         // attach dropdown
         _field.parent().addClass('dropdown');
-        _field.attr('data-toggle', 'dropdown');
+        _field.attr('data-toggle', 'dropdown')
+
+        // add aria data attributes to tell screen readers there is a popup and its default state is not expanded. aria-expanded will change to "true" automatically when the menu exists
+        _field.attr('aria-haspopup', 'true');
+        _field.attr('aria-expanded', 'false');
+        // add aria-controls attribute
+        // Indicates whether and how the user's input into the field could trigger display of a prediction of the intended value
+        _field.attr('aria-controls', `${_field.attr('id')}menu`);
+        _field.attr('aria-autocomplete', 'list');
+
         _field.addClass('dropdown-toggle');
-        _field.after('<div class="dropdown-menu"></div>');
+
+        // creates a div
+        // need div to have an ID to be controlled by the input box and a role for the input box to have as aria-popup
+        _field.after(`<div id="${_field.attr('id')}menu" aria-labelledby="${_field.attr('id')}" role="listbox" ></div>`);
+
         _field.dropdown(opts.dropdownOptions);
         this.off('click.autocomplete').click('click.autocomplete', function (e) {
             if (createItems(_field, opts) == 0) {
@@ -83,6 +96,9 @@
         this.off('keyup.autocomplete').keyup('keyup.autocomplete', function () {
             if (createItems(_field, opts) > 0) {
                 _field.dropdown('show');
+                _field.role('listbox')
+                // ad aria expanded and role
+                _field.attr('aria-expanded', 'true');
             }
             else {
                 // sets up positioning

@@ -12,7 +12,7 @@ let TIME12WSEC = 'DD MMMM YYYY h:mm:ss a';
 let TIME12WOSEC = 'DD MMMM YYYY h:mm a';
 let TIME24WSEC = 'DD MMMM YYYY HH:mm:ss';
 let TIME24WOSEC = 'DD MMMM YYYY HH:mm';
-let FORMATTEDTIME = TIME12WOSEC; // Default formatted time
+let FORMATTEDTIME = TIME12WSEC; // Default formatted time
 // 
 let TRUESECONDS = true; // boolean true if show seconds is true
 let TRUE12HR = true; // boolean true if numHrs is 12
@@ -54,7 +54,7 @@ $(function(){
   class AClock{
      // Clock will go into either the existing shifting or static placeholder div
     /**
-     * @type {object} div where the clock will be placed, default is shiftingClocksPlaceholderye
+     * @type {object} div where the clock will be placed, default is shiftingClocksPlaceholdery
      */
     get clockPlaceholder(){
       return this._clockPlaceholder;
@@ -168,26 +168,6 @@ $(function(){
         throw new RangeError('You must enter a timeID')
       }
       this._timeID = tid;
-    }
-
-    // Evaluate whether the time should be pulsed
-    /**
-     * @type {Boolean}
-     */
-    get pulseMe(){
-      return this._pulseMe;
-    }
-    /**
-     * @type {Boolean}
-     * @throws {TypeError} if not Boolean, defaults to false
-     */
-    set pulseMe(pm){
-      if (typeof pm !== 'boolean'){
-        console.log(pm);
-        throw new RangeError('pulseMe value must be true or false')
-      }else{
-        this._pulseMe = pm;
-      }
     }
 
     // Determine if clock will be timeshifted or static
@@ -342,14 +322,9 @@ $(function(){
     }
     //  Define the Instance functions
     aRenderTime(){
-      if (this.pulseMe == false){
-        $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME))
-      }else{
-        $(`#${this.timeID}`).addClass('pulse').html(moment.tz(this.location).format(FORMATTEDTIME));
-      }
-      // $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME)); 
-      // can't put description here. trust me. no really, not here.   
-    }
+        $(`#${this.timeID}`).html(moment.tz(this.location).format(FORMATTEDTIME));
+      }  
+  
     // Render the html for the clocks
     putClockUp(){
       // Convert the placeholder template script to a string
@@ -414,7 +389,6 @@ $(function(){
       timeFormat: TIME12WSEC,
       location: moment.tz.guess(true),
       timeShifted: false,
-      pulseMe: true
     });
     searchClock1 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
@@ -425,7 +399,6 @@ $(function(){
       timeID: 'search1Time',
       timeFormat: TIME12WSEC,
       timeShifted: true,
-      pulseMe: false,
       location: a,
       searchBoxDivID: 'sbsearchClock1Div',
       searchBoxID: 'sbsearchClock1'
@@ -440,7 +413,6 @@ $(function(){
       timeID: 'search2Time',
       timeFormat: TIME12WSEC,
       timeShifted: true,
-      pulseMe: false,
       location: c,
       searchBoxDivID: 'sbsearchClock2Div',
       searchBoxID: 'sbsearchClock2'
@@ -636,7 +608,7 @@ function setTimesFromURL(){
     time12 = myUrlParam.get('time12')
     if (time12 == "false"){
       $('#numHrs').prop('checked', false);
-      FORMATTEDTIME = TIME24WOSEC;
+      FORMATTEDTIME = TIME24WSEC;
     }
     $('#localTSTime').html(`${myUrlParam.get('loctime')}`)
     $('#search1Time').html(`${myUrlParam.get('searchtime1')}`)
