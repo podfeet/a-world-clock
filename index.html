@@ -65,7 +65,7 @@
       }
       
       /* Pulse time in non-shifting clocks */
-      .pulse {
+      /* .pulse {
         animation: blinker 2s linear infinite;
       }
 
@@ -73,6 +73,11 @@
         50% {
           opacity: .2;
         }
+      } */
+
+      /* Stop inline check box from adding a margin-right */
+      .form-check-inline {
+        margin-right: 0;
       }
 
     </style>
@@ -122,15 +127,15 @@
       <div class="container-fluid bg bg-light mb-2 rounded">
         <div class="row"> <!-- Open row for header -->
           <p class="lead">
-            <div class="col-2 mr-2"><img width="75" alt="Programming by Stealth Logo" src="https://pbs.bartificer.net/assets/logo.png"></div> <!-- open/close col-2 for logo -->
-            <div class="col-6"><!-- open col-6 for title and explanation button -->
+            <div class="col-3 mr-2"><img width="75" alt="Programming by Stealth Logo" src="https://pbs.bartificer.net/assets/logo.png"></div> <!-- open/close col-2 for logo -->
+            <div class="col col-md-8"><!-- open col-6 for title and explanation button -->
               <h1 class="row h3 d-md-inline">Time Shifter Clock</h1> <!-- row for Heading -->
 
               <div class="row"><!-- row for current local time -->
                 <!-- Placeholder for current local time -->
                 <div class="container">
                   <div class="row">
-                    <div class="col col-md-6">
+                    <div class="col col-md-5">
                       <div class="row" id="staticClocksPlaceholder"></div>
                     </div>
                   </div>
@@ -143,16 +148,19 @@
                     Push to Learn How This Works
                   </button>
                 </p>
-                <div class="collapse" id="explanationText">
-                  <div class="card card-body">
-                    <p>The purpose of this clock is to take the guess work out of telling someone in another time zone what time you want to meet. </p>
-                    <p> Search for your own city and your partner's city and drag the shifter until you see the time you like and then hit the copy URL button.</p> <p>Send the URL to your partner and they'll see the exact times you've chosen. In turn they can offer an alternate time by using their own time shifter.</p>
-                  </div>
-                </div>
+                
               </div> <!-- close row for explanation button -->
             </div> <!-- close column for title & explanation button -->
           </p>
         </div> <!-- close row for header -->
+        <div class="row"> <!-- open row for explanation -->
+          <div class="collapse" id="explanationText">
+            <div class="card card-body">
+              <p>The purpose of this clock is to take the guess work out of telling someone in another time zone what time you want to meet. </p>
+              <p> Search for your own city and your partner's city and drag the shifter until you see the time you like and then hit the copy URL button.</p> <p>Send the URL to your partner and they'll see the exact times you've chosen. In turn they can offer an alternate time by using their own time shifter.</p>
+            </div>
+          </div>
+        </div>
       </div> <!-- close container for page header -->
     </header>
 
@@ -163,12 +171,11 @@
 
       <div class="container"> <!-- open container for switches -->
         <!-- Switch to  12 vs 24 hr clock -->
-        <div class="row pb-3"> <!-- row for numHrs switch -->
-          <div class="col col-md-6 form-control form-check-inline bg-light border border-dark rounded p-2 m3 d-flex justify-content-center">
+        <div class="row pb-3 pr-1 pl-1"> <!-- row for numHrs switch -->
+          <div class="col col-md-6 form-control form-check-inline bg-light border border-dark rounded d-flex justify-content-center">
             <!-- Description of checkbox for screen readers -->
             <div id="hrsDesc" class="sr-only">Switch to toggle between 24 and 12 hour clocks</div> 
-            <!-- <div class="mr-2 font-weight-bold mySwitches d-none d-md-inline">24 Hour Clocks</div>
-            <div class="mr-2 font-weight-bold mySwitches d-inline d-md-none">24 Hour</div> -->
+            
             <div class="custom-control custom-switch form-control-md">
                 <input type="checkbox" class="custom-control-input" checked id="numHrs" name="numHrs" >
               <label class="custom-control-label mySwitches" for="numHrs">Toggle 12/24 Hour Clocks</label>
@@ -177,15 +184,12 @@
           </div>
         </div>
       </div> <!-- close switch 12 vs 24 hr clock -->
-
-      <div class="tooltip">Hover over me
-        <span class="tooltiptext">Tooltip text</span>
-      </div>
+      
       <!-- TIMESHIFTER CLOCKS -->
 
         <!-- One placeholder for all time shifting clocks using clockCards template -->
         <div class="container">
-          <div class="row">
+          <div class="row pr-1 pl-1">
             <div class="col col-md-6">
               <div class="row" id="shiftingClocksPlaceholder"></div>
              </div>
@@ -204,7 +208,7 @@
                   <button class="btn" type="button" data-toggle="collapse" data-target="#explainSlider" aria-expanded="false" aria-controls="explainSlider"><i class="fas fa-question-circle ">  Help</i></button>
                   <div class="collapse" id="explainSlider">
                     <div class="card card-body">
-                      Note that clocks will round down to nearest hour before current time and shift forward from there.
+                      As you start to slide, clocks will round down to nearest hour and shift forward from there.
                     </div>
                   </div>
                   <!-- <i class="fas fa-info-circle" data-toggle='popover' data-trigger="hover" title= "Drag slider to shift time" data-content="Note that clocks will round down to nearest hour before current time first, and shift forward from there.">
@@ -221,7 +225,7 @@
 
       <!-- Button to copy the times to a sendable URL -->
       <div class="container">
-        <div class="row">
+        <div class="row pr-1 pl-1">
             <button class = "col-md-6 btn btn-danger copyBtn" id="copyBtn">Copy URL to send times</button>
             <div id="dummy"></div>
         </div>
@@ -237,19 +241,18 @@
       </div>
     </main>
     
-    <!-- The clock card template for CLASS clocks -->
+    <!-- The clock card template for Class clocks -->
     <script type="text/html" id="clockCards">
       <!-- box that the entire clock sits in -->
       <div class="mb-2 {{boardr}} {{bgcolor}}" style="width: 100%"> 
+        <div id="parent" class="form-group" role="combobox"> <!-- form -->
+          <label for="{{searchBoxID}}" class="sr-only" >Type 3 characters and look for dropdown</label>
+          <div id="{{searchBoxDivID}}" aria-expanded="false"></div>
+        </div> <!-- close form -->
         
-          <div id="parent" class="form-group" role="combobox"> <!-- form -->
-            <label for="{{searchBoxID}}" class="sr-only" >Type 3 characters and look for dropdown</label>
-            <div id="{{searchBoxDivID}}" aria-expanded="false"></div>
-          </div> <!-- close form -->
-          
-          <div style="color: blue" class="rounded col" id="{{timeDescriptionID}}">{{timeDescription}}
-          </div>
-          <div class="ml-5 mb-3 text-dark {{pulseMe}}" id="{{timeID}}"></div><!-- placeholder div for the actual time -->
+        <div style="color: blue" class="rounded col" id="{{timeDescriptionID}}">{{timeDescription}}
+        </div>
+        <div class="ml-5 mb-3 text-dark {{pulseMe}}" id="{{timeID}}"></div><!-- placeholder div for the actual time -->
       </div> <!-- close div for card -->     
     </script>
     <!-- END NEW PROBABLY WRONG STUFF -->
@@ -284,7 +287,7 @@
     <script type="text/javascript" src="./script.js"></script>
 
     <!-- This Page's Event handlers -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
       // document ready handler
       $(function(){
         // initialise all popovers
@@ -292,6 +295,6 @@
         // set font-awesome popovers to trigger on hover
         $("i.fa").popover({'trigger':'hover'});
       });
-    </script>
+    </script> -->
   </body>
 </html>

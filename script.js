@@ -408,7 +408,7 @@ $(function(){
       clockPlaceholder: staticClocksPlaceholder,
       timeDescriptionID: 'localID',
       bgcolor: 'bg-light',
-      // boardr: ''
+      boardr: '',
       timeDescription: 'Your current local time is:',
       timeID: 'localTime',
       timeFormat: TIME12WSEC,
