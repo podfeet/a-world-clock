@@ -566,13 +566,13 @@ $(function(){
   $('#sbsearchClock1').autocomplete({
       source: tzNamesObject, // dictionary object with the values from which to search
       onSelectItem: onSelectItem1, // callback to run when item is selected
-      highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
+      highlightTyped: false, // if typed text is highlighted in search results, the name gets broken in two for screen readers. e.g. "Det roit"
       treshold: 3 // minimum characters to search before it starts displaying
   });
   $('#sbsearchClock2').autocomplete({
       source: tzNamesObject, // dictionary object with the values from which to search
       onSelectItem: onSelectItem2, // callback to run when item is selected
-      highlightClass: 'text-danger', // color to highlight the searched-for text in the found fields
+      highlightTyped: false, // if typed text is highlighted in search results, the name gets broken in two for screen readers. e.g. "Det roit"
       treshold: 1 // minimum characters to search before it starts displaying
   });
 
