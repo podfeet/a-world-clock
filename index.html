@@ -228,11 +228,20 @@
     <!-- The clock card template for Class clocks -->
     <script type="text/html" id="clockCards">
       <!-- box that the entire clock sits in -->
-      <div class="mb-2 {{boardr}} {{bgcolor}}" style="width: 100%"> 
-        <div id="parent" class="form-group" role="combobox"> <!-- form -->
+      <div class="mb-2 {{boardr}} {{bgcolor}}" style="width: 100%">
+        <div class="form-group row"> 
           <label for="{{searchBoxID}}" class="sr-only" >Type 3 characters and look for dropdown</label>
-          <div id="{{searchBoxDivID}}" aria-expanded="false"></div>
-        </div> <!-- close form -->
+          <div id="parent" class="col input-group" role="combobox"> <!-- form -->
+            <div class="input-group-prepend rounded">
+              <div class=" input-group-text">
+                <i class="fas fa-search"></i>
+              </div>
+            </div>
+            <div class="form-control p-0 pl-1 pt-1" id="{{searchBoxDivID}}" aria-expanded="false">
+            </div>
+          </div> <!-- close form -->
+        </div>
+       
         
         <div style="color: red" class="rounded col" id="{{timeDescriptionID}}">{{timeDescription}}
         </div>
