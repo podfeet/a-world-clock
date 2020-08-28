@@ -2,7 +2,7 @@
     var defaults = {
         treshold: 4,
         maximumItems: 5,
-        highlightTyped: falseœ,
+        highlightTyped: false,
         highlightClass: 'text-primary'
     };
     function createItem(lookup, item, opts) {
