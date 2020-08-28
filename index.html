@@ -179,9 +179,7 @@
         <!-- One placeholder for all time shifting clocks using clockCards template -->
         <div class="container">
           <div class="row pr-1 pl-1">
-            <div class="col col-md-6">
-              <div class="row" id="shiftingClocksPlaceholder"></div>
-             </div>
+              <div class="col col-md-6" id="shiftingClocksPlaceholder"></div>
           </div>
         </div>
         <!-- end clock divs -->
@@ -189,7 +187,6 @@
 
       <div class="container mt-2">  <!-- open container to hold range sliders -->
         <div class="row">
-          <!-- <div class="col col-md-6"> -->
             <form class="col col-md-6 ">
               <div class="form-group">
                 <div >
@@ -200,8 +197,6 @@
                       As you start to slide, clocks will round down to nearest hour and shift forward from there.
                     </div>
                   </div>
-                  <!-- <i class="fas fa-info-circle" data-toggle='popover' data-trigger="hover" title= "Drag slider to shift time" data-content="Note that clocks will round down to nearest hour before current time first, and shift forward from there.">
-                  </i> -->
                   <input type="range" class="slider form-control-input" min="0" max="167.5" step=".5" value="0" data-show-value="true" id="changeHrs" data-thumbwidth="20">
                   <p class="slider_label" id="hrsChosen"></p>
                 </div>
@@ -275,15 +270,5 @@
     <!-- Load the local JS Code AFTER the other libraries -->
     <script type="text/javascript" src="./script.js"></script>
 
-    <!-- This Page's Event handlers -->
-    <!-- <script type="text/javascript">
-      // document ready handler
-      $(function(){
-        // initialise all popovers
-        $('[data-toggle="popover"]').popover({});
-        // set font-awesome popovers to trigger on hover
-        $("i.fa").popover({'trigger':'hover'});
-      });
-    </script> -->
   </body>
 </html>
