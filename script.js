@@ -701,11 +701,6 @@ setTimesFromURL();
       var dummyTextInput = $('<input>').val(sendableURL).attr('id',"#dummyText").attr('class', 'dummy').appendTo('#dummy').select()
       document.execCommand("copy");
       alert('Sendable times URL copied to your clipboard and ready to send to your colleague.')
-      function removeElement(elementId) {
-        // Removes an element from the document
-        var element = document.getElementById(elementId);
-        element.parentNode.removeChild(element);
-      }
       $('input').remove('.dummy')
      
       
