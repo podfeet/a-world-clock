@@ -257,6 +257,30 @@ $(function(){
       }
       this._searchBoxID = sbid;
     } 
+    // Determine if a font awesome icon has been provided to prepend to search box
+    /**
+     * @typeof {string} font awesome name
+     * 
+    */
+    get fas(){
+      return this._fas;
+    }
+    /**
+    * @type {string}
+    * @throws {TypeError}
+    * really should include a range error but the field of options is too vast
+    * If none provided, then none used
+    */
+   set fas(fa){
+     if (!fa){
+       return;
+     }
+     if(is.not.string(fa)){
+      throw new TypeError('fas must be a string representing the font awesome icon you want');
+     }
+     this._fas = fa;
+   }
+
     /**
      * 
      * @typeof {string} location 
@@ -319,6 +343,9 @@ $(function(){
 
       // Unique ID to hold the text box for search
       this.searchBoxID = details.searchBoxID;
+
+      // Apply font awesome to only shifting clocks
+      this.fas = details.fas;
     }
     //  Define the Instance functions
     aRenderTime(){
@@ -355,12 +382,11 @@ $(function(){
         })
       }else{return}
     }
-
     // Add text search box for cities
     addSearchBox(){
       if (this.searchBoxDivID){
         if(this.searchBoxID){
-          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes form-control small").attr('id', `${this.searchBoxID}`).attr('placeholder', `Search (default ${this.location})`);
+          const $thisSearchBox = $('<input type="text">').addClass("mySearchboxes w-100 border-0").attr('id', `${this.searchBoxID}`).attr('placeholder', `default: ${this.location})`);
           // define a variable for the div which will hold the <input> text box
           let aSearchBoxDivID = $(`#${this.searchBoxDivID}`);
           aSearchBoxDivID.append($thisSearchBox);
@@ -370,6 +396,9 @@ $(function(){
       }
     }
 
+    addFasPrepend(){
+      
+    }
   } // complete AClock Class definition
   
   // Create a function to make the clocks
@@ -401,7 +430,7 @@ $(function(){
       timeShifted: true,
       location: a,
       searchBoxDivID: 'sbsearchClock1Div',
-      searchBoxID: 'sbsearchClock1'
+      searchBoxID: 'sbsearchClock1',
     });
     searchClock2 = new AClock({
       clockPlaceholder: shiftingClocksPlaceholder,
@@ -415,7 +444,7 @@ $(function(){
       timeShifted: true,
       location: c,
       searchBoxDivID: 'sbsearchClock2Div',
-      searchBoxID: 'sbsearchClock2'
+      searchBoxID: 'sbsearchClock2',
     });
     // Put the clocks up, enable/disable interval, and enable timeshifting
    
@@ -434,7 +463,6 @@ $(function(){
     searchClock2.clockInterval();
     searchClock2.shiftTime();
     searchClock2.addSearchBox();
- 
   }
 
   // pull the query string that may have been received in the URL
